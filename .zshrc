@@ -22,7 +22,7 @@ HISTFILE=~/.zsh_history
 # ==== PLUGINS ====
 
 source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /usr/share/zsh-sytax-hightlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh-syntax-hightlighting/zsh-syntax-highlighting.zsh
 
 source ~/.config/zsh-plugins/sudo.plugin.zsh
 
