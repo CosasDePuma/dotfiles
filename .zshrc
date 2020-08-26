@@ -19,6 +19,13 @@ test -f ~/.fzf.zsh && source ~/.fzf.zsh
 SAVEHIST=1000
 HISTFILE=~/.zsh_history
 
+# ==== PLUGINS ====
+
+source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh-sytax-hightlighting/zsh-syntax-highlighting.zsh
+
+source ~/.config/zsh-plugins/sudo
+
 # ==== ALIASES ====
 
 # lsd
@@ -59,7 +66,7 @@ man() {
 }
 
 # fzf previews
-fzf-lovely(){
+preview(){
 
 	if [ "$1" = "h" ]; then
 		fzf -m --reverse --preview-window down:20 --preview '[[ $(file --mime {}) =~ binary ]] &&

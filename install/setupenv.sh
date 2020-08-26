@@ -276,6 +276,26 @@ nullify wget -q -O "${HOME}/.zshrc" "${REPO}/.zshrc"
 nullify ln -s -f "${HOME}/.zshrc" /root/.zshrc
 log "Terminal successfully customized"
 
+# ==== INSTALL: zsh plugins ====
+
+info "Installing zsh plugins"
+
+makedir "${CONFIG}"/zsh-plugins
+ln -s -f "${CONFIG}"/zsh-plugins /root/.config/zsh-plugins
+
+get zsh-autosuggestions
+get zsh-syntax-highlighting
+own /usr/share/zsh-*
+
+for plugin in "sudo"
+do
+    info "Downloading ${plugin}"
+    wget -q -O "${CONFIG}"/.zsh-plugins/"${1}" https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/"${1}"/"${1}".plugin.zsh
+done
+
+own "${CONFIG}"/zsh-plugins
+log "All plugins installed!"
+
 # ==== INSTALL: powerlevel10k ====
 
 # Terminal Theme
@@ -347,3 +367,4 @@ own "${CONFIG}"
 # ==== ALL DONE! ====
 
 log "All done!"
+
