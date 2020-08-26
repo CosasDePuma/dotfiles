@@ -322,6 +322,18 @@ log "lsd successfully installed"
 
 get scrub
 
+# ==== INSTALL: fzf ====
+
+info "Installing fzf"
+chdir "${CONFIG}"
+git clone https://github.com/junegunn/fzf
+printf "y\ny\nn\n" | "${CONFIG}"/fzf/install
+rm -f "${HOME}"/.fzf.bash 1>/dev/null 2>/dev/null
+ln -s -f "${HOME}"/.fzf.zsh /root/.fzf.zsh
+ln -s -f "${CONFIG}"/fzf /root/.config/fzf
+chdir "${CWD}"
+log "fzf successfully installed"
+
 # ==== OWN CONFIG DIRECTORY ====
 
 own "${HOME}/.xinitrc"
