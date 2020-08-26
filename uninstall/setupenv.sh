@@ -66,7 +66,8 @@ rm -rf /usr/share/fonts/hacknerd
 # ==== REMOVE CONFIG FILES ====
 
 warning "Removing config files"
-rm -rf "${CONFIG}"/feh "${CONFIG}"/powerlevel10k "${CONFIG}"/fzf /root/powerlevel10k /root/fzf
+rm -rf /root/.config/fzf /root/.config/powerlevel10k /root/.config/zsh-plugins
+rm -rf "${CONFIG}"/feh "${CONFIG}"/fzf "${CONFIG}"/powerlevel10k "${CONFIG}"/zsh-plugins
 rm -f "${HOME}"/.zsh* "${HOME}"/.p10k.zsh /root/.zsh* /root/.p10k.zsh /root/.fzf.zsh
 iter rm -rf "${CONFIG}"/%%
 
@@ -74,7 +75,7 @@ iter rm -rf "${CONFIG}"/%%
 
 warning "Uninstalling programs"
 iter apt -y purge %%
-apt -y purge bat feh lsd rofi zsh 1>/dev/null 2>/dev/null
+apt -y purge bat feh lsd rofi zsh zsh-autosuggestions zsh-syntax-highlighting 1>/dev/null 2>/dev/null
 
 # ==== REMOVE SYSTEM DIRECTORIES ====
 
