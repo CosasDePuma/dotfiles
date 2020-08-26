@@ -81,6 +81,10 @@ nullify() {
     "${@}" 1>/dev/null 2>/dev/null || panic "Command \"${*}\" failed"
 }
 
+# ==== AVOID RECREATING HOME DIRS ====
+
+nullify sed -i 's/enabled=True/enabled=False/g' /etc/xdg/user-dirs.conf
+
 # ==== INSTALLER ====
 
 # Install a program

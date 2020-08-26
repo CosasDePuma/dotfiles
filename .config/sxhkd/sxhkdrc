@@ -42,7 +42,7 @@ super + g
 
 # BurpSuite
 super + b
-	gksudo burp
+	burp
 
 # ----------------------------------------------------
 #  Utilities

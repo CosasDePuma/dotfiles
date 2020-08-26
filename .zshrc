@@ -19,6 +19,9 @@ test -f ~/.fzf.zsh && source ~/.fzf.zsh
 SAVEHIST=1000
 HISTFILE=~/.zsh_history
 
+# Init in Desktop
+cd ~/Desktop
+
 # ==== PLUGINS ====
 
 source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
