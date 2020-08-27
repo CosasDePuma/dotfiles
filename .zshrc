@@ -50,7 +50,7 @@ alias pip="python3 -m pip"
 # ==== FUNCTIONS ====
 
 # Prepare folder to pentesting
-mkt() { mkdir -p content; mkdir -p exploits; mkdir -p nmap; mkdir -p scripts }
+mkt() { mkdir -p content; mkdir -p scripts; mkdir -p nmap; mkdir -p enum }
 
 # Remove a file and make it unrecoverable
 rmk() { scrub -p dod "${@}"; shred -v -zun 10 "${@}" }
