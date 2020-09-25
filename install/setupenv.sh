@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Oneliner:
+#  curl -sSLo- https://raw.githubusercontent.com/CosasDePuma/dotfiles/master/install/setupenv.sh | sudo sh
+
 # ==== ENV ====
 
 CWD="$(pwd)"
