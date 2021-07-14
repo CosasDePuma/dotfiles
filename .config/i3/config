@@ -4,53 +4,53 @@
 # ██║ ╚═══██╗ ██║     ██║   ██║██║╚██╗██║██╔══╝  ██║██║   ██║
 # ██║██████╔╝ ╚██████╗╚██████╔╝██║ ╚████║██║     ██║╚██████╔╝
 # ╚═╝╚═════╝   ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝     ╚═╝ ╚═════╝ 
+#               Inspiration: http://dotshare.it/dots/1398/
 
 # General
 # ----------
 # modkey: Alt
 set $mod Mod1
-# shotcutkey: Win
-set $short Mod4
 # fonts
-font pango:System San Francisco Display 13
+font pango:Source Sans Pro 10
 # modifier on floating windows
 floating_modifier $mod
 # mouse to select window
 focus_follows_mouse yes
-# spanish keyboard layout
-exec --no-startup-id setxkbmap -layout es,es
-# wallpaper
-exec --no-startup-id feh --no-fehbg --bg-fill ~/.config/wallpapers/koyo.jpg
+# popups
+popup_during_fullscreen smart
 
-# Gaps
+# Borders
 # ----------
-#gaps inner 10
-#gaps outer 20
-#smart_gaps on
-#smart_borders on
+default_border          none
+default_floating_border none
 
 # Keybindings: i3
 # ----------
 bindsym $mod+Shift+c reload
-bindsym $mod+Shift+r restart
-bindsym $mod+Shift+e exec i3-msg exit
+bindsym $mod+Shift+q exec i3lock # exec i3-msg exit
 
 # Keybindings: Apps
 # ----------
 # terminal
 bindsym $mod+Return exec --no-startup-id kitty
-bindsym $short+Return exec --no-startup-id kitty
-bindsym $shot+Shift+Return exec --no-startup-id cool-retro-term
+bindsym $mod+Shift+Return exec --no-startup-id cool-retro-term
 # launcher
-bindsym $short+r exec --no-startup-id rofi -modi drun -show drun
+bindsym $mod+e exec --no-startup-id rofi -modi drun -show drun
+bindsym $mod+Tab exec --no-startup-id rofi -modi window -show window
+# editor
+bindsym $mod+c exec --no-startup-id vscodium
 # browser
-bindsym $short+b exec --no-startup-id chromium
-bindsym $short+Shift+b exec --no-startup-id chromium -incognito
+bindsym $mod+b exec --no-startup-id chromium
+bindsym $mod+Shift+b exec --no-startup-id chromium -incognito
+# proxy
+bindsym $mod+z exec --no-startup-id zaproxy
+# stream
+bindsym $mod+o exec --no-startup-id obs
 
 # Keybindings: Windows
 # ----------
 # exit
-bindsym $mod+Shift+q kill
+bindsym $mod+q kill
 # fullscreen
 bindsym $mod+f fullscreen toggle
 # resize
@@ -78,16 +78,16 @@ bindsym $mod+v split v
 # Workspaces
 # ----------
 # aliases
-set $ws1 1
-set $ws2 2
-set $ws3 3
-set $ws4 4
-set $ws5 5
-set $ws6 6
-set $ws7 7
-set $ws8 8
-set $ws9 9
-set $ws10 10
+set $ws1 "1:  Terminal "
+set $ws2 "2:  Code "
+set $ws3 "3:  Browser "
+set $ws4 "4:  Proxy "
+set $ws5 "5:  "
+set $ws6 "6:  "
+set $ws7 "7:  "
+set $ws8 "8:  "
+set $ws9 "9:  "
+set $ws10 "10:  Stream "
 # switch
 bindsym $mod+1 workspace number $ws1
 bindsym $mod+2 workspace number $ws2
@@ -111,8 +111,10 @@ bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 # binds
-assign [class="(?i)alacritty"] $ws1
-assign [window_role="browser"] $ws2
+assign [class="kitty"]              $ws1
+assign [window_role="vscodium"]     $ws2
+assign [window_role="*zaproxy*"]    $ws4
+assign [window_role="obs"]          $ws10
 
 # Window modifiers
 # ----------
@@ -120,18 +122,18 @@ assign [window_role="browser"] $ws2
 for_window [class=".*"] border pixel 0
 hide_edge_borders both
 # custom apps
-for_window [class="(?i)kitty"] focus
-for_window [window_role="browser"] focus
+for_window [class="(kitty|vscodium)"]   focus
+for_window [window_role="browser"]      focus
 
 # Modes
 # ----------
 # resize
 mode "resize" {
         # keyboard
-        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Left resize grow width 10 px or 10 ppt
         bindsym Down resize grow height 10 px or 10 ppt
         bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
+        bindsym Right resize shrink width 10 px or 10 ppt
         # return
         bindsym Return mode "default"
         bindsym Escape mode "default"
@@ -140,16 +142,48 @@ mode "resize" {
 
 # Theme
 # ----------
-# colors
-set $cbg "#f26262"
-set $ccolor "#efebe0"
-set $cunfo "#cb8b8b"
-set $cindi "#145ba7"
-set $cindiu "#8a9db1"
-# props <class>		<border> <background> <text> <indicator> <child_border>
-client.focused		$cbg	$cbg	$ccolor	$cindi	$cbg
-client.focused_inactive	$cbg	$cunfo	$ccolor	$cindiu	$cunfo
-client.unfocused	$cbg	$cunfo	$ccolor	$cindiu	$cunfo
-client.urgent		$cbg	$cunfo	$ccolor	$cindi	$cunfo
+# class                 border      background  text        indicator   child_border
+client.focused          "#2b83a6"   "#2b83a6"   "#ffffff"   "#dddddd"   "#2b83a6"
+client.focused_inactive "#212121"   "#212121"   "#86888c"   "#292d2e"   "#5a5a5a"
+client.unfocused        "#212121"   "#212121"   "#86888c"   "#292d2e"   "#5a5a5a"
+client.urgent           "#d64e4e"   "#d64e4e"   "#ffffff"   "#d64e4e"   "#d64e4e"
+client.placeholder      "#212121"   "#0c0c0c"   "#ffffff"   "#212121"   "#262626"
+client.background       "#212121"
 
-# Reference: dotshare.it/dots/1546
+# Bar
+# ----------
+bar {
+    status_command          i3blocks
+    bindsym button4         nop
+    bindsym button5         nop
+    position                bottom
+    tray_output             primary
+    separator_symbol        "·"
+    workspace_buttons       yes
+    strip_workspace_numbers yes
+
+    colors {
+        background  "#212121"
+        statusline  "#dddddd"
+        separator   "#666666"
+        # class             border      backgr.     text
+        focused_workspace   "#2b83a6"   "#2b83a6"   "#ffffff"
+        active_workspace    "#212121"   "#212121"   "#ffffff"
+        inactive_workspace  "#212121"   "#212121"   "#86888c"
+        urgent_workspace    "#d64e4e"   "#d64e4e"   "#ffffff"
+        binding_mode        "#229c56"   "#229c56"   "#ffffff"
+    }
+}
+
+# Gaps
+# ----------
+smart_gaps on
+gaps inner 8
+gaps outer 2
+
+# Startup
+# ----------
+# spanish keyboard layout
+exec_always --no-startup-id setxkbmap -layout es,es
+# wallpaper
+exec_always --no-startup-id feh --no-fehbg --bg-fill ~/.config/wallpapers/koyo.jpg

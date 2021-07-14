@@ -6,7 +6,7 @@
   "custom-commands": [
     "echo 'puma ALL=(ALL) NOPASSWD: /usr/bin/pacman' >> /etc/sudoers",
     "su puma -c 'git clone https://aur.archlinux.org/yay /tmp/yay; cd /tmp/yay; makepkg -si --noconfirm'",
-    "su puma -c 'yay -Sy --noconfirm ttf-yosemite-san-francisco-font-git'",
+    "su puma -c 'yay -Sy --noconfirm --removemake ttf-sourcesanspro vscodium-bin'",
     "sed -i '$d' /etc/sudoers",
     "git clone https://github.com/cosasdepuma/dotfiles /tmp/dot; mv -f /tmp/dot/.* /home/puma/",
     "chown -R puma:puma /home/puma; usermod -aG docker puma"
@@ -26,16 +26,22 @@
     "curl",
     "docker",
     "feh",
+    "fish",
     "git",
     "go",
     "i3",
     "kitty",
     "lsd",
+    "man-db",
     "neovim",
     "obs-studio",
+    "python-pip",
     "rofi",
+    "rust",
+    "thefuck",
+    "ttf-font-awesome",
     "wget",
-    "zsh"
+    "zaproxy"
   ],
   "profile": "xorg",
   "services": ["docker"],
