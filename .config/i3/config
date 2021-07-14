@@ -36,8 +36,8 @@ bindsym $mod+Shift+e exec i3-msg exit
 # Keybindings: Apps
 # ----------
 # terminal
-bindsym $mod+Return exec --no-startup-id alacritty
-bindsym $short+Return exec --no-startup-id alacritty
+bindsym $mod+Return exec --no-startup-id kitty
+bindsym $short+Return exec --no-startup-id kitty
 bindsym $shot+Shift+Return exec --no-startup-id cool-retro-term
 # launcher
 bindsym $short+r exec --no-startup-id rofi -modi drun,run -show drun

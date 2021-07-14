@@ -1,0 +1,40 @@
+{
+  "!encryption-password": "",
+  "audio": "pipewire",
+  "bootloader": "grub-install",
+  "custom_commands": [
+    "cd /tmp; git clone https://github.com/cosasdepuma/dotfiles; mv -f dotfiles/.* /home/puma/",
+    "chown -R puma:puma /home/puma",
+    "usermod -aG docker puma"
+  ],
+  "filesystem": "xfs",
+  "harddrive": "/dev/sda",
+  "hostname": "zoo",
+  "kernels": ["linux"],
+  "keyboard-language": "es",
+  "mirror-region": "Spain",
+  "nic": { "NetworkManager": true },
+  "ntp": true,
+  "packages": [
+    "chromium",
+    "curl",
+    "docker",
+    "feh",
+    "git",
+    "i3",
+    "kitty",
+    "neovim",
+    "obs-studio",
+    "rofi",
+    "wget",
+    "zsh"
+  ],
+  "profile": "xorg",
+  "services": ["docker"],
+  "superusers": {
+    "puma": { "!password": "monkeys" }
+  },
+  "sys-encoding": "utf-8",
+  "sys-language": "en_US",
+  "timezone": "Europe/Madrid"
+}

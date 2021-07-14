@@ -8,8 +8,3 @@ SAVEHIST=1000
 # ----------
 setopt autocd extendedglob nomatch notify
 unsetopt beep
-
-# Prompt
-# ----------
-autoload -U promptinit; promptinit
-prompt spaceship

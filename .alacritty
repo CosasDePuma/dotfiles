@@ -1,5 +1,0 @@
-env:
-	TERM: alacritty
-window:
-	title: terminal
-	dynamic_title: true
