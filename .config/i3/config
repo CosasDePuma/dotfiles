@@ -12,20 +12,22 @@ set $mod Mod1
 # shotcutkey: Win
 set $short Mod4
 # fonts
-font pango:Fira Code Retina 8
+font pango:System San Francisco Display 13
 # modifier on floating windows
 floating_modifier $mod
 # mouse to select window
 focus_follows_mouse yes
 # spanish keyboard layout
 exec --no-startup-id setxkbmap -layout es,es
+# wallpaper
+exec --no-startup-id feh --no-fehbg --bg-fill ~/.config/wallpapers/koyo.jpg
 
 # Gaps
 # ----------
-gaps inner 10
-gaps outer 20
-smart_gaps on
-smart_borders on
+#gaps inner 10
+#gaps outer 20
+#smart_gaps on
+#smart_borders on
 
 # Keybindings: i3
 # ----------
@@ -40,7 +42,7 @@ bindsym $mod+Return exec --no-startup-id kitty
 bindsym $short+Return exec --no-startup-id kitty
 bindsym $shot+Shift+Return exec --no-startup-id cool-retro-term
 # launcher
-bindsym $short+r exec --no-startup-id rofi -modi drun,run -show drun
+bindsym $short+r exec --no-startup-id rofi -modi drun -show drun
 # browser
 bindsym $short+b exec --no-startup-id chromium
 bindsym $short+Shift+b exec --no-startup-id chromium -incognito
@@ -114,7 +116,11 @@ assign [window_role="browser"] $ws2
 
 # Window modifiers
 # ----------
-for_window [class="(?i)alacritty"] focus
+# fixing i3-gaps borders
+for_window [class=".*"] border pixel 0
+hide_edge_borders both
+# custom apps
+for_window [class="(?i)kitty"] focus
 for_window [window_role="browser"] focus
 
 # Modes

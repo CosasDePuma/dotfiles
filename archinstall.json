@@ -1,11 +1,15 @@
 {
   "!encryption-password": "",
+  "!root-password": "",
   "audio": "pipewire",
   "bootloader": "grub-install",
-  "custom_commands": [
-    "cd /tmp; git clone https://github.com/cosasdepuma/dotfiles; mv -f dotfiles/.* /home/puma/",
-    "chown -R puma:puma /home/puma",
-    "usermod -aG docker puma"
+  "custom-commands": [
+    "echo 'puma ALL=(ALL) NOPASSWD: /usr/bin/pacman' >> /etc/sudoers",
+    "su puma -c 'git clone https://aur.archlinux.org/yay /tmp/yay; cd /tmp/yay; makepkg -si --noconfirm'",
+    "su puma -c 'yay -Sy --noconfirm ttf-yosemite-san-francisco-font-git'",
+    "sed -i '$d' /etc/sudoers",
+    "git clone https://github.com/cosasdepuma/dotfiles /tmp/dot; mv -f /tmp/dot/.* /home/puma/",
+    "chown -R puma:puma /home/puma; usermod -aG docker puma"
   ],
   "filesystem": "xfs",
   "harddrive": "/dev/sda",
@@ -16,13 +20,17 @@
   "nic": { "NetworkManager": true },
   "ntp": true,
   "packages": [
+    "bat",
+    "cool-retro-term",
     "chromium",
     "curl",
     "docker",
     "feh",
     "git",
+    "go",
     "i3",
     "kitty",
+    "lsd",
     "neovim",
     "obs-studio",
     "rofi",

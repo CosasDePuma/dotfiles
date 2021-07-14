@@ -14,10 +14,6 @@ if test -d /etc/X11/xinit/xinitrc.d; then
 	unset f
 fi
 
-# Wallpaper
-# ----------
-command -v feh >/dev/null && test -x ~/.fehbg && ~/.fehbg &
-
 # Window manager
 # ----------
 exec i3
