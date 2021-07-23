@@ -12,6 +12,8 @@
   boot.loader.efi.efiSysMountPoint = "/boot";
   # Whether to enable the GNU GRUB boot loader.
   boot.loader.grub.enable = true;
+  # The device on which the GRUB boot loader will be installed. The special value nodev means that a GRUB boot menu will be generated, but GRUB itself will not actually be installed. To install GRUB on multiple devices, use boot.loader.grub.devices.
+  boot.loader.grub.device = "nodev";
   # Background color to be used for GRUB to fill the areas the image isn't filling.
   boot.loader.grub.backgroundColor = "#282A36";
   # GRUB entry name instead of default.
@@ -279,8 +281,6 @@
   services.httpd.phpOptions = "";
   # Whether to ask Let's Encrypt to sign a certificate for this vhost. Alternately, you can use an existing certificate through useACMEHost.
   services.httpd.virtualHosts."kike.wtf".enableACME = true;
-  # Whether to enable HTTPS in addition to plain HTTP. This will set defaults for listen to listen on all interfaces on the respective default ports (80, 443).
-  services.httpd.virtualHosts."kike.wtf".addSSL = true;
   # E-mail address of the server administrator.
   services.httpd.virtualHosts."kike.wtf".adminAddr = "hola+admin@kike.wtf";
   # The path of Apache's document root directory. If left undefined, an empty directory in the Nix store will be used as root.
@@ -344,7 +344,7 @@
   # |     Swap     |
   # ·--------------·
   # The swap devices and swap files. These must have been initialised using mkswap. Each element should be an attribute set specifying either the path of the swap device or file (device) or the label of the swap device (label, see mkswap -L). Using a label is recommended.
-  swapDevices = [ { label = "swap" } ];
+  swapDevices = [ { label = "swap"; } ];
 
   # ·--------------·
   # |    System    |
