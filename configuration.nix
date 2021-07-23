@@ -197,7 +197,7 @@
   # Install and setup the Java development kit.
   programs.java.enable = true;
   # Java package to install. Typical values are pkgs.jdk or pkgs.jre.
-  programs.java.package = "pkgs.jdk";
+  programs.java.package = pkgs.jdk;
   # Whether to enable Neovim.
   programs.neovim.enable = true;
   # When enabled, installs neovim and configures neovim to be the default editor using the EDITOR environment variable.
@@ -211,9 +211,9 @@
   # Whether to enable npm global config.
   programs.npm.enable = true;
   # Whether to enable installing proxychains configuration.
-  programs.proxychains.enable = true;
+  #programs.proxychains.enable = true; # FIXME
   # The package used for the openssh client and daemon.
-  programs.ssh.package = "pkgs.openssh";
+  programs.ssh.package = pkgs.openssh;
   # Whether to enable steam.
   programs.steam.enable = true;
   # Open ports in the firewall for Source Dedicated Server.
@@ -227,7 +227,7 @@
   # Whether to add Wireshark to the global environment and configure a setcap wrapper for 'dumpcap' for users in the 'wireshark' group.
   programs.wireshark.enable = true;
   # Which Wireshark package to install in the global environment.
-  programs.wireshark.package  = "pkgs.wireshark";
+  programs.wireshark.package  = pkgs.wireshark;
   # Whether to enable ZMap.
   programs.zmap.enable = true;
 
@@ -243,8 +243,6 @@
   security.acme.certs."kike.wtf".extraDomainNames = [ "*.kike.wtf" "www.kike.wtf" ];
   ## Group running the ACME client.
   security.acme.certs."kike.wtf".group = "acme";
-  ## Where the webroot of the HTTP vhost is located. .well-known/acme-challenge/ directory will be created below the webroot if it doesn't exist. http://example.org/.well-known/acme-challenge/ must also be available (notice unencrypted HTTP).
-  security.acme.certs."kike.wtf".webroot = "/www/kike.wtf";
   # Whether to enable the sudo command, which allows non-root users to execute commands as root.
   security.sudo.enable = true;
   # Only allow members of the wheel group to execute sudo by setting the executable's permissions accordingly. This prevents users that are not members of wheel from exploiting vulnerabilities in sudo such as CVE-2021-3156.
@@ -272,7 +270,7 @@
   # Whether to enable MySQL server.
   services.mysql.enable = true;
   # Which MySQL derivation to use. MariaDB packages are supported too.
-  services.mysql.package = "pkgs.mariadb";
+  services.mysql.package = pkgs.mariadb;
   # Whether to enable the Apache HTTP Server.
   services.httpd.enable = true;
   # Whether to enable the PHP module.
@@ -288,17 +286,7 @@
   # Whether to add a separate nginx server block that permanently redirects (301) all plain HTTP traffic to HTTPS. This will set defaults for listen to listen on all interfaces on the respective default ports (80, 443), where the non-SSL listens are used for the redirect vhosts.
   services.httpd.virtualHosts."kike.wtf".forceSSL = true;
   # Declarative location config. See https://httpd.apache.org/docs/2.4/mod/core.html#location for details.
-  services.httpd.virtualHosts."kike.wtf".locations = {
-    "~ \.php$" = {
-      extraConfig = ''
-        fastcgi_pass unix:${config.services.phpfpm.pools.mypool.socket};
-        fastcgi_index index.php;
-      '';
-    };
-    "/.well-known/acme-challenge" = {
-      root = "/var/lib/acme/challenges";
-    };
-  };
+  services.httpd.virtualHosts."kike.wtf".locations = { };
   # Specification of pages to be ignored by web crawlers. See http://www.robotstxt.org/ for details.
   services.httpd.virtualHosts."kike.wtf".robotsEntries = "User-agent: *\nDisallow: /";
   # Additional names of virtual hosts served by this virtual host configuration.
@@ -318,7 +306,7 @@
   # Whether to enable lightdm as the display manager.
   services.xserver.displayManager.lightdm.enable = true;
   # The background image or color to use.
-  services.xserver.displayManager.lightdm.background = "pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath";
+  services.xserver.displayManager.lightdm.background = pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath;
   # Keyboard layout, or multiple keyboard layouts separated by commas.
   services.xserver.layout = "us,es";
   # Whether to enable libinput.
@@ -328,7 +316,7 @@
   # Whether to enable i3 window manager.
   services.xserver.windowManager.i3.enable = true;
   # i3 package to use.
-  services.xserver.windowManager.i3.package = "pkgs.i3-gaps";
+  services.xserver.windowManager.i3.package = pkgs.i3-gaps;
   # Extra packages to be installed system wide.
   services.xserver.windowManager.i3.extraPackages = [ pkgs.i3blocks-gaps ];
   # X keyboard options; layout switching goes here.
@@ -349,8 +337,6 @@
   # ·--------------·
   # |    System    |
   # ·--------------·
-  # The NixOS release (e.g. 16.03).
-  system.nixos.release = "21.05";
   # Every once in a while, a new NixOS release may change configuration defaults in a way incompatible with stateful data. For instance, if the default version of PostgreSQL changes, the new version will probably be unable to read your existing databases. To prevent such breakage, you should set the value of this option to the NixOS release with which you want to be compatible. The effect is that NixOS will use defaults corresponding to the specified release (such as using an older version of PostgreSQL). It‘s perfectly fine and recommended to leave this value at the release version of the first install of this system. Changing this option will not upgrade your system. In fact it is meant to stay constant exactly when you upgrade your system. You should only bump this option, if you are sure that you can or have migrated all state on your system which is affected by this option.
   system.stateVersion = "21.05";
 
@@ -358,7 +344,7 @@
   # |     User     |
   # ·--------------·
   # This option defines the default shell assigned to user accounts. This can be either a full system path or a shell package.
-  users.defaultUserShell = "pkgs.fish";
+  users.defaultUserShell = pkgs.fish;
   # If set to true, you are free to add new users and groups to the system with the ordinary useradd and groupadd commands. On system activation, the existing contents of the /etc/passwd and /etc/group files will be merged with the contents generated from the users.users and users.groups options. The initial password for a user will be set according to users.users, but existing passwords will not be changed.
   users.mutableUsers = true;
   # Additional user accounts to be created automatically by the system. This can also be used to set options for root.
