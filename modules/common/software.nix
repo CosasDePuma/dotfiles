@@ -1,5 +1,4 @@
-{ config, lib, pkgs, ... }:
-with lib; {
+{ config, pkgs, ... }: {
   config = {
     # Allow unfree (Stallman crying...)
     nixpkgs.config.allowUnfree = true;

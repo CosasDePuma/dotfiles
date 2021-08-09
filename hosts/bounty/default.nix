@@ -3,8 +3,8 @@ let
   user = "bug";
 in {
   imports = [
-    ../modules/i3.nix
-    ../modules/hacking.nix
+    ../../modules/i3.nix
+    ../../modules/hacking.nix
   ];
 
   # System
@@ -21,4 +21,3 @@ in {
   };
   services.xserver.displayManager.autoLogin.user = "${user}";
 }
-

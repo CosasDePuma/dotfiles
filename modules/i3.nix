@@ -1,12 +1,14 @@
-{ config, lib, pkgs, ... }:
-with lib; {
+{ config, pkgs, ... }: {
   config = {
     # Environment
-    services.xserver.enable = mkDefault true;
-    services.xserver.displayManager.defaultSession = mkDefault "none+i3";
-    services.xserver.displayManager.lightdm.enable = mkDefault true;
-    services.xserver.windowManager.i3.enable = mkDefault true;
-    services.xserver.windowManager.i3.package = mkDefault pkgs.i3-gaps;
+    services.xserver = {
+      enable = true;
+      displayManager.defaultSession = "none+i3";
+      displayManager.lightdm.enable = true;
+      windowManager.i3.enable = true;
+      windowManager.i3.package = pkgs.i3-gaps;
+    };
+  
     # Programs
     environment.systemPackages = with pkgs; [
       feh            # wallpaper

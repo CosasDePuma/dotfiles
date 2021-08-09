@@ -1,8 +1,7 @@
-{ config, lib, pkgs, ... }:
-with lib; {
+{ config, pkgs, ... }: {
   config = {
-  programs.wireshark.enable = mkDefault true;
-  environment.systemPackages = with pkgs; [
+    programs.wireshark.enable = true;
+    environment.systemPackages = with pkgs; [
       amass        # dns enumeration
       burpsuite    # web security platform
       ffuf         # bruteforce assets

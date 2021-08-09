@@ -1,6 +1,6 @@
 {
   description = "My machines!";
-  
+
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-21.05";
     home-manager.url = "github:nix-community/home-manager/release-21.05";
@@ -9,20 +9,56 @@
 
   outputs = { self, nixpkgs, ... }:
   let
+    # Only install Linux systems
     system = "x86_64-linux";
+
+    # Available programs
     pkgs = import nixpkgs {
       inherit system;
       config.allowUnfree = true;
     };
 
-    mkHost = hostname: nixpkgs.lib.nixosSystem {
+    # Default modules needed in every system
+    defaultModules = map (n: "common/${n}") [
+      "documentation"
+      "grub"
+      "hardware"
+      "network"
+      "security"
+      "software"
+      "spanish"
+      "virtualisation"
+   ];
+
+    # Get all hostnames from hosts folder
+    getHosts = builtins.attrsNames (filterAttrs (_: v: v == "directory") (builtins.readDir ./.));
+
+    # Converts modules filenames to paths
+    # Example: mkModules [ "hardware" "spanish" ]
+    mkModules = modules: map (n: ./modules + "/${n}.nix" ) modules;
+
+    # Creates the configuration for each host from a list of hostnames
+    # Example: mkHosts [ "personal" "work" ]
+    mkHosts = hosts: genAttrs hosts (host: nixpkgs.lib.nixosSystem {
       inherit system;
-      modules = [
-        ./base.nix
-        (./hosts + "/${hostname}.nix")
-      ];
-    };
+        modules = (mkModules defaultModules) ++ [
+          # Version
+          ({ system.stateVersion = "21.05"; })
+          # Flakes
+          ({ pkgs, ... }: {
+            nix.package = pkgs.nixFlakes;
+            nix.extraOptions = "experimental-features = nix-command flakes";
+          })
+          # Hostname
+          ({ networking.hostName = host; })
+          # Custom configuration
+          (./hosts + "/${host}")
+          
+          ./base.nix
+        ];
+    });
   in {
-    nixosConfigurations.bounty = mkHost "bounty";
+    # Systems
+    nixosConfigurations = mkHosts getHosts;
   };
 }
