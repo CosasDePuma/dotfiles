@@ -8,7 +8,7 @@ with lib; {
     services.xserver.windowManager.i3.enable = mkDefault true;
     services.xserver.windowManager.i3.package = mkDefault pkgs.i3-gaps;
     # Programs
-    environment.systemPackages = with pkgs; mkDefault [
+    environment.systemPackages = with pkgs; [
       feh            # wallpaper
       kitty          # terminal
       picom          # compositor

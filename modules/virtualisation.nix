@@ -1,5 +1,8 @@
 { config, lib, pkgs, ... }:
-with lib; {
+with lib;
+let
+  cfg = config;
+in {
   config = {
     # Docker
     virtualisation.docker.enable = mkDefault true;
@@ -8,7 +11,7 @@ with lib; {
     environment.systemPackages = with pkgs; [ docker_compose ];
     # VirtualBox
     virtualisation.virtualbox.guest.enable = mkDefault false;
-    virtualisation.virtualbox.host.enable = mkDefault (!config.virtualisation.virtualbox.guest.enable);
+    virtualisation.virtualbox.host.enable = mkDefault (!cfg.virtualisation.virtualbox.guest.enable);
     virtualisation.virtualbox.host.enableHardening = true;
   };
 }

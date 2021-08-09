@@ -1,5 +1,8 @@
 { config, lib, ... }:
-with lib; {
+with lib;
+let
+  cfg = config;
+in {
   imports = [ ../services/rmlogs.nix ];
 
   config = {  
@@ -7,7 +10,7 @@ with lib; {
     security.protectKernelImage = true; 
     # Clear tmp files
     boot.tmpOnTmpfs = mkDefault true;
-    boot.cleanTmpDir = !config.boot.tmpOnTmpfs;
+    boot.cleanTmpDir = !cfg.boot.tmpOnTmpfs;
     # Disable systemd-boot editor
     boot.loader.systemd-boot.editor = false;
     # ACME SSL

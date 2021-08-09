@@ -2,7 +2,7 @@
 with lib; {
   config = {
   programs.wireshark.enable = mkDefault true;
-  environment.systemPackages = with pkgs; mkDefault [
+  environment.systemPackages = with pkgs; [
       amass        # dns enumeration
       burpsuite    # web security platform
       ffuf         # bruteforce assets
@@ -16,6 +16,7 @@ with lib; {
       nuclei       # targeted scanning
       sqlmap       # automatic sql injection
       subfinder    # subdomain discovery
+      wpscan       # wordpress
       zap          # web security platform (open-source)
     ];
   };
