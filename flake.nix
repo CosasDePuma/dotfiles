@@ -11,7 +11,6 @@
   let
     # Only install Linux systems
     system = "x86_64-linux";
-
     # Available programs
     pkgs = import nixpkgs {
       inherit system;
@@ -39,13 +38,18 @@
     
     # Converts hosts to VM hosts
     # Example: mkVMHosts [ "hardware" "spanish" ]
-    mkVMHosts = hosts: map (n: "${n}'" ) hosts;
+    vmSuffix = "vm";
+    mkVMHosts = hosts: map (n: "${n}${vmSuffix}" ) hosts;
 
     # Creates the configuration for each host from a list of hostnames
     # Example: mkHosts [ "personal" "work" ]
     mkHosts = hosts: nixpkgs.lib.attrsets.genAttrs hosts (host: nixpkgs.lib.nixosSystem {
       inherit system;
-        modules = (mkModules defaultModules) ++ [
+      modules =
+        with nixpkgs.lib;
+        let
+          hostname = strings.removeSuffix vmSuffix host
+        in (mkModules defaultModules) ++ [
           # Version
           ({ system.stateVersion = "21.05"; })
           # Flakes
@@ -54,18 +58,18 @@
             nix.extraOptions = "experimental-features = nix-command flakes";
           })
           # Hostname
-          ({ networking.hostName = host; })
-          # VM settings # Fixme: Remove vm from Hostname, so we can import the config from the original folder
-          ({ pkgs, ... }: nixpkgs.lib.mkIf nixpkgs.lib.strings.hasSuffix "vm" host {
+          ({ networking.hostName = hostname; })
+          # VM settings
+          ({ pkgs, ... }: mkIf (strings.hasSuffix vmSuffix host) {
             virtualisation.vmware.guest.enable = true;
             virtualisation.virtualbox.guest.enable = true;
             environment.systemPackages = with pkgs; [ "open-vm-tools" ];
           })
           # Custom configuration
-          (./hosts + "/${host}")
-          
-          ./base.nix
-        ];
+          (./hosts + "/${hostname}")
+          # Custom hardware configuration
+          ./hardware-configuration.nix
+      ];
     });
   in {
     # Systems
