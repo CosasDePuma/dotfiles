@@ -1,7 +1,7 @@
 { config, ... }: {
   config = {
     # Monitors
-    services.autorand.enable = true;
+    services.autorandr.enable = true;
     # Bluetooth
     services.blueman.enable = true;
     # Sound
