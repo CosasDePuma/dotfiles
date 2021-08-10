@@ -51,6 +51,12 @@
           })
           # Hostname
           ({ networking.hostName = host; })
+          # VM settings
+          ({ pkgs, ... }: lib.mkIf lib.strings.hasSuffix "VM" host {
+            virtualisation.vmware.guest.enable = true;
+            virtualisation.virtualbox.guest.enable = true;
+            environment.systemPackages = with pkgs; [ "open-vm-tools" ];
+          });
           # Custom configuration
           (./hosts + "/${host}")
           
