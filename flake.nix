@@ -63,7 +63,7 @@
           ({ pkgs, ... }: mkIf (strings.hasSuffix vmSuffix host) {
             virtualisation.vmware.guest.enable = true;
             virtualisation.virtualbox.guest.enable = true;
-            environment.systemPackages = with pkgs; [ "open-vm-tools" ];
+            environment.systemPackages = with pkgs; [ open-vm-tools ];
           })
           # Custom configuration
           (./hosts + "/${hostname}")
