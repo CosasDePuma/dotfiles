@@ -36,6 +36,10 @@
     # Converts modules filenames to paths
     # Example: mkModules [ "hardware" "spanish" ]
     mkModules = modules: map (n: ./modules + "/${n}.nix" ) modules;
+    
+    # Converts hosts to VM hosts
+    # Example: mkVMHosts [ "hardware" "spanish" ]
+    mkVMHosts = hosts: map (n: "${n}'" ) hosts;
 
     # Creates the configuration for each host from a list of hostnames
     # Example: mkHosts [ "personal" "work" ]
@@ -52,11 +56,11 @@
           # Hostname
           ({ networking.hostName = host; })
           # VM settings
-          ({ pkgs, ... }: lib.mkIf lib.strings.hasSuffix "VM" host {
+          ({ pkgs, ... }: lib.mkIf lib.strings.hasSuffix "'" host {
             virtualisation.vmware.guest.enable = true;
             virtualisation.virtualbox.guest.enable = true;
             environment.systemPackages = with pkgs; [ "open-vm-tools" ];
-          });
+          })
           # Custom configuration
           (./hosts + "/${host}")
           
@@ -65,6 +69,6 @@
     });
   in {
     # Systems
-    nixosConfigurations = mkHosts getHosts;
+    nixosConfigurations = mkHosts (getHosts ++ (mkVMHosts getHosts));
   };
 }
