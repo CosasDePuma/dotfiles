@@ -48,7 +48,7 @@
       modules =
         with nixpkgs.lib;
         let
-          hostname = strings.removeSuffix vmSuffix host
+          hostname = strings.removeSuffix vmSuffix host;
         in (mkModules defaultModules) ++ [
           # Version
           ({ system.stateVersion = "21.05"; })
