@@ -31,7 +31,7 @@
    ];
 
     # Get all hostnames from hosts folder
-    getHosts = builtins.attrsNames (filterAttrs (_: v: v == "directory") (builtins.readDir ./.));
+    getHosts = builtins.attrNames (nixpkgs.lib.attrsets.filterAttrs (_: v: v == "directory") (builtins.readDir ./hosts));
 
     # Converts modules filenames to paths
     # Example: mkModules [ "hardware" "spanish" ]
@@ -43,7 +43,7 @@
 
     # Creates the configuration for each host from a list of hostnames
     # Example: mkHosts [ "personal" "work" ]
-    mkHosts = hosts: genAttrs hosts (host: nixpkgs.lib.nixosSystem {
+    mkHosts = hosts: nixpkgs.lib.attrsets.genAttrs hosts (host: nixpkgs.lib.nixosSystem {
       inherit system;
         modules = (mkModules defaultModules) ++ [
           # Version
@@ -55,8 +55,8 @@
           })
           # Hostname
           ({ networking.hostName = host; })
-          # VM settings
-          ({ pkgs, ... }: lib.mkIf lib.strings.hasSuffix "'" host {
+          # VM settings # Fixme: Remove vm from Hostname, so we can import the config from the original folder
+          ({ pkgs, ... }: nixpkgs.lib.mkIf nixpkgs.lib.strings.hasSuffix "vm" host {
             virtualisation.vmware.guest.enable = true;
             virtualisation.virtualbox.guest.enable = true;
             environment.systemPackages = with pkgs; [ "open-vm-tools" ];
