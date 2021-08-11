@@ -2,6 +2,8 @@
 let
   user = "bug";
 in {
+  imports = [ ../../modules/i3.nix ];
+
   # User
   users.users."${user}" = {
     uid = 1000;
