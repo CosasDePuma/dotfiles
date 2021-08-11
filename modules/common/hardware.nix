@@ -5,7 +5,7 @@
     # Bluetooth
     services.blueman.enable = true;
     # Sound
-    sound.enable = mkDefault true;
+    sound.enable = true;
     hardware.pulseaudio.enable = true;
     # Touchpad
     services.xserver.libinput.enable = true;
