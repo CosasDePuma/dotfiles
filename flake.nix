@@ -7,7 +7,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, ... }:
+  outputs = { self, nixpkgs, home-manager, ... }:
   let
     # Only install Linux systems
     system = "x86_64-linux";
@@ -57,6 +57,13 @@
             nix.package = pkgs.nixFlakes;
             nix.extraOptions = "experimental-features = nix-command flakes";
           })
+          # Home-Manager
+          home-manager.nixosModules.home-manager {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+            };
+          }
           # Hostname
           ({ networking.hostName = hostname; })
           # VM settings
