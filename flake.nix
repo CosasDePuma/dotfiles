@@ -5,14 +5,12 @@
 
   # -- 📥 inputs -- #
   
-  inputs = {
-    # nixos packages
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    # home manager
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+  # nixos packages
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+  # home manager
+  inputs.home-manager = {
+    url = "github:nix-community/home-manager";
+    inputs.nixpkgs.follows = "nixpkgs";
   };
 
   # -- 📦 outputs -- #
@@ -31,7 +29,7 @@
       # -- 🧠 functions -- #
 
       # generates the home manager config for a user
-      mkHome = { user, machine, ... }:
+      mkHome = { user, machine, ... }: {
         "${user}" = {
           imports = [
             # user configuration
@@ -44,15 +42,16 @@
               };
             })
             # custom configuration for the user
-            ("./machines/${machine}/home.nix")
+            (./machines/${machine}/home.nix)
           ];
         };
+      };
 
       # gets the name of the machines from the machines directory
-      getMachines = buildtins.attrNames (nixpkgs.lib.attrsets.filterAttrs (_: v: v == "directory") (builtins.readDir ./machines));
+      getMachines = builtins.attrNames (nixpkgs.lib.attrsets.filterAttrs (_: v: v == "directory") (builtins.readDir ./machines));
 
       # generates the machine configuration
-      mkMachine = { machine, user ? "puma", extraGroups ? [], extraModules ? [], hardware ? "./hardware-configuration.nix", ... }:
+      mkMachine = { machine, user ? "puma", extraGroups ? [], extraModules ? [], hardware ? "vmware", ... }:
         nixpkgs.lib.nixosSystem {
           inherit system;
           
@@ -65,31 +64,32 @@
             ({ pkgs, ... }: {
               nix = {
                 package = pkgs.nixFlakes;
-                extraOptions = lib.optionalString (config.nix.package == pkgs.nixFlakes)
-                  "experimental-features = nix-command flakes";
+                extraOptions = "experimental-features = nix-command flakes";
               };
             })
             # home manager
-            (home-manager.nixosModules.home-manager {
+            home-manager.nixosModules.home-manager {
               home-manager = {
+                # home manager configuration
                 useGlobalPkgs = true;
                 useUserPackages = true;
-                # users configutation
-                home-manager.users = mkHome user;
-                home-manager.users = mkHome "root";
+                # users configuration
+                users = mkHome { inherit user; inherit machine; }; #) ++ (mkHome "root");
               };
-            })
+            }
             # hostname
-            ({ networking.hostName = hostname; })
+            ({ networking.hostName = machine; })
             # user configutation
-            (users.users."${user}" = {
+            ({
+              users.users."${user}" = {
                 isNormalUser = true;
                 extraGroups = [ "audio networkmanager wheel" ] ++ extraGroups;
+              };
             })
             # machine configuration
-            ("./machines/${machine}")
+            (./machines/${machine})
             # hardware configuration
-            (hardware)
+            (./hardware/${hardware})
           
           # extra modules
           ] ++ extraModules;
@@ -97,11 +97,10 @@
     in {
       nixosConfigurations = {
 
-        bounty = mkHost {
-          inherit system;
+        bounty = mkMachine {
           machine = "bounty";
           user = "bug";
-          hardware = "./harware/hardware-configuration.nix";
+          hardware = "vmware";
         };
 
       };
