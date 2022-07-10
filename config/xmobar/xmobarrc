@@ -1,0 +1,44 @@
+Config
+
+  -- 🔤 fonts
+
+  { font                               = "xft:Mononoki Nerd Font:style=Regular:pixelsize=14:antialias=true:hinting=true"
+  , additionalFonts                    = []
+
+  -- 🧠 behaviour
+  , position                           = Top
+  , lowerOnStart                       = True       -- lower element in the screen
+  , hideOnStart                        = False      -- visible on startup
+  , persistent                         = True       -- always visible
+  , allDesktops                        = True       -- same bar for all desktops
+  , overrideRedirect                   = True       -- block event propagation
+
+  -- 💻 commands
+  
+  , commands =
+      -- time
+      [ Run Date                      "<fn=1>\xf5ec </fn> %d/%m/%y %H:%M " "date" 50
+      -- cpu usage (percentange)
+      , Run Cpu                       ["-t", "<fn=1>\xf2db </fn> <user>% (<total>%)", "-H", "50", "--high", "red"] 20
+      -- ram usage (+ percentage)
+      , Run Memory                    ["-t", "<fn=1>\xf0e4 </fn> <used>M (<usedratio>%)"] 20
+      -- disk
+      , Run DiskU                     [("/", "<fn=1>\xf7c9 </fn><used>/<size> (<usedp>%)")] [] 50
+      -- network
+      , Run DynNetwork                ["-t", "<fn=1>\xfbf1 </fn> <dev>:<rx>KB/<tx>KB"] 20
+      -- volume
+      , Run Volume "default" "Master" ["-t", "<fn=1>\xfa7d </fn><volume>%", "-c", "red"] 1
+      -- temperature
+      , Run ThermalZone 0             ["-t", "<fn=1>\xfbf1 </fn> <temp>ºC"] 50
+      -- battery
+      , Run Battery                   ["-t", "<acstatus>", "-L", "10", "-H", "80", "-l", "red", "-h", "green", "--", "-O", "<fn=1>\xf583 </fn><left>%", "-i", "<fc=#b3afc2><fn=1>\xf578 </fn><fn=1>\xe255 </fn></fc>", "-o", "<fn=1>\xf578 </fn><left>%"] 50
+    ]
+
+  -- 💄 style
+
+  , bgColor                           = "#444d5e"   -- background color
+  , fgColor                           = "#b3afc2"   -- foreground color
+  , sepChar                           = "%"         -- variable identifier
+  , alignSep                          = "}{"        -- align identifier
+  , template                          = "|| }{ %cpu% | %memory% | %dynnetwork% | %disku% | %thermal0% | %battery% | %default:Master% | %date%"
+  }
