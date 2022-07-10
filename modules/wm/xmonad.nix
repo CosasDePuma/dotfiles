@@ -9,9 +9,10 @@
     };
   };
 
+  fonts.fonts = with pkgs; [ nerdfonts ];
+
   environment.systemPackages = with pkgs; [
     feh
-    fira-code
     haskellPackages.xmobar
     kitty
     rofi

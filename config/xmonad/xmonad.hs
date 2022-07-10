@@ -4,8 +4,9 @@ import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 import XMonad                    as X
 import XMonad.Layout.Spacing(spacingRaw,Border(..))
+import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks(avoidStruts,docks)
-import XMonad.Util.Run(spawnPipe)
+import XMonad.Util.Run(hPutStrLn,spawnPipe)
 import XMonad.Util.SpawnOnce(spawnOnce)
 import Graphics.X11.ExtraTypes.XF86
 import Data.Function
@@ -14,12 +15,12 @@ import System.Exit(exitWith,ExitCode(ExitSuccess))
 -- 🚪 entrypoint
 
 main = do
-    xmproc <- spawnPipe "xmobar -x 0 ~/.config/xmobar/xmobarrc"  -- start xmobar
-    xmonad $ docks myConfig                                      -- start xmonad
+    xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"  -- start xmobar
+    xmonad $ docks $ myConfig xmproc                        -- start xmonad
 
 -- 🧰 configuration
 
-myConfig = def {
+myConfig myProc = def {
     -- simple stuff
     terminal           = "kitty",
     borderWidth        = 3,
@@ -35,13 +36,13 @@ myConfig = def {
     layoutHook         = myLayout,
     manageHook         = myManageHook,
     handleEventHook    = myEventHook,
-    logHook            = myLogHook,
+    logHook            = myLogHook myProc,
     startupHook        = myStartupHook
 }
 
 -- 🔑 keybindings
 
-myKeys conf @ (XConfig {modMask = modm}) = M.fromList $
+myKeys conf@(XConfig {modMask = modm}) = M.fromList $
     [ ((modm              , xK_q                   ), spawn "pkill -9 xmobar; xmonad --recompile; xmonad --restart")  -- reload xmonad
     , ((modm .|. shiftMask, xK_q                   ), io (exitWith ExitSuccess))                                      -- close xmonad
     , ((modm              , xK_Return              ), spawn $ X.terminal conf)                                        -- terminal
@@ -99,13 +100,15 @@ myEventHook = mempty
 
 -- 📜 logger
 
-myLogHook = return ()
+myLogHook xmproc = dynamicLogWithPP $ xmobarPP
+    { ppOutput = hPutStrLn xmproc }
+
 
 -- 🏁 startup
 
 myStartupHook = do
+    spawnOnce "pulseaudio --start"                                       -- audio
     spawnOnce "feh --no-fehbg --bg-fill ~/.config/wallpapers/wallpaper"  -- wallpaper
-    spawnOnce "pulseaudio --check && pulseaudio -k; pulseaudio --start"  -- audio
 
 -- 🆘 help message
 
@@ -132,4 +135,3 @@ help = unlines [
     " -- XMonad --",
     " [Win + Q]             Reload the window manager",
     " [Win + Shift + Q]     Exit the window manager"]
- 
