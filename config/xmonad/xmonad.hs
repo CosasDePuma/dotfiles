@@ -1,3 +1,5 @@
+-- TODO closed imports(), myLogHook, help, up/down keys, move window using keys.
+
 -- 📦 imports
 
 import qualified XMonad.StackSet as W
@@ -16,13 +18,13 @@ import System.Exit(exitWith,ExitCode(ExitSuccess))
 
 main = do
     xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"  -- start xmobar
-    xmonad $ docks $ myConfig xmproc                        -- start xmonad
+    getDirectories >>= (launch $ docks $ myConfig xmproc)   -- start xmonad
 
 -- 🧰 configuration
 
 myConfig myProc = def {
     -- simple stuff
-    terminal           = "kitty",
+    terminal           = "xterm",
     borderWidth        = 3,
     clickJustFocuses   = False,
     focusFollowsMouse  = True,
@@ -43,8 +45,8 @@ myConfig myProc = def {
 -- 🔑 keybindings
 
 myKeys conf@(XConfig {modMask = modm}) = M.fromList $
-    [ ((modm              , xK_q                   ), spawn "pkill -9 xmobar; xmonad --recompile; xmonad --restart")  -- reload xmonad
-    , ((modm .|. shiftMask, xK_q                   ), io (exitWith ExitSuccess))                                      -- close xmonad
+    [ ((modm .|. shiftMask, xK_Escape              ), io (exitWith ExitSuccess))                                      -- close xmonad
+    , ((modm              , xK_q                   ), restart "xmonad" True)                                          -- reload xmonad
     , ((modm              , xK_Return              ), spawn $ X.terminal conf)                                        -- terminal
     , ((modm              , xK_r                   ), spawn "rofi -modi drun -show drun")                             -- launcher
     , ((modm              , xK_c                   ), kill)                                                           -- close window

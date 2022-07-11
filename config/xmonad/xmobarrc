@@ -28,8 +28,6 @@ Config
       , Run DiskU                     [("/", "<fn=1>\xf7c9 </fn><usedp>%")] [] 50
       -- network
       , Run DynNetwork                ["-t", "<dev> <fn=1>\xfbf1 </fn> <rx>KB/<tx>KB"] 20
-      -- volume
-      , Run Volume "default" "Master" ["-t", "<fn=1>\xfa7d </fn><volume>%", "-c", "red"] 1
       -- battery
       , Run Battery                   ["-t", "<acstatus>", "-L", "10", "-H", "80", "-l", "red", "-h", "green", "--", "-O", "<fn=1>\xf583 </fn><left>%", "-i", "<fc=#b3afc2><fn=1>\xf578 </fn><fn=1>\xe255 </fn></fc>", "-o", "<fn=1>\xf578 </fn><left>%"] 50
       -- language
@@ -42,5 +40,5 @@ Config
   , fgColor                           = "#b3afc2"   -- foreground color
   , sepChar                           = "%"         -- variable identifier
   , alignSep                          = "}{"        -- align identifier
-  , template                          = "|| %StdinReader% }{ %dynnetwork% | %cpu% | %memory% | %disku% | %battery% | %default:Master% | %date% | %kbd% "
+  , template                          = "|| %StdinReader% }{ %dynnetwork% | %cpu% | %memory% | %disku% | %battery% | %date% | %kbd% "
   }

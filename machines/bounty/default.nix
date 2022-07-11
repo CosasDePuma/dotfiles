@@ -1,6 +1,6 @@
 { config, pkgs, ... }: {
   imports = [
-    ../../modules/wm/xmonad.nix
+    ./modules.nix
   ];
 
   networking.networkmanager.enable = true;
