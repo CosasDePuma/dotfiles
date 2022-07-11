@@ -25,8 +25,14 @@ list:
 
 
 # .---------------.
-# |  GENERATIONS  |
+# |    UPDATES    |
 # '---------------'
+
+# ⤵️ fetch the latests configuration
+.PHONY: fetch
+fetch: .git
+	git fetch
+	git reset --hard origin/main
 
 # 🚀 update the system
 .PHONY: update

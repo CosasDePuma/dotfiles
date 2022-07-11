@@ -34,7 +34,7 @@ in {
       font = "Lat2-Terminus16";
     };
     services.xserver.layout = lib.concatStringsSep "," cfg.languages;
-    services.xserver.xkbOptions = "grp:${cfg.toggleCombination}";
+    services.xserver.xkbOptions = "grp:${cfg.toggleLanguage}";
   
   };
 }
