@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 let
   cfg = config.experimental;
 in {
@@ -14,13 +14,5 @@ in {
   config = lib.mkIf cfg.enable {
     networking.networkmanager.enable = true;
     services.xserver.libinput.enable = true;
-    environment.systemPackages = with pkgs; [
-      firefox
-      git
-      gnumake
-      vim
-      wget
-      xclip
-    ];
   };
 }

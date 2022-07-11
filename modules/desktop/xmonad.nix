@@ -6,9 +6,28 @@ in {
   options = {
     desktop.xmonad = {
       enable = lib.mkEnableOption "custom XMonad (with XMobar) window manager";
+
+      config = lib.mkOption {
+        type = lib.types.path;
+        default = ../../config/xmonad/xmonad.hs;
+        description = "The path of the XMonad configuration file. This file is embedded in the binary.";
+      };
+
       defaultTerminal = lib.mkPackageOption pkgs "xterm" {};
-      disableExtraPkgs = lib.mkEnableOption "disable extra packages";
-      disableExtraFonts = lib.mkEnableOption "disable extra fonts";
+
+      disableExtraFonts = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        example = true;
+        description = "Whether to disable extra fonts";
+      };
+
+      disableExtraPackages = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        example = true;
+        description = "Whether to disable extra packages";
+      };
     };
   };
 
@@ -19,13 +38,13 @@ in {
       displayManager.defaultSession = "none+xmonad";
       windowManager.xmonad = {
         enable = true;
-        config = builtins.replaceStrings ["xterm"] [cfg.defaultTerminal.pname] (builtins.readFile ../../config/xmonad/xmonad.hs);
+        config = builtins.replaceStrings ["xterm"] [cfg.defaultTerminal.pname] (builtins.readFile cfg.config);
         enableContribAndExtras = true;
       };
     };
 
     fonts.fonts = lib.optionals (!cfg.disableExtraFonts)  [ (pkgs.nerdfonts.override { fonts = [ "Mononoki" ]; }) ];
 
-    environment.systemPackages = with pkgs;[ haskellPackages.xmobar xorg.xmessage ] ++ [ cfg.defaultTerminal ] ++ (lib.optionals (!cfg.disableExtraPkgs) extraPkgs);
+    environment.systemPackages = with pkgs;[ haskellPackages.xmobar xorg.xmessage ] ++ [ cfg.defaultTerminal ] ++ (lib.optionals (!cfg.disableExtraPackages) extraPkgs);
   };
 }

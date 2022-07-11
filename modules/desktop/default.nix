@@ -1,1 +1,1 @@
-{  imports = [ ./xmonad.nix ]; }
+{  imports = [ ./picom.nix ./xmonad.nix ]; }

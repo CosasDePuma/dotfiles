@@ -5,17 +5,33 @@
 
   # -- 📥 inputs -- #
   
-  # nixos packages
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-  # home manager
-  inputs.home-manager = {
-    url = "github:nix-community/home-manager";
-    inputs.nixpkgs.follows = "nixpkgs";
+  inputs = {
+    # nixos packages
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    
+    # home manager
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # overlays
+    overlays = {
+      # picom overlay
+      picom = (self: super: {
+        picom = super.picom.overrideAttrs (_: {
+          src = {
+            flake = false;
+            url = github:jonaburg/picom/v8;
+          };
+        });
+      });
+    };
   };
 
   # -- 📦 outputs -- #
 
-  outputs = inputs @ { self, nixpkgs, home-manager, ... }:
+  outputs = inputs @ { self, nixpkgs, home-manager, overlays, ... }:
     let
       # variables
       nixosVersion = "22.05";
@@ -57,9 +73,10 @@
           
           # modules
           modules = [
-
             # nixos version
             ({ system.stateVersion = nixosVersion; })
+            # overlays
+            ({ nixpkgs.overlays = overlays; })
             # flakes
             ({ pkgs, ... }: {
               nix = {
@@ -83,7 +100,7 @@
             ({
               users.users."${user}" = {
                 isNormalUser = true;
-                extraGroups = [ "audio networkmanager wheel" ] ++ extraGroups;
+                extraGroups = [ "networkmanager wheel" ] ++ extraGroups;
               };
             })
             # machine configuration
