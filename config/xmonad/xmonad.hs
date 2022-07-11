@@ -107,7 +107,6 @@ myLogHook xmproc = dynamicLogWithPP $ xmobarPP
 -- 🏁 startup
 
 myStartupHook = do
-    spawnOnce "pulseaudio --start"                                       -- audio
     spawnOnce "feh --no-fehbg --bg-fill ~/.config/wallpapers/wallpaper"  -- wallpaper
 
 -- 🆘 help message
