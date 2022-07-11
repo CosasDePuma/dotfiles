@@ -14,24 +14,11 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # overlays
-    overlays = {
-      # picom overlay
-      picom = (self: super: {
-        picom = super.picom.overrideAttrs (_: {
-          src = {
-            flake = false;
-            url = github:jonaburg/picom/v8;
-          };
-        });
-      });
-    };
   };
 
   # -- 📦 outputs -- #
 
-  outputs = inputs @ { self, nixpkgs, home-manager, overlays, ... }:
+  outputs = inputs @ { self, nixpkgs, home-manager, ... }:
     let
       # variables
       nixosVersion = "22.05";
@@ -41,6 +28,20 @@
         inherit system;
         config.allowUnfree = true;
       };
+      # overlays
+      overlays = [
+        # picom overlay
+        (self: super: {
+          picom = pkgs.picom.overrideAttrs (_: {
+            src = pkgs.fetchFromGitHub {
+              repo = "picom";
+              owner = "jonaburg";
+              rev = "v8";
+              sha256 = "sha256-JYVk7mq9K9wm/WLDy/q7ghrVcigkGUWT9QiPs89eWxM=";
+            };
+          });
+        })
+      ];
 
       # -- 🧠 functions -- #
 
@@ -67,7 +68,7 @@
       getMachines = builtins.attrNames (nixpkgs.lib.attrsets.filterAttrs (_: v: v == "directory") (builtins.readDir ./machines));
 
       # generates the machine configuration
-      mkMachine = { machine, user ? "puma", extraGroups ? [], extraModules ? [], hardware ? "vmware", ... }:
+      mkMachine = { machine, user ? "puma", extraGroups ? [], extraModules ? [], overlays ? [], hardware ? "vmware", ... }:
         nixpkgs.lib.nixosSystem {
           inherit system;
           
@@ -115,6 +116,7 @@
       nixosConfigurations = {
 
         bounty = mkMachine {
+          inherit overlays; 
           machine = "bounty";
           user = "bug";
           hardware = "vmware";

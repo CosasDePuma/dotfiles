@@ -16,9 +16,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    services.picom = {
-      enable = true;
-      settings = builtins.readFile cfg.config;
-    };
+    services.picom.enable = true;
+    environment.etc."picom/picom.conf" = builtins.readFile cfg.config;
   };
 }
