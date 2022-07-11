@@ -4,10 +4,11 @@
 
 # 🔀 switch to the latests configuration
 .PHONY: switch
-switch: .git flake.nix
-	@git add .
-	@git diff-index --quiet HEAD || git commit -m "Switching generation"
-	nixos-rebuild switch --flake .#$(HOSTNAME)
+switch: .git flake.nix flake.lock
+	nix flake update
+	git add .
+	git diff-index --quiet HEAD || git commit -m "Switching generation"
+	nixos-rebuild switch --flake .#$(shell hostname)
 
 # ⏮️ switch to an old generation
 .PHONY: rollback
@@ -58,3 +59,10 @@ uninstall:
 .PHONY: prune purge
 purge: prune
 prune: | uninstall clean
+
+# .---------------.
+# |     FILES     |
+# '---------------'
+
+flake.lock: flake.nix
+	nix flake lock

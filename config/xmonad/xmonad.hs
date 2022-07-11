@@ -1,5 +1,3 @@
--- TODO closed imports(), myLogHook, help, up/down keys, move window using keys.
-
 -- 📦 imports
 
 import qualified XMonad.StackSet as W
@@ -11,7 +9,7 @@ import XMonad.Hooks.ManageDocks(avoidStruts,docks)
 import XMonad.Util.Run(hPutStrLn,spawnPipe)
 import XMonad.Util.SpawnOnce(spawnOnce)
 import Graphics.X11.ExtraTypes.XF86
-import Data.Function
+import Data.Function((&))
 import System.Exit(exitWith,ExitCode(ExitSuccess))
 
 -- 🚪 entrypoint

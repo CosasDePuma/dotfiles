@@ -17,6 +17,7 @@ in {
     environment.systemPackages = with pkgs; [
       firefox
       git
+      gnumake
       vim
       wget
       xclip
