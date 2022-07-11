@@ -1,0 +1,6 @@
+· packages
+  * fish
+  * dunst
+  * picom (animation fork)
+· modules
+  * add asserts in values like strings // done

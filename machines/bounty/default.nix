@@ -1,17 +1,7 @@
 { config, pkgs, ... }: {
-  imports = [
-    ./modules.nix
-  ];
+  imports = [ ./modules.nix ];
 
   networking.networkmanager.enable = true;
-  time.timeZone = "Europe/Amsterdam";
-  i18n.defaultLocale = "es_ES.UTF-8";
-  console = {
-    font = "Lat2-Terminus16";
-    keyMap = "es";
-  };
-  services.xserver.layout = "es,us";
-  services.xserver.xkbOptions = "grp:lalt_lshift_toggle";
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;

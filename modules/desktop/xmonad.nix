@@ -27,10 +27,10 @@ in {
 
     environment.systemPackages = with pkgs; [
       feh
+      dunst
       rofi
       xorg.xmessage
       haskellPackages.xmobar
-      kitty
     ] ++ [ cfg.defaultTerminal ];
   };
 }

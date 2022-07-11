@@ -46,10 +46,10 @@ myConfig myProc = def {
 
 myKeys conf@(XConfig {modMask = modm}) = M.fromList $
     [ ((modm .|. shiftMask, xK_Escape              ), io (exitWith ExitSuccess))                                      -- close xmonad
-    , ((modm              , xK_q                   ), restart "xmonad" True)                                          -- reload xmonad
+--  , ((modm              , xK_Escape              ), restart "xmonad" True)                                          -- reload xmonad
     , ((modm              , xK_Return              ), spawn $ X.terminal conf)                                        -- terminal
     , ((modm              , xK_r                   ), spawn "rofi -modi drun -show drun")                             -- launcher
-    , ((modm              , xK_c                   ), kill)                                                           -- close window
+    , ((modm              , xK_q                   ), kill)                                                           -- close window
     , ((modm              , xK_space               ), sendMessage NextLayout)                                         -- change layout
     , ((modm .|. shiftMask, xK_space               ), setLayout $ X.layoutHook conf)                                  -- reset layout
     , ((modm              , xK_Tab                 ), windows W.focusDown)                                            -- change focus (down)
@@ -124,7 +124,7 @@ help = unlines [
     " [Win + R]             Run the launcher",
     "",
     " -- Windows --",
-    " [Win + C]             Close the focused window",
+    " [Win + Q]             Close the focused window",
     " [Win + Tab]           Focus next window",
     " [Win + Shift + Tab]   Focus previous window",
     " [Win + Right]         Focus next window",
@@ -135,5 +135,5 @@ help = unlines [
     " [Win + Shift + 1..9]  Move focused window to workspace (1..9)",
     "",
     " -- XMonad --",
-    " [Win + Q]             Reload the window manager",
-    " [Win + Shift + Q]     Exit the window manager"]
+--  " [Win + Esc]             Reload the window manager",
+    " [Win + Shift + Esc]     Exit the window manager"]
