@@ -1,23 +1,20 @@
 { config, lib, ... }:
 let
   cfg = config.base;
-  primary = builtins.elemAt cfg.languages.languages 0;
+  primary = builtins.elemAt cfg.languages 0;
 in {
-
   options = {
     base = {
-      languages = {
-        languages = lib.mkOption {
-          type = lib.types.nonEmptyListOf (lib.types.strMatching "^(es|us)$");
-          default = ["us"];
-          description = "Languages used by the system. The first item will be the default language. Available options: \"es\", \"us\".";
-        };
+      languages = lib.mkOption {
+        type = lib.types.nonEmptyListOf (lib.types.strMatching "^(es|us)$");
+        default = ["us"];
+        description = "Languages used by the system. The first item will be the default language. Available options: \"es\", \"us\".";
+      };
 
-        toggleCombination = lib.mkOption {
-          type = lib.types.nonEmptyStr;
-          default = "lalt_lshift_toggle";
-          description = "Keybindings for toggling the language (grp:xkbOptions format).";
-        };
+      toggleLanguage = lib.mkOption {
+        type = lib.types.nonEmptyStr;
+        default = "lalt_lshift_toggle";
+        description = "Keybindings for toggling the language (grp:xkbOptions format).";
       };
 
       timezone = lib.mkOption {
@@ -36,8 +33,8 @@ in {
       keyMap = primary;
       font = "Lat2-Terminus16";
     };
-    services.xserver.layout = lib.concatStringsSep "," cfg.languages.languages;
-    services.xserver.xkbOptions = "grp:${cfg.languages.toggleCombination}";
+    services.xserver.layout = lib.concatStringsSep "," cfg.languages;
+    services.xserver.xkbOptions = "grp:${cfg.toggleCombination}";
   
   };
 }

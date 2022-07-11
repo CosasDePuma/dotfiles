@@ -4,3 +4,4 @@
   * picom (animation fork)
 · modules
   * add asserts in values like strings // done
+  * xmonad config file as flag

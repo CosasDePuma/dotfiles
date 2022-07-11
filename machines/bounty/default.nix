@@ -1,20 +1,8 @@
 { config, pkgs, ... }: {
-  imports = [ ./modules.nix ];
+  imports = [ ../../modules ];
 
-  networking.networkmanager.enable = true;
-
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
-  hardware.pulseaudio.support32Bit = true;
-  hardware.pulseaudio.extraConfig = "unload-module module-suspend-on-idle";
-
-  services.xserver.libinput.enable = true;
-
-  environment.systemPackages = with pkgs; [
-    firefox
-    git
-    vim
-    wget
-    xclip
-  ];
+  base.languages = [ "es" "us" ];
+  base.timezone = "Europe/Madrid";
+  desktop.xmonad.enable = true;
+  desktop.xmonad.defaultTerminal = pkgs.alacritty;
 }

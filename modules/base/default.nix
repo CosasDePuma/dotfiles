@@ -1,1 +1,1 @@
-{  imports = [ ./language.nix ]; }
+{  imports = [ ./language.nix ./sound.nix ]; }
