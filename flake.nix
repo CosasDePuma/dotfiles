@@ -35,9 +35,9 @@
           picom = pkgs.picom.overrideAttrs (_: {
             src = pkgs.fetchFromGitHub {
               repo = "picom";
-              owner = "jonaburg";
-              rev = "v8";
-              sha256 = "sha256-JYVk7mq9K9wm/WLDy/q7ghrVcigkGUWT9QiPs89eWxM=";
+              owner = "pijulius";
+              rev = "e3c19cd7d1108d114552267f302548c113278d45";
+              sha256 = "sha256-4voCAYd0fzJHQjJo4x3RoWz5l3JJbRvgIXn1Kg6nz6Y=";
             };
           });
         })
@@ -115,11 +115,18 @@
     in {
       nixosConfigurations = {
 
-        bounty = mkMachine {
+        boring = mkMachine {
+          inherit overlays;
+          machine = "boring";
+          user = "puma";
+          hardware = "matebook.nix";
+        };
+
+        boringvm = mkMachine {
           inherit overlays; 
-          machine = "bounty";
-          user = "bug";
-          hardware = "vmware";
+          machine = "boring";
+          user = "puma";
+          hardware = "vmware.nix";
         };
 
       };

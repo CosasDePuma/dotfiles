@@ -7,6 +7,8 @@ in {
     desktop.picom = {
       enable = lib.mkEnableOption "custom picom";
 
+      package = lib.mkPackageOption pkgs "picom" {};
+
       config = lib.mkOption {
         type = lib.types.path;
         default = ../../config/picom/picom.conf;
@@ -16,7 +18,9 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    services.picom.enable = true;
-    environment.etc."picom/picom.conf" = builtins.readFile cfg.config;
+    environment = {
+      systemPackages = [ cfg.package ];
+      etc."xdg/picom.conf".text = builtins.readFile cfg.config;
+    };
   };
 }

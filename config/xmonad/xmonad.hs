@@ -4,19 +4,24 @@ import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 import XMonad                    as X
 import XMonad.Layout.Spacing(spacingRaw,Border(..))
-import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.ManageDocks(avoidStruts,docks)
+import XMonad.Layout.MultiToggle(mkToggle,single)
+import XMonad.Layout.MultiToggle.Instances(StdTransformers(NBFULL))
+import qualified XMonad.Layout.MultiToggle as MT(Toggle(..))
+import XMonad.Hooks.DynamicLog(dynamicLogWithPP,xmobarPP,PP(..))
+import XMonad.Hooks.EwmhDesktops(ewmh,ewmhFullscreen)
+import XMonad.Hooks.ManageDocks(avoidStruts,docks,ToggleStruts(..))
 import XMonad.Util.Run(hPutStrLn,spawnPipe)
 import XMonad.Util.SpawnOnce(spawnOnce)
 import Graphics.X11.ExtraTypes.XF86
 import Data.Function((&))
+import System.IO(hPutStrLn)
 import System.Exit(exitWith,ExitCode(ExitSuccess))
 
 -- 🚪 entrypoint
 
 main = do
-    xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"  -- start xmobar
-    getDirectories >>= (launch $ docks $ myConfig xmproc)   -- start xmonad
+    xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"        -- start xmobar
+    getDirectories >>= (launch $ docks . ewmhFullscreen . ewmh $ myConfig xmproc)  -- start xmonad
 
 -- 🧰 configuration
 
@@ -53,11 +58,18 @@ myKeys conf@(XConfig {modMask = modm}) = M.fromList $
     , ((modm              , xK_Tab                 ), windows W.focusDown)                                            -- change focus (down)
     , ((modm .|. shiftMask, xK_Tab                 ), windows W.focusUp)                                              -- change focus (up)
     , ((modm              , xK_Right               ), windows W.focusDown)                                            -- focus next
+    , ((modm              , xK_Down                ), windows W.focusDown)                                            -- focus next
     , ((modm              , xK_Left                ), windows W.focusUp)                                              -- focus previous
-    , ((modm              , xK_m                   ), windows W.focusMaster)                                          -- focus master
-    , ((modm .|. shiftMask, xK_m                   ), windows W.swapMaster)                                           -- change master
+    , ((modm              , xK_Up                  ), windows W.focusUp)                                              -- focus previous
+    , ((modm .|. shiftMask, xK_Right               ), windows W.swapDown)                                             -- focus next
+    , ((modm .|. shiftMask, xK_Down                ), windows W.swapDown)                                             -- focus next
+    , ((modm .|. shiftMask, xK_Left                ), windows W.swapUp)                                               -- focus previous
+    , ((modm .|. shiftMask, xK_Up                  ), windows W.swapUp)                                               -- focus previous
+    , ((modm              , xK_m                   ), windows W.swapMaster)                                           -- change master
+    , ((modm .|. shiftMask, xK_m                   ), windows W.focusMaster)                                          -- focus master
     , ((modm              , xK_j                   ), sendMessage Shrink)                                             -- shrink window
     , ((modm              , xK_k                   ), sendMessage Expand)                                             -- expand window
+    , ((modm              , xK_f                   ), sendMessage (MT.Toggle NBFULL) >> sendMessage ToggleStruts)     -- toggle fullscreen
     , ((modm              , xK_t                   ), withFocused $ windows . W.sink)                                 -- tiling window
     , ((0                 , xF86XK_AudioLowerVolume), spawn "amixer set Master 10%-")                                 -- volume down
     , ((0                 , xF86XK_AudioRaiseVolume), spawn "amixer set Master 10%+")                                 -- volume up
@@ -77,15 +89,16 @@ myMouseBindings (XConfig {X.modMask = modm}) = M.fromList $
 
 -- 🍱 layouts
 
-myLayout = avoidStruts $ spacingRaw False
-    (Border 10 10 10 10) True               -- screen gaps
-    (Border 10 10 10 10) True               -- window gaps
+myLayout = avoidStruts $ mkToggle (single NBFULL) $ spacingRaw False
+    (Border gap gap gap gap) True           -- screen gaps
+    (Border gap gap gap gap) True           -- window gaps
     $ ( tiled ||| Full )                    -- layouts
   where
     tiled   = Tall nmaster delta ratio      -- custom layout: master and secondary windows
     nmaster = 1                             -- how many master windows
     ratio   = 1/2                           -- master window space
     delta   = 3/100                         -- resize percentage
+    gap     = 5                             -- gaps size
 
 -- 🏠 windows
   -- check window names with 'xprop | grep WM_CLASS'
@@ -107,6 +120,7 @@ myLogHook xmproc = dynamicLogWithPP $ xmobarPP
 -- 🏁 startup
 
 myStartupHook = do
+    spawnOnce "picom"                                                    -- compositor
     spawnOnce "feh --no-fehbg --bg-fill ~/.config/wallpapers/wallpaper"  -- wallpaper
 
 -- 🆘 help message
