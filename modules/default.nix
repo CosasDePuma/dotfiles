@@ -1,1 +1,7 @@
-{  imports = [ ./base ./desktop ./todo.nix ]; }
+{
+  imports = [
+    ./base
+    ./programs
+    ./todo.nix
+  ];
+}

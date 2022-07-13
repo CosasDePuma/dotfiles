@@ -20,21 +20,21 @@ import System.Exit(exitWith,ExitCode(ExitSuccess))
 -- 🚪 entrypoint
 
 main = do
-    xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"        -- start xmobar
+    xmproc <- spawnPipe "xmobar /etc/xmobar/xmobarrc"                              -- start xmobar
     getDirectories >>= (launch $ docks . ewmhFullscreen . ewmh $ myConfig xmproc)  -- start xmonad
 
 -- 🧰 configuration
 
 myConfig myProc = def {
     -- simple stuff
-    terminal           = "xterm",
+    terminal           = "alacritty",
     borderWidth        = 3,
     clickJustFocuses   = False,
     focusFollowsMouse  = True,
     modMask            = mod4Mask,
     workspaces         = map show [1..9],
-    normalBorderColor  = "#0d0e0c",
-    focusedBorderColor = "#c15a45",
+    normalBorderColor  = "#88c0d0",
+    focusedBorderColor = "#bf616a",
     -- complex stuff
     keys               = myKeys,
     mouseBindings      = myMouseBindings,
@@ -120,8 +120,8 @@ myLogHook xmproc = dynamicLogWithPP $ xmobarPP
 -- 🏁 startup
 
 myStartupHook = do
-    spawnOnce "picom"                                                    -- compositor
-    spawnOnce "feh --no-fehbg --bg-fill ~/.config/wallpapers/wallpaper"  -- wallpaper
+    spawnOnce "picom"                                        -- compositor
+    spawnOnce "feh --no-fehbg --bg-fill /etc/feh/wallpaper"  -- wallpaper
 
 -- 🆘 help message
 
@@ -131,20 +131,28 @@ help = unlines [
     " Default keybindings:",
     "",
     " -- Programs --",
-    " [Win + Enter]         Launch terminal",
-    " [Win + R]             Run the launcher",
+    " [Win + Enter]                Launch terminal",
+    " [Win + R]                    Run the launcher",
     "",
     " -- Windows --",
-    " [Win + Q]             Close the focused window",
-    " [Win + Tab]           Focus next window",
-    " [Win + Shift + Tab]   Focus previous window",
-    " [Win + Right]         Focus next window",
-    " [Win + Left]          Focus previous window",
+    " [Win + Q]                    Close the focused window",
+    " [Win + M]                    Define the master window",
+    " [Win + Shift + M]            Focus master window",
+    " [Win + Tab]                  Focus next window",
+    " [Win + Shift + Tab]          Focus previous window",
+    " [Win + Down/Right]           Focus next window",
+    " [Win + Up/Left]              Focus previous window",
+    " [Win + Shift + Down/Right]   Swap window with next",
+    " [Win + Shift + Up/Left]      Swap window with previous",
+    "",
+    " -- Layouts --",
+    " [Win + F]                    Enter fullscreen mode",
+    " [Win + Space]                Change the layout",
+    " [Win + Shift + Space]        Change to primary layout",
     "",
     " -- Workspaces --",
-    " [Win + 1..9]          Switch to workspace (1..9)",
-    " [Win + Shift + 1..9]  Move focused window to workspace (1..9)",
+    " [Win + 1..9]                 Switch to workspace (1..9)",
+    " [Win + Shift + 1..9]         Move focused window to workspace (1..9)",
     "",
     " -- XMonad --",
---  " [Win + Esc]             Reload the window manager",
-    " [Win + Shift + Esc]     Exit the window manager"]
+    " [Win + Shift + Esc]            Exit the window manager"]

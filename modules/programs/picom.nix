@@ -1,10 +1,9 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.desktop.picom;
-  extraPkgs = with pkgs;[ dunst feh rofi ];
+  cfg = config.programs.picom;
 in {
   options = {
-    desktop.picom = {
+    programs.picom = {
       enable = lib.mkEnableOption "custom picom";
 
       package = lib.mkPackageOption pkgs "picom" {};
