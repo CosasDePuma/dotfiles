@@ -7,14 +7,13 @@ import XMonad.Layout.Spacing(spacingRaw,Border(..))
 import XMonad.Layout.MultiToggle(mkToggle,single)
 import XMonad.Layout.MultiToggle.Instances(StdTransformers(NBFULL))
 import qualified XMonad.Layout.MultiToggle as MT(Toggle(..))
-import XMonad.Hooks.DynamicLog(dynamicLogWithPP,xmobarPP,PP(..))
+import XMonad.Hooks.DynamicLog(dynamicLogWithPP,xmobarPP,PP(..) , xmobarColor,shorten,wrap)
 import XMonad.Hooks.EwmhDesktops(ewmh,ewmhFullscreen)
 import XMonad.Hooks.ManageDocks(avoidStruts,docks,ToggleStruts(..))
 import XMonad.Util.Run(hPutStrLn,spawnPipe)
 import XMonad.Util.SpawnOnce(spawnOnce)
 import Graphics.X11.ExtraTypes.XF86
 import Data.Function((&))
-import System.IO(hPutStrLn)
 import System.Exit(exitWith,ExitCode(ExitSuccess))
 
 -- 🚪 entrypoint
@@ -33,8 +32,8 @@ myConfig myProc = def {
     focusFollowsMouse  = True,
     modMask            = mod4Mask,
     workspaces         = map show [1..9],
-    normalBorderColor  = "#88c0d0",
-    focusedBorderColor = "#bf616a",
+    normalBorderColor  = "#474646",
+    focusedBorderColor = "#83a598",
     -- complex stuff
     keys               = myKeys,
     mouseBindings      = myMouseBindings,
@@ -47,11 +46,13 @@ myConfig myProc = def {
 
 -- 🔑 keybindings
 
+launcher = "rofi -theme /etc/rofi/rofi.rasi -show "
 myKeys conf@(XConfig {modMask = modm}) = M.fromList $
     [ ((modm .|. shiftMask, xK_Escape              ), io (exitWith ExitSuccess))                                      -- close xmonad
---  , ((modm              , xK_Escape              ), restart "xmonad" True)                                          -- reload xmonad
     , ((modm              , xK_Return              ), spawn $ X.terminal conf)                                        -- terminal
-    , ((modm              , xK_r                   ), spawn "rofi -modi drun -show drun")                             -- launcher
+    , ((modm              , xK_r                   ), spawn $ launcher ++ "drun")                                     -- launcher (apps)
+    , ((modm              , xK_e                   ), spawn $ launcher ++ "emoji")                                    -- launcher (emojis)
+    , ((modm              , xK_c                   ), spawn $ launcher ++ "calc")                                     -- calculator
     , ((modm              , xK_q                   ), kill)                                                           -- close window
     , ((modm              , xK_space               ), sendMessage NextLayout)                                         -- change layout
     , ((modm .|. shiftMask, xK_space               ), setLayout $ X.layoutHook conf)                                  -- reset layout
@@ -114,8 +115,10 @@ myEventHook = mempty
 -- 📜 logger
 
 myLogHook xmproc = dynamicLogWithPP $ xmobarPP
-    { ppOutput = hPutStrLn xmproc }
-
+    { ppOutput = hPutStrLn xmproc
+    , ppCurrent = xmobarColor "#83a598" "" . wrap "[" "]"   -- #9BC1B2 #69DFFA
+    , ppTitle = xmobarColor "#d3869b" "" . shorten 50       -- #9BC1B2 #69DFFA
+    }
 
 -- 🏁 startup
 
@@ -132,7 +135,9 @@ help = unlines [
     "",
     " -- Programs --",
     " [Win + Enter]                Launch terminal",
-    " [Win + R]                    Run the launcher",
+    " [Win + R]                    Run the launcher (applications)",
+    " [Win + E]                    Run the launcher (emojis)",
+    " [Win + C]                    Run the launcher (calculator)",
     "",
     " -- Windows --",
     " [Win + Q]                    Close the focused window",

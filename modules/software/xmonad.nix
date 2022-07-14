@@ -1,9 +1,9 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.programs.xmonad;
+  cfg = config.software.xmonad;
 in {
   options = {
-    programs.xmonad = {
+    software.xmonad = {
       enable = lib.mkEnableOption "custom XMonad (window manager)";
 
       config = lib.mkOption {

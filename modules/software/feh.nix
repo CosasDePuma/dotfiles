@@ -1,16 +1,16 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.programs.feh;
+  cfg = config.software.feh;
 in {
   options = {
-    programs.feh = {
+    software.feh = {
       enable = lib.mkEnableOption "custom feh (image viewer and background manager)";
 
       package = lib.mkPackageOption pkgs "feh" {};
 
       wallpaper = lib.mkOption {
         type = lib.types.path;
-        default = ../../config/wallpapers/sagiri.png;
+        default = ../../config/wallpapers/ghiblike.png;
         description = "The path of the default wallpaper.";
       };
     };

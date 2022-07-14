@@ -1,7 +1,7 @@
 {
   imports = [
     ./base
-    ./programs
+    ./software
     ./todo.nix
   ];
 }

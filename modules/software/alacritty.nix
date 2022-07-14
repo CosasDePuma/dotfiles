@@ -1,17 +1,17 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.programs.alacritty;
+  cfg = config.software.alacritty;
 in {
   options = {
-    programs.alacritty = {
-      enable = lib.mkEnableOption "custom alacritty";
+    software.alacritty = {
+      enable = lib.mkEnableOption "custom alacritty (terminal emulator)";
 
       package = lib.mkPackageOption pkgs "alacritty" {};
 
       config = lib.mkOption {
         type = lib.types.path;
         default = ../../config/alacritty/alacritty.yml;
-        description = "The path of the picom configuration file.";
+        description = "The path of the alacritty configuration file.";
       };
     };
   };

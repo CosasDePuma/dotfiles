@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.programs.picom;
+  cfg = config.software.picom;
 in {
   options = {
-    programs.picom = {
-      enable = lib.mkEnableOption "custom picom";
+    software.picom = {
+      enable = lib.mkEnableOption "custom picom (compositor)";
 
       package = lib.mkPackageOption pkgs "picom" {};
 

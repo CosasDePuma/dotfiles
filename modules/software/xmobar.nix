@@ -1,9 +1,9 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.programs.xmobar;
+  cfg = config.software.xmobar;
 in {
   options = {
-    programs.xmobar = {
+    software.xmobar = {
       enable = lib.mkEnableOption "custom XMobar (status bar)";
 
       package = lib.mkPackageOption pkgs.haskellPackages "xmobar" {};

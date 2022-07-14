@@ -2,7 +2,7 @@ Config
 
   -- 🔤 fonts
 
-  { font                               = "xft:Mononoki Nerd Font:style=Regular:size=11:antialias=true:hinting=true"
+  { font                               = "xft:Mononoki Nerd Font:style=Regular:size=10:antialias=true:hinting=true"
   , additionalFonts                    = []
 
   -- 🧠 behaviour
@@ -19,16 +19,26 @@ Config
       -- variables from xmonad
       [ Run StdinReader
       -- time
-      , Run Date                      "%d/%m %H:%M" "date" 50
+      , Run Date                      "<fn=1>\xf5ef </fn>%d/%m/%y %H:%M" "date" 50
+      -- cpu usage (percentange)
+      , Run Cpu                       ["-t", "<fn=1>\xf2db </fn> <total>%", "-H", "50", "--high", "red"] 20
+      -- ram usage (+ percentage)
+      , Run Memory                    ["-t", "<fn=1>\xf0e4 </fn> <usedratio>%"] 20
+      -- disk
+      , Run DiskU                     [("/", "<fn=1>\xf7c9 </fn><usedp>%")] [] 50
+      -- network
+      , Run DynNetwork                ["-t", "<dev> <fn=1>\xfbf1 </fn> <rx>KB/<tx>KB"] 20
       -- battery
       , Run Battery                   ["-t", "<acstatus>", "-L", "10", "-H", "80", "-l", "red", "-h", "green", "--", "-O", "<fn=1>\xf583 </fn><left>%", "-i", "<fc=#98be65><fn=1>\xf578 </fn><fn=1>\xe255 </fn></fc>", "-o", "<fn=1>\xf578 </fn><left>%"] 50
+      -- language
+      , Run Kbd                       [("es","<fn=1>\xf80b </fn>ES"), ("us","<fn=1>\xf80b </fn>US")]
     ]
 
   -- 💄 style
 
-  , bgColor                           = "#282828"   -- background color
-  , fgColor                           = "#dadada"   -- foreground color
+  , bgColor                           = "#282828"   -- ba>
+  , fgColor                           = "#ebdbb2"   -- foreground color
   , sepChar                           = "%"         -- variable identifier
   , alignSep                          = "}{"        -- align identifier
-  , template                          = " %StdinReader% } %date% { %battery% "
+  , template                          = "|| %StdinReader% }{ %dynnetwork% | %cpu% | %memory% | %disku% | %battery% | %date% | %kbd% "
   }

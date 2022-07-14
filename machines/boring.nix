@@ -4,12 +4,17 @@
   base.languages = [ "es" ];
   base.timezone = "Europe/Madrid";
   
-  programs = {
-    extras = with pkgs;[ bunnyfetch dunst firefox rofi ];
+  software = {
+    extras = with pkgs;[ bunnyfetch dunst firefox pcmanfm ];
+
     alacritty.enable = true;
     feh.enable = true;
+    icons.enable = true;
     picom.enable = true;
+    rofi.enable = true;
+    rofi.package = pkgs.rofi.override { plugins = with pkgs;[ rofi-calc rofi-emoji ]; };
     xmobar.enable = true;
     xmonad.enable = true;
+    zsh.enable = true;
   };
 }
