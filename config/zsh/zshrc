@@ -1,9 +1,25 @@
 #!/bin/zsh
 
-# avoid first-time message (the second time)
+# -- 📛 aliases ---
+
+# cat -> bat
+alias cat='bat --paging=never'
+alias catl='bat'
+alias catn='cat --plain --paging=never'
+
+# ls -> lsd
+alias l='ls -alh'
+alias la='lsd -a'
+alias ll='lsd -l'
+alias lla='lsd -la'
+alias ls='lsd'
+
+# --- ⏹️ avoid first-time message (the second time) ---
+
 echo "#" > ~/.zshrc
 
-# enable git support
+# --- 📌 enable git ---
+
 autoload -Uz vcs_info
 precmd_functions+=( vcs_info )
 setopt prompt_subst
@@ -12,13 +28,17 @@ zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' unstagedstr '%F{3}'
 zstyle ':vcs_info:*' enable git
 
-# prompts
-# icon - color5(user@host) - directories - unbold || statuscode
+# --- 📢 prompts ---
+
+# left side: icon(root indicator) + user@host + pwd
 if test "${EUID}" -ne 0; then isroot=15; else isroot=13; fi
 PROMPT='%F{$isroot}🐰%f %F{12}%n@%m%f%b %F{14}%2~%f${vcs_info_msg_0_} '
+# right side: status code
 RPROMPT='%(?..%F{1}(%?%) %f)'
 
-# Save a color into the palette:: name -> color
+# --- 🎨 theme ---
+
+# save a color into the palette:: name -> color
 function set_color {
 	if [ "$TERM" = "linux" ]; then
 		[ $1 -lt 16 ] && printf $'\e]P%X%s' "$1" "$2"
@@ -27,7 +47,7 @@ function set_color {
 	fi
 }
 
-# Set terminal colors (gruvbox theme).
+# terminal colors (gruvbox theme).
 local black=1d2021
 local white=dadada
 printf "\e]10;#$white"

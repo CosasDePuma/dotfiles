@@ -50,6 +50,7 @@ launcher = "rofi -theme /etc/rofi/rofi.rasi -show "
 myKeys conf@(XConfig {modMask = modm}) = M.fromList $
     [ ((modm .|. shiftMask, xK_Escape              ), io (exitWith ExitSuccess))                                      -- close xmonad
     , ((modm              , xK_Return              ), spawn $ X.terminal conf)                                        -- terminal
+    , ((modm .|. shiftMask, xK_Return              ), spawn "cool-retro-term --fullscreen")                           -- retro terminal
     , ((modm              , xK_r                   ), spawn $ launcher ++ "drun")                                     -- launcher (apps)
     , ((modm              , xK_e                   ), spawn $ launcher ++ "emoji")                                    -- launcher (emojis)
     , ((modm              , xK_c                   ), spawn $ launcher ++ "calc")                                     -- calculator
@@ -118,6 +119,7 @@ myLogHook xmproc = dynamicLogWithPP $ xmobarPP
     { ppOutput = hPutStrLn xmproc
     , ppCurrent = xmobarColor "#83a598" "" . wrap "[" "]"   -- #9BC1B2 #69DFFA
     , ppTitle = xmobarColor "#d3869b" "" . shorten 50       -- #9BC1B2 #69DFFA
+    , ppOrder = \(ws:l:t:_) -> [ws]
     }
 
 -- 🏁 startup
@@ -135,6 +137,7 @@ help = unlines [
     "",
     " -- Programs --",
     " [Win + Enter]                Launch terminal",
+    " [Win + Shift + Enter]        Launch retro terminal",
     " [Win + R]                    Run the launcher (applications)",
     " [Win + E]                    Run the launcher (emojis)",
     " [Win + C]                    Run the launcher (calculator)",
@@ -160,4 +163,5 @@ help = unlines [
     " [Win + Shift + 1..9]         Move focused window to workspace (1..9)",
     "",
     " -- XMonad --",
-    " [Win + Shift + Esc]            Exit the window manager"]
+    " [Win + Esc]                  Launch lockscreen",
+    " [Win + Shift + Esc]          Exit the window manager"]

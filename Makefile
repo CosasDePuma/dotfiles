@@ -49,6 +49,7 @@ update: ~/.nix-channels
 .PHONY: clean
 clean:
 	nix-collect-garbage -d
+	/run/current-system/bin/switch-to-configuration boot
 
 # 🚮 remove all the user programs
 .PHONY: uninstall

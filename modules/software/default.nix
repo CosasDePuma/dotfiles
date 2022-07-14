@@ -6,8 +6,12 @@ let
 in {
   imports = [
     ./alacritty.nix
+    ./bat.nix
+    ./coolretroterm.nix
     ./feh.nix
     ./icons.nix
+    ./lsd.nix
+    ./pcmanfm.nix
     ./picom.nix
     ./rofi.nix
     ./xmobar.nix

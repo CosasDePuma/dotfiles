@@ -39,8 +39,14 @@
 
       # -- 🧠 functions -- #
 
+      # generates a develop shell
+      mkShell = name: import ./shells/${name}.nix { inherit pkgs; };
+
+      # generates multiple develop shells
+      mkShells = names: nixpkgs.lib.genAttrs names mkShell;
+
       # gets the name of the machines from the machines directory
-      getMachines = builtins.attrNames (nixpkgs.lib.attrsets.filterAttrs (_: v: v == "directory") (builtins.readDir ./machines));
+      getMachines = builtins.attrNames (nixpkgs.lib.filterAttrs (_: v: v == "directory") (builtins.readDir ./machines));
 
       # generates the machine configuration
       mkMachine = { machine, user ? "puma", extraGroups ? [], extraModules ? [], overlays ? [], hardware ? "vmware", ... }:
@@ -79,7 +85,6 @@
         };
     in {
       nixosConfigurations = {
-
         boring = mkMachine {
           inherit overlays;
           machine = "boring";
@@ -93,7 +98,8 @@
           user = "puma";
           hardware = "vmware.nix";
         };
-
       };
+
+      devShells.${system} = mkShells [ "hacking" ];
     };
 }
