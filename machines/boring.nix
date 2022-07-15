@@ -38,8 +38,14 @@ in {
   };
 
   system = {
+    distribution = {
+      name = "B1O5";
+      version = "(Boring)";
+    };
+
     languages = [ "es" ];
     timezone = "Europe/Madrid";
+
     users = {
       "puma" = {
         sudo = true;
