@@ -20,7 +20,7 @@
 **Packages**
 - [x] [alacritty](https://github.com/alacritty/alacritty)
 - [x] [bat](https://github.com/sharkdp/bat)
-- [x] [cool-retro-term](https://github.com/Swordfish90/cool-retro-term)
+- [ ] [cool-retro-term](https://github.com/Swordfish90/cool-retro-term) (TODO config)
 - [ ] [emacs](https://github.com/emacs-mirror/emacs) / [doomemacs](https://github.com/doomemacs/doomemacs) (has a shell.nix)
 - [ ] [dunst](https://github.com/dunst-project/dunst)
 - [x] [feh](https://github.com/derf/feh)

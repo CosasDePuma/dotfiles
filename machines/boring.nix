@@ -31,8 +31,6 @@ in {
     lightdm.enable = true;
     lsd.enable = true;
     pcmanfm.enable = true;
-#   pcmanfm.theme.name = "gruvbox-dark"; # FIXME only for pcmanfm
-#   pcmanfm.theme.package = pkgs.gruvbox-dark-gtk;
     picom.enable = true;
     rofi.enable = true;
     rofi.package = pkgs.rofi.override { plugins = with pkgs;[ rofi-calc rofi-emoji ]; };

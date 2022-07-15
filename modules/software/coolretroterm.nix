@@ -7,8 +7,6 @@ in {
       enable = lib.mkEnableOption "custom coolretroterm (terminal emulator)";
 
       package = lib.mkPackageOption pkgs "cool-retro-term" {};
-
-      # todo config
     };
   };
 
