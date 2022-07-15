@@ -1,0 +1,9 @@
+#+STARTUP: B1O5
+#+CREATOR: Kike Fontán
+#+TITLE: README
+
+* TODO List
+
+** NixOS System
+*** TODO Change OS name to B1O5
+*** DONE Test
