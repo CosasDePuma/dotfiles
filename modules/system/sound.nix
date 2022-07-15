@@ -1,9 +1,9 @@
 { config, lib, ... }:
 let
-  cfg = config.base.sound;
+  cfg = config.system.sound;
 in {
   options = {
-    base.sound.enable = lib.mkOption {
+    system.sound.enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
       example = false;

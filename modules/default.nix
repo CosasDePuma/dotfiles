@@ -1,8 +1,9 @@
 {
   imports = [
-    ./base
     ./hardware
     ./software
+    ./system
+
     ./todo.nix
   ];
 }

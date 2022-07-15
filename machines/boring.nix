@@ -10,9 +10,6 @@ let
 in {
   imports = [ ../modules ];
 
-  base.languages = [ "es" ];
-  base.timezone = "Europe/Madrid";
-
   hardware.grub2 = {
     enable = true;
     supportEFI = true;
@@ -37,5 +34,10 @@ in {
     xmobar.enable = true;
     xmonad.enable = true;
     zsh.enable = true;
+  };
+
+  system = {
+    languages = [ "es" ];
+    timezone = "Europe/Madrid";
   };
 }
