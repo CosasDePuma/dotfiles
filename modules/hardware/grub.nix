@@ -1,11 +1,11 @@
 
 { config, lib, pkgs, ... }:
 let
-  cfg = config.hardware.grub2;
+  cfg = config.hardware.grub;
   themeFolder = "theme";
 in {
   options = {
-    hardware.grub2 = {
+    hardware.grub = {
       enable = lib.mkEnableOption "custom GRUB2 (bootloader)";
 
       theme = lib.mkOption {

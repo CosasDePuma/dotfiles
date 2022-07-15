@@ -17,14 +17,19 @@
 - [ ] Ctrl+O -> pcmanfm or similar
 - [ ] User configuration
 
-**Packages**
+**Hardware**
+- [x] grub (efi, theming)
+- [x] laptop (mouse support)
+
+**Software**
 - [x] [alacritty](https://github.com/alacritty/alacritty)
 - [x] [bat](https://github.com/sharkdp/bat)
 - [ ] [cool-retro-term](https://github.com/Swordfish90/cool-retro-term) (TODO config)
 - [ ] [emacs](https://github.com/emacs-mirror/emacs) / [doomemacs](https://github.com/doomemacs/doomemacs) (has a shell.nix)
 - [ ] [dunst](https://github.com/dunst-project/dunst)
 - [x] [feh](https://github.com/derf/feh)
-- [x] [firefox](https://github.com/mozilla)
+- [ ] [firefox](https://github.com/mozilla)
+- [ ] [git](https://github.com/git/git)
 - [x] [lightdm](https://github.com/canonical/lightdm)
 - [x] [lsd](https://github.com/Peltoche/lsd)
 - [ ] [pcmanfm](https://github.com/lxde/pcmanfm) (TODO theme)

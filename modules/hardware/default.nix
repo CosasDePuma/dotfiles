@@ -1,5 +1,6 @@
 {
   imports = [
-    ./grub2.nix
+    ./grub.nix
+    ./laptop.nix
   ];
 }

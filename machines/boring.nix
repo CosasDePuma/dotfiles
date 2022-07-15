@@ -10,7 +10,7 @@ let
 in {
   imports = [ ../modules ];
 
-  hardware.grub2 = {
+  hardware.grub = {
     enable = true;
     supportEFI = true;
     theme = grubtheme;
