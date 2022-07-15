@@ -4,11 +4,21 @@
 
 # 🔀 switch to the latests configuration
 .PHONY: switch
-switch: .git flake.nix flake.lock
+switch: prebuild
+	nixos-rebuild switch --flake .#$(shell hostname)
+
+# 🌔 switch to the latests configuration (forcing boot changes)
+.PHONY: boot
+boot: prebuild
+	nixos-rebuild boot --flake .#$(shell hostname)
+
+
+# 🔨 prerequisites to rebuild the system
+.PHONY: rebuild
+prebuild: .git flake.nix flake.lock
 	nix flake update
 	git add .
 	git diff-index --quiet HEAD || git commit -m "Switching generation"
-	nixos-rebuild switch --flake .#$(shell hostname)
 
 # ⏮️ switch to an old generation
 .PHONY: rollback

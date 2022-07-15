@@ -14,9 +14,28 @@ alias ll='lsd -l'
 alias lla='lsd -la'
 alias ls='lsd'
 
+# thefuck -> fuck
+eval $(thefuck --alias)
+
 # --- ⏹️ avoid first-time message (the second time) ---
 
 echo "#" > ~/.zshrc
+
+# --- 📚 history ---
+
+export HISTFILE="~/.zsh_history"
+export HISTSIZE=1000
+export SAVEHIST=1000
+export HISTTIMEFORMAT="[%F %T] "
+setopt EXTENDED_HISTORY
+setopt INC_APPEND_HISTORY
+setopt HIST_FIND_NO_DUPS
+
+# --- 🔑 bindkeys ---
+
+bindkey "^[[3~" delete-char
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
 
 # --- 📌 enable git ---
 
@@ -32,9 +51,9 @@ zstyle ':vcs_info:*' enable git
 
 # left side: icon(root indicator) + user@host + pwd
 if test "${EUID}" -ne 0; then isroot=15; else isroot=13; fi
-PROMPT='%F{$isroot}🐰%f %F{12}%n@%m%f%b %F{14}%2~%f${vcs_info_msg_0_} '
+export PROMPT='%F{$isroot}🐰%f %F{12}%n@%m%f%b %F{14}%2~%f${vcs_info_msg_0_} '
 # right side: status code
-RPROMPT='%(?..%F{1}(%?%) %f)'
+export RPROMPT='%(?..%F{1}(%?%) %f)'
 
 # --- 🎨 theme ---
 

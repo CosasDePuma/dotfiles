@@ -4,11 +4,6 @@
   boot = {
     kernelModules = [ "kvm-intel" ];
     initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" ];
-
-    loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
-    };
   };
 
   fileSystems = {
@@ -29,6 +24,5 @@
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-  # high-resolution display
   hardware.video.hidpi.enable = lib.mkDefault true;
 }
