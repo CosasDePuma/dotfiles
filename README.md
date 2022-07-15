@@ -10,14 +10,14 @@
 - [ ] Sponsor
 
 **NixOS System**
-- [ ] Change OS name to B1O5
+- [x] Change OS name to B1O5
 - [ ] Garbage collector
 - [ ] Git support
 - [ ] Ctrl+O -> pcmanfm or similar
-- [ ] User configuration
+- [x] User configuration
 
 **Hardware**
-- [x] grub (efi, theming)
+- [x] grub (efi,theme)
 - [x] laptop (mouse support)
 
 **Software**
