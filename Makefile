@@ -55,21 +55,26 @@ update: ~/.nix-channels
 # |    GARBAGE    |
 # '---------------'
 
-# 🗑️ remove all the garbage files
+# 👤 remove all the user programs
+.PHONY: uninstall
+uninstall:
+	nix-env -e "*"
+
+# 🔗 remove all broken symlinks in gcroots
+.PHONY: broken
+broken:
+	find /nix/var/nix/gcroots/ -xtype l -delete
+
+# 🚮 remove all the garbage files
 .PHONY: clean
 clean:
 	nix-collect-garbage -d
 	/run/current-system/bin/switch-to-configuration boot
 
-# 🚮 remove all the user programs
-.PHONY: uninstall
-uninstall:
-	nix-env -e "*"
-
 # 🔥 remove all
 .PHONY: prune purge
 purge: prune
-prune: | uninstall clean
+prune: | uninstall broken clean
 
 # .---------------.
 # |     FILES     |

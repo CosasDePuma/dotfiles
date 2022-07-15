@@ -14,92 +14,22 @@
 
   outputs = inputs @ { self, nixpkgs, ... }:
     let
-      # variables
-      nixosVersion = "22.05";
       system = "x86_64-linux";
-      # packages
-      pkgs = import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-      };
-      # overlays
-      overlays = [
-        # picom overlay
-        (self: super: {
-          picom = pkgs.picom.overrideAttrs (_: {
-            src = pkgs.fetchFromGitHub {
-              repo = "picom";
-              owner = "pijulius";
-              rev = "e3c19cd7d1108d114552267f302548c113278d45";
-              sha256 = "sha256-4voCAYd0fzJHQjJo4x3RoWz5l3JJbRvgIXn1Kg6nz6Y=";
-            };
-          });
-        })
-      ];
+      pkgs = import nixpkgs { inherit system; };
 
-      # -- 🧠 functions -- #
+      # --- imports --- #
 
-      # generates a develop shell
-      mkShell = name: import ./shells/${name}.nix { inherit pkgs; };
-
-      # generates multiple develop shells
-      mkShells = names: nixpkgs.lib.genAttrs names mkShell;
-
-      # gets the name of the machines from the machines directory
-      getMachines = builtins.attrNames (nixpkgs.lib.filterAttrs (_: v: v == "directory") (builtins.readDir ./machines));
-
-      # generates the machine configuration
-      mkMachine = { machine, user ? "puma", extraGroups ? [], extraModules ? [], overlays ? [], hardware ? "vmware", ... }:
-        nixpkgs.lib.nixosSystem {
-          inherit system;
-          
-          # modules
-          modules = [
-            # nixos version
-            ({ system.stateVersion = nixosVersion; })
-            # overlays
-            ({ nixpkgs.overlays = overlays; })
-            # flakes
-            ({ pkgs, ... }: {
-              nix = {
-                package = pkgs.nixFlakes;
-                extraOptions = "experimental-features = nix-command flakes";
-              };
-            })
-            # hostname
-            ({ networking.hostName = machine; })
-            # user configutation
-            ({
-              users.users."${user}" = {
-                isNormalUser = true;
-                extraGroups = [ "networkmanager wheel" ] ++ extraGroups;
-              };
-            })
-            # hardware configuration
-            (./hardware/${hardware})
-            # machine configuration
-            (./machines/${machine}.nix)
-          
-          # extra modules
-          ] ++ extraModules;
-        };
+      lib = import ./lib { inherit nixpkgs system; };
+      overlays = import ./overlays { inherit pkgs; };
     in {
-      nixosConfigurations = {
-        boring = mkMachine {
-          inherit overlays;
-          machine = "boring";
-          user = "puma";
-          hardware = "matebook.nix";
-        };
+      devShells."${system}" = lib.mkShells;
 
-        boringvm = mkMachine {
-          inherit overlays; 
-          machine = "boring";
+      nixosConfigurations = lib.mkMachines {
+        boring = {
+          inherit overlays;
           user = "puma";
-          hardware = "vmware.nix";
+          hardware = "matebook";
         };
       };
-
-      devShells.${system} = mkShells [ "hacking" ];
     };
 }

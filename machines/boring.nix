@@ -1,4 +1,5 @@
 
+
 { config, pkgs, ... }: 
 let
   grubtheme = pkgs.fetchFromGitHub {
@@ -39,5 +40,12 @@ in {
   system = {
     languages = [ "es" ];
     timezone = "Europe/Madrid";
+    users = {
+      "puma" = {
+        sudo = true;
+        description = "Pumita";
+        groups = [ "networkmanager" ];
+      };
+    };
   };
 }
