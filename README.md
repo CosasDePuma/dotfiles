@@ -9,7 +9,6 @@
 - [ ] Readme
 - [ ] Sponsor
 
-
 **NixOS System**
 - [ ] Change OS name to B1O5
 - [ ] Garbage collector
@@ -40,3 +39,6 @@
 - [x] [xmobar](https://github.com/jaor/xmobar)
 - [x] [xmonad](https://github.com/xmonad/xmonad)
 - [x] [zsh](https://github.com/zsh-users/zsh)
+
+**Bugs**
+- [ ] zsh locking failed when exit
