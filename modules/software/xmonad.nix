@@ -7,8 +7,9 @@ in {
       enable = lib.mkEnableOption "custom XMonad (window manager)";
 
       config = lib.mkOption {
-        type = lib.types.path;
-        default = ../../config/xmonad/xmonad.hs;
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        example = ../../config/xmonad/xmonad.hs;
         description = "The path of the XMonad configuration file. This file is embedded in the binary.";
       };
     };
@@ -21,7 +22,7 @@ in {
       displayManager.defaultSession = "none+xmonad";
       windowManager.xmonad = {
         enable = true;
-        config = builtins.readFile cfg.config;
+        config = cfg.config;
         enableContribAndExtras = true;
       };
     };

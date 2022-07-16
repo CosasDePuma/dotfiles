@@ -11,7 +11,8 @@ in {
       background = lib.mkOption {
         type = lib.types.either lib.types.path (lib.types.strMatching "^#[0-9]\{6\}$");
         default = "#282828";
-        description = "LightDM background image or color.";
+        example = ../../config/wallpapers/wallpaper.png;
+        description = "Path to the LightDM background image or hex color.";
       };
     };
   };

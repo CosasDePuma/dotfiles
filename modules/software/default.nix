@@ -4,23 +4,10 @@ let
   defaults = with pkgs;[ curl git gnumake nano wget xclip ];
   extras   = with pkgs;[ firefox ];
 in {
-  imports = [
-    ./alacritty.nix
-    ./bat.nix
-    ./coolretroterm.nix
-    ./feh.nix
-    ./fuck.nix
-    ./icons.nix
-    ./lightdm.nix
-    ./lsd.nix
-    ./pcmanfm.nix
-    ./picom.nix
-    ./rofi.nix
-    ./sddm.nix
-    ./xmobar.nix
-    ./xmonad.nix
-    ./zsh.nix
-  ];
+  imports = builtins.map (x: ./${x})
+    (builtins.attrNames
+      (lib.filterAttrs (n: _: n != "default.nix")
+        (builtins.readDir ./.)));
 
   options.software = {
     defaults.enable = lib.mkOption {

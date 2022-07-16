@@ -8,16 +8,10 @@ in {
 
       package = lib.mkPackageOption pkgs.haskellPackages "xmobar" {};
 
-      fonts = lib.mkOption {
-        type = lib.types.listOf lib.types.package;
-        default = [ (pkgs.nerdfonts.override { fonts = [ "Mononoki" ]; }) ];
-        example = [];
-        description = "Extra fonts to install.";
-      };
-
       config = lib.mkOption {
-        type = lib.types.path;
-        default = ../../config/xmobar/xmobarrc;
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        example = ../../config/xmobar/xmobarrc;
         description = "The path of the XMobar configuration file.";
       };
     };
@@ -26,8 +20,9 @@ in {
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = [ cfg.package ];
-      etc."xmobar/xmobarrc".text = builtins.readFile cfg.config;
+      etc."xmobar/xmobarrc" = lib.mkIf (cfg.config != null) {
+        text = builtins.readFile cfg.config;
+      };
     };
-    fonts.fonts = cfg.fonts;
   };
 }

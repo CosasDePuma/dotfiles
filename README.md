@@ -13,7 +13,7 @@
 - [x] Change OS name to B1O5
 - [ ] Garbage collector
 - [ ] Git support
-- [ ] Ctrl+O -> pcmanfm or similar
+- [x] GTK theme
 - [x] User configuration
 
 **Hardware**
@@ -31,7 +31,7 @@
 - [ ] [git](https://github.com/git/git)
 - [x] [lightdm](https://github.com/canonical/lightdm)
 - [x] [lsd](https://github.com/Peltoche/lsd)
-- [ ] [pcmanfm](https://github.com/lxde/pcmanfm) (TODO theme)
+- [x] [pcmanfm](https://github.com/lxde/pcmanfm)
 - [x] [picom](https://github.com/jonaburg/picom)
 - [x] [rofi](https://github.com/davatorium/rofi)
 - [x] [sddm](https://github.com/sddm/sddm)

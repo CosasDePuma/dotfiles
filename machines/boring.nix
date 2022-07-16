@@ -20,24 +20,65 @@ in {
   software = {
     extras = with pkgs;[ bunnyfetch dunst firefox ];
 
-    alacritty.enable = true;
+    alacritty = {
+      enable = true;
+      config = ../config/alacritty/alacritty.yml;
+    };
+
     bat.enable = true;
     coolretroterm.enable = true;
-    feh.enable = true;
+
+    feh = {
+      enable = true;
+      wallpaper = ../config/wallpapers/ghiblike.png;
+    };
+
     fuck.enable = true;
-    icons.enable = true;
-    lightdm.enable = true;
+    htop.enable = true;
+
+    lightdm = {
+      enable = true;
+      background = ../config/wallpapers/cryptogirl.jpg;
+    };
+
     lsd.enable = true;
     pcmanfm.enable = true;
-    picom.enable = true;
-    rofi.enable = true;
-    rofi.package = pkgs.rofi.override { plugins = with pkgs;[ rofi-calc rofi-emoji ]; };
-    xmobar.enable = true;
-    xmonad.enable = true;
-    zsh.enable = true;
+
+    picom = {
+      enable = true;
+      config = ../config/picom/picom.conf;
+    };
+
+    rofi = {
+      enable = true;
+      package = pkgs.rofi.override { plugins = with pkgs;[ rofi-calc rofi-emoji ]; };
+      config = ../config/rofi/rofi.rasi;
+    };    
+
+    xmobar = {
+      enable = true;
+      config = ../config/xmobar/xmobarrc;
+    };
+
+    xmonad = {
+      enable = true;
+      config = ../config/xmonad/xmonad.hs;
+    };
+
+    zsh = {
+      enable = true;
+      config = ../config/zsh/zshrc;
+    };
   };
 
   system = {
+    appearance = {
+      themes = [ pkgs.theme-vertex ];
+      icons = [ pkgs.gnome.adwaita-icon-theme pkgs.papirus-icon-theme ];
+      fonts = [ (pkgs.nerdfonts.override { fonts = [ "Mononoki" ]; }) ];
+      config = ../config/gtk-3.0/settings.ini;
+    };
+
     distribution = {
       name = "B1O5";
       version = "(Boring)";

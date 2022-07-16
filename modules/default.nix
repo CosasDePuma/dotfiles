@@ -1,9 +1,7 @@
-{
-  imports = [
-    ./hardware
-    ./software
-    ./system
-
-    ./todo.nix
-  ];
+#{ imports = [ ./hardware ./software ./system ]; }
+{ lib, ... }: {
+  imports = builtins.map (x: ./${x})
+    (builtins.attrNames
+      (lib.filterAttrs (n: _: n != "default.nix")
+        (builtins.readDir ./.)));
 }

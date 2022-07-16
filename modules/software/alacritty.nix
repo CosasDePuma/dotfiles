@@ -9,8 +9,9 @@ in {
       package = lib.mkPackageOption pkgs "alacritty" {};
 
       config = lib.mkOption {
-        type = lib.types.path;
-        default = ../../config/alacritty/alacritty.yml;
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        example = ../../config/alacritty/alacritty.yml;
         description = "The path of the alacritty configuration file.";
       };
     };
@@ -19,7 +20,9 @@ in {
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = [ cfg.package ];
-      etc."xdg/alacritty.yml".text = builtins.readFile cfg.config;
+      etc."xdg/alacritty.yml" = lib.mkIf (cfg.config != null) {
+        text = builtins.readFile cfg.config;
+      };
     };
   };
 }

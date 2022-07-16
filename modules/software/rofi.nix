@@ -9,8 +9,9 @@ in {
       package = lib.mkPackageOption pkgs "rofi" {};
 
       config = lib.mkOption {
-        type = lib.types.path;
-        default = ../../config/rofi/rofi.rasi;
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        example = ../../config/rofi/rofi.rasi;
         description = "The path of the rofi configuration file.";
       };
     };
@@ -19,7 +20,9 @@ in {
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = [ cfg.package ];
-      etc."rofi/rofi.rasi".text = builtins.readFile cfg.config;
+      etc."rofi/rofi.rasi" = lib.mkIf (cfg.config != null) {
+        text = builtins.readFile cfg.config;
+      };
     };
   };
 }

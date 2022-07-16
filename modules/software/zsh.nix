@@ -9,8 +9,9 @@ in {
       package = lib.mkPackageOption pkgs "zsh" {};
 
       config = lib.mkOption {
-        type = lib.types.path;
-        default = ../../config/zsh/zshrc;
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        example = ../../config/zsh/zshrc;
         description = "The path of the zsh configuration file.";
       };
     };
@@ -19,7 +20,9 @@ in {
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = [ cfg.package ];
-      etc."zshrc".text = builtins.readFile cfg.config;
+      etc."zshrc" = lib.mkIf (cfg.config != null) {
+        text = builtins.readFile cfg.config;
+      };
     };
     users.defaultUserShell = cfg.package;
   };

@@ -10,10 +10,13 @@ import qualified XMonad.Layout.MultiToggle as MT(Toggle(..))
 import XMonad.Hooks.DynamicLog(dynamicLogWithPP,xmobarPP,PP(..) , xmobarColor,shorten,wrap)
 import XMonad.Hooks.EwmhDesktops(ewmh,ewmhFullscreen)
 import XMonad.Hooks.ManageDocks(avoidStruts,docks,ToggleStruts(..))
+import XMonad.Hooks.ManageHelpers(doRectFloat)
+import XMonad.StackSet(RationalRect(..))
 import XMonad.Util.Run(hPutStrLn,spawnPipe)
 import XMonad.Util.SpawnOnce(spawnOnce)
 import Graphics.X11.ExtraTypes.XF86
 import Data.Function((&))
+import Data.Ratio((%))
 import System.Exit(exitWith,ExitCode(ExitSuccess))
 
 -- 🚪 entrypoint
@@ -22,7 +25,7 @@ main = do
     xmproc <- spawnPipe "xmobar /etc/xmobar/xmobarrc"                              -- start xmobar
     getDirectories >>= (launch $ docks . ewmhFullscreen . ewmh $ myConfig xmproc)  -- start xmonad
 
--- 🧰 configuration
+-- 🔨 configuration
 
 myConfig myProc = def {
     -- simple stuff
@@ -54,6 +57,7 @@ myKeys conf@(XConfig {modMask = modm}) = M.fromList $
     , ((modm              , xK_r                   ), spawn $ launcher ++ "drun")                                     -- launcher (apps)
     , ((modm              , xK_e                   ), spawn $ launcher ++ "emoji")                                    -- launcher (emojis)
     , ((modm              , xK_c                   ), spawn $ launcher ++ "calc")                                     -- calculator
+    , ((modm              , xK_f                   ), spawn "pcmanfm")                                                -- file manager
     , ((modm              , xK_q                   ), kill)                                                           -- close window
     , ((modm              , xK_space               ), sendMessage NextLayout)                                         -- change layout
     , ((modm .|. shiftMask, xK_space               ), setLayout $ X.layoutHook conf)                                  -- reset layout
@@ -71,7 +75,7 @@ myKeys conf@(XConfig {modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_m                   ), windows W.focusMaster)                                          -- focus master
     , ((modm              , xK_j                   ), sendMessage Shrink)                                             -- shrink window
     , ((modm              , xK_k                   ), sendMessage Expand)                                             -- expand window
-    , ((modm              , xK_f                   ), sendMessage (MT.Toggle NBFULL) >> sendMessage ToggleStruts)     -- toggle fullscreen
+    , ((modm              , xK_F11                 ), sendMessage (MT.Toggle NBFULL) >> sendMessage ToggleStruts)     -- toggle fullscreen
     , ((modm              , xK_t                   ), withFocused $ windows . W.sink)                                 -- tiling window
     , ((0                 , xF86XK_AudioLowerVolume), spawn "amixer set Master 10%-")                                 -- volume down
     , ((0                 , xF86XK_AudioRaiseVolume), spawn "amixer set Master 10%+")                                 -- volume up
@@ -106,8 +110,8 @@ myLayout = avoidStruts $ mkToggle (single NBFULL) $ spacingRaw False
   -- check window names with 'xprop | grep WM_CLASS'
 
 myManageHook = composeAll
-    [ className =? "MPlayer"        --> doFloat
-    , resource  =? "kdesktop"       --> doIgnore ]
+    [ stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> doRectFloat (RationalRect (1 % 4) (1 % 4) (1 % 2) (1 % 2))
+    ]
 
 -- 🔔 events
 

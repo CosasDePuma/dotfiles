@@ -1,6 +1,6 @@
 { lib, ... }: {
   imports = builtins.map (x: ./${x})
     (builtins.attrNames
-      (lib.filterAttrs (n: v: n != "default.nix" && v == "regular")
+      (lib.filterAttrs (n: _: n != "default.nix")
         (builtins.readDir ./.)));
 }
