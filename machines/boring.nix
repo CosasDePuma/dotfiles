@@ -20,63 +20,23 @@ in {
   software = {
     extras = with pkgs;[ bunnyfetch firefox ];
 
-    alacritty = {
-      enable = true;
-      config = ../config/alacritty;
-    };
-
+    alacritty = { enable = true; config = ../config/alacritty; };
     bat.enable = true;
     coolretroterm.enable = true;
-
-    dunst = {
-      enable = true;
-      config = ../config/dunst;
-    };
-
-    feh = {
-      enable = true;
-      wallpapers = ../config/wallpapers/ghiblike.png;
-    };
-
+    dunst = { enable = true; config = ../config/dunst; };
+    feh = { enable = true; wallpapers = ../config/wallpapers/ghiblike.png; };
     htop.enable = true;
-
-    lightdm = {
-      enable = true;
-      background = ../config/wallpapers/cryptogirl.jpg;
-    };
-
+    lightdm = { enable = true; background = ../config/wallpapers/cryptogirl.jpg; };
     lsd.enable = true;
     pcmanfm.enable = true;
-
-    picom = {
-      enable = true;
-      config = ../config/picom;
-    };
-
+    picom = { enable = true; config = ../config/picom; };
     qemu.enable = true;
-
-    rofi = {
-      enable = true;
-      package = pkgs.rofi.override { plugins = with pkgs;[ rofi-calc rofi-emoji ]; };
-      config = ../config/rofi;
-    };    
-
+    redshift = { enable = true; latitude = 40.30; longitude = 3.40; };
+    rofi = { enable = true; package = pkgs.rofi.override { plugins = with pkgs;[ rofi-calc rofi-emoji ]; }; config = ../config/rofi; };    
     thefuck.enable = true;
-
-    xmobar = {
-      enable = true;
-      config = ../config/xmobar;
-    };
-
-    xmonad = {
-      enable = true;
-      config = ../config/xmonad/xmonad.hs;
-    };
-
-    zsh = {
-      enable = true;
-      config = ../config/zsh/zshrc;
-    };
+    xmobar = { enable = true; config = ../config/xmobar; };
+    xmonad = { enable = true; config = ../config/xmonad/xmonad.hs; };
+    zsh = { enable = true; config = ../config/zsh/zshrc; };
   };
 
   system = {
@@ -86,21 +46,11 @@ in {
       fonts = [ (pkgs.nerdfonts.override { fonts = [ "Mononoki" ]; }) ];
       config = ../config/gtk-3.0;
     };
-
-    distribution = {
-      name = "B1O5";
-      version = "(Boring)";
-    };
-
+    distribution = { name = "B1O5"; version = "(Boring)"; };
     languages = [ "es" ];
     timezone = "Europe/Madrid";
-
     users = {
-      "puma" = {
-        sudo = true;
-        description = "Pumita";
-        groups = [ "networkmanager" ];
-      };
+      "puma" = { sudo = true; description = "Pumita"; groups = [ "networkmanager" ]; };
     };
   };
 }

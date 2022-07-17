@@ -33,7 +33,7 @@ in {
         timeout = 10;
       };
     };
-    environment.etc = = lib.mkIf (cfg.config != null) {
+    environment.etc = lib.mkIf (cfg.config != null) {
       "${name}" = if (builtins.pathExists (builtins.toString cfg.config + "/.")) then {
         source = cfg.config;
         target = name;

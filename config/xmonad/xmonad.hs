@@ -49,7 +49,9 @@ myConfig myProc = def {
 
 -- 🔑 keybindings
 
-launcher = "rofi -theme /etc/rofi/rofi.rasi -show "
+launcher  = "rofi -theme /etc/rofi/rofi.rasi -show "
+volumectl = "/etc/dunst/bin/changevolume "
+
 myKeys conf@(XConfig {modMask = modm}) = M.fromList $
     [ ((modm .|. shiftMask, xK_Escape              ), io (exitWith ExitSuccess))                                      -- close xmonad
     , ((modm              , xK_Return              ), spawn $ X.terminal conf)                                        -- terminal
@@ -77,9 +79,9 @@ myKeys conf@(XConfig {modMask = modm}) = M.fromList $
     , ((modm              , xK_k                   ), sendMessage Expand)                                             -- expand window
     , ((modm              , xK_F11                 ), sendMessage (MT.Toggle NBFULL) >> sendMessage ToggleStruts)     -- toggle fullscreen
     , ((modm              , xK_t                   ), withFocused $ windows . W.sink)                                 -- tiling window
-    , ((0                 , xF86XK_AudioLowerVolume), spawn "amixer set Master 10%-")                                 -- volume down
-    , ((0                 , xF86XK_AudioRaiseVolume), spawn "amixer set Master 10%+")                                 -- volume up
-    , ((0                 , xF86XK_AudioMute       ), spawn "amixer set Master toggle")                               -- volume mute
+    , ((0                 , xF86XK_AudioLowerVolume), spawn $ volumectl ++ "10%- unmute")                             -- volume down
+    , ((0                 , xF86XK_AudioRaiseVolume), spawn $ volumectl ++ "10%+ unmute")                             -- volume up
+    , ((0                 , xF86XK_AudioMute       ), spawn $ volumectl ++ "toggle")                                  -- volume mute
     , ((modm              , xK_period              ), spawn ("echo \"" ++ help ++ "\" | xmessage -file -"))           -- show help
     ] ++ [
       ((m .|. modm, k), windows $ f i) | (i, k) <- zip (X.workspaces conf) [xK_1 .. xK_9]                             -- change workspace
@@ -129,9 +131,10 @@ myLogHook xmproc = dynamicLogWithPP $ xmobarPP
 -- 🏁 startup
 
 myStartupHook = do
-    spawnOnce "dunst"                                        -- notification
-    spawnOnce "picom"                                        -- compositor
-    spawnOnce "feh --no-fehbg --bg-fill /etc/feh/wallpaper"  -- wallpaper
+    spawnOnce "dunst -config /etc/dunst/dunstrc"           -- notifications
+    spawnOnce "feh --no-fehbg --bg-fill --random /etc/feh" -- wallpaper
+    spawnOnce "picom"                                      -- compositor
+    spawnOnce "redshift"                                   -- brightness controller
 
 -- 🆘 help message
 

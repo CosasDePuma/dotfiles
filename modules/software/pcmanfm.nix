@@ -21,7 +21,7 @@ in {
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = [ cfg.package ];
-      etc = = lib.mkIf (cfg.config != null) {
+      etc = lib.mkIf (cfg.config != null) {
         "${name}" = if (builtins.pathExists (builtins.toString cfg.config + "/.")) then {
           source = cfg.config;
           target = name;

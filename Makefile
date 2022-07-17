@@ -64,12 +64,12 @@ uninstall:
 .PHONY: broken
 broken:
 	find /nix/var/nix/gcroots/ -xtype l -delete
+	/run/current-system/bin/switch-to-configuration boot
 
 # 🚮 remove all the garbage files
 .PHONY: clean
 clean:
 	nix-collect-garbage -d
-	/run/current-system/bin/switch-to-configuration boot
 
 # 🔥 remove all
 .PHONY: prune purge

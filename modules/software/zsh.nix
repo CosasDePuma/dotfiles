@@ -18,7 +18,7 @@ in {
 
       history = lib.mkOption {
         type = lib.types.nonEmptyStr;
-        default = "~/.zsh_history";
+        default = "$HOME/.zsh_history";
         description = "${name} history file location.";
       };
     };

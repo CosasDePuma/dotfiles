@@ -21,17 +21,6 @@ eval $(thefuck --alias)
 
 echo "#" > ~/.zshrc
 
-# --- 📚 history ---
-
-touch ~/.zsh_history
-export HISTFILE="~/.zsh_history"
-export HISTSIZE=1000
-export SAVEHIST=1000
-export HISTTIMEFORMAT="[%F %T] "
-setopt EXTENDED_HISTORY
-setopt INC_APPEND_HISTORY
-setopt HIST_FIND_NO_DUPS
-
 # --- 🔑 bindkeys ---
 
 bindkey "^[[3~" delete-char
