@@ -1,18 +1,19 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.software.pcmanfm;
+  name = "pcmanfm";
+  cfg = config.software."${name}";
 in {
   options = {
-    software.pcmanfm = {
-      enable = lib.mkEnableOption "custom pcmanfm (file manager)";
+    software."${name}" = {
+      enable = lib.mkEnableOption "custom ${name} (file manager)";
 
-      package = lib.mkPackageOption pkgs "pcmanfm" {};
+      package = lib.mkPackageOption pkgs name {};
 
       config = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        example = ../../config/pcmanfm/default/pcmanfm.conf;
-        description = "The path of the pcmanfm configuration file.";
+        example = ../../config/${name};
+        description = "The path of the ${name} configuration file or folder.";
       };
     };
   };
@@ -20,8 +21,14 @@ in {
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = [ cfg.package ];
-      etc."pcmanfm/default/pcmanfm.conf" = lib.mkIf (cfg.config != null) {
-        text = builtins.readFile cfg.config;
+      etc = = lib.mkIf (cfg.config != null) {
+        "${name}" = if (builtins.pathExists (builtins.toString cfg.config + "/.")) then {
+          source = cfg.config;
+          target = name;
+        } else {
+          text = builtins.readConfig cfg.config;
+          target = "${name}/default/${name}.conf";
+        };
       };
     };
   };

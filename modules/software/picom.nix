@@ -1,18 +1,19 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.software.picom;
+  name = "picom";
+  cfg = config.software."${name}";
 in {
   options = {
-    software.picom = {
-      enable = lib.mkEnableOption "custom picom (compositor)";
+    software."${name}" = {
+      enable = lib.mkEnableOption "custom ${name} (compositor)";
 
-      package = lib.mkPackageOption pkgs "picom" {};
+      package = lib.mkPackageOption pkgs name {};
 
       config = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        example = ../../config/picom/picom.conf;
-        description = "The path of the picom configuration file.";
+        example = ../../config/${name};
+        description = "The path of the ${name} configuration file or folder.";
       };
     };
   };
@@ -20,8 +21,14 @@ in {
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = [ cfg.package ];
-      etc."xdg/picom.conf" = lib.mkIf (cfg.config != null) {
-        text = builtins.readFile cfg.config;
+      etc = lib.mkIf (cfg.config != null) {
+        "${name}" = if (builtins.pathExists (builtins.toString cfg.config + "/.")) then {
+          source = cfg.config;
+          target = "xdg/${name}";
+        } else {
+          text = builtins.readConfig cfg.config;
+          target = "xdg/${name}.yml";
+        };
       };
     };
   };

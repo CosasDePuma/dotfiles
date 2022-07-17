@@ -1,9 +1,10 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.system.appearance;
+  name = "appearance";
+  cfg = config.system."${name}";
 in {
   options = {
-    system.appearance = {
+    system."${name}" = {
       themes = lib.mkOption {
         type = lib.types.listOf lib.types.package;
         default = [];
@@ -28,19 +29,25 @@ in {
       config = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        example = ../../config/gtk-3.0/settings.ini;
-        description = "The path of the GTK 3 configuration file.";
+        example = ../../config/gtk-3.0;
+        description = "The path of the GTK 3 configuration file or folder.";
       };
     };
   };
 
   config = {
     fonts.fonts = cfg.fonts;
-   xdg.icons.enable = (cfg.icons != []);
+    xdg.icons.enable = (cfg.icons != []);
     environment = {
       systemPackages = cfg.themes ++ cfg.icons;
-      etc."xdg/gtk-3.0/settings.ini" = lib.mkIf (cfg.config != null) {
-        text = builtins.readFile cfg.config;
+      etc = lib.mkIf (cfg.config != null) {
+        "${name}" = if (builtins.pathExists (builtins.toString cfg.config + "/.")) then {
+          source = cfg.config;
+          target = "xdg/gtk-3.0";
+        } else {
+          text = builtins.readConfig cfg.config;
+          target = "xdg/gtk-3.0/settings.ini";
+        };
       };
     };
   };

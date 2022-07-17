@@ -1,18 +1,19 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.software.xmobar;
+  name = "xmobar";
+  cfg = config.software."${name}";
 in {
   options = {
-    software.xmobar = {
-      enable = lib.mkEnableOption "custom XMobar (status bar)";
+    software."${name}" = {
+      enable = lib.mkEnableOption "custom ${name} (status bar)";
 
-      package = lib.mkPackageOption pkgs.haskellPackages "xmobar" {};
+      package = lib.mkPackageOption pkgs.haskellPackages name {};
 
       config = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        example = ../../config/xmobar/xmobarrc;
-        description = "The path of the XMobar configuration file.";
+        example = ../../config/${name};
+        description = "The path of the ${name} configuration file or folder.";
       };
     };
   };
@@ -20,8 +21,14 @@ in {
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = [ cfg.package ];
-      etc."xmobar/xmobarrc" = lib.mkIf (cfg.config != null) {
-        text = builtins.readFile cfg.config;
+      etc = lib.mkIf (cfg.config != null) {
+        "${name}" = if (builtins.pathExists (builtins.toString cfg.config + "/.")) then {
+          source = cfg.config;
+          target = name;
+        } else {
+          text = builtins.readConfig cfg.config;
+          target = "${name}/${name}rc";
+        };
       };
     };
   };

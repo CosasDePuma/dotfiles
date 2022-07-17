@@ -1,12 +1,13 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.software.qemu;
+  name = "qemu";
+  cfg = config.software."${name}";
 in {
   options = {
-    software.qemu = {
-      enable = lib.mkEnableOption "custom qemu (vm manager)";
+    software."${name}" = {
+      enable = lib.mkEnableOption "custom ${name} (vm manager)";
 
-      package = lib.mkPackageOption pkgs "qemu" {};
+      package = lib.mkPackageOption pkgs name {};
     };
   };
 

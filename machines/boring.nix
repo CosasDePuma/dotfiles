@@ -30,15 +30,14 @@ in {
 
     dunst = {
       enable = true;
-      config = ../config/dunst/dunstrc;
+      config = ../config/dunst;
     };
 
     feh = {
       enable = true;
-      wallpaper = ../config/wallpapers/ghiblike.png;
+      wallpapers = ../config/wallpapers/ghiblike.png;
     };
 
-    fuck.enable = true;
     htop.enable = true;
 
     lightdm = {
@@ -51,7 +50,7 @@ in {
 
     picom = {
       enable = true;
-      config = ../config/picom/picom.conf;
+      config = ../config/picom;
     };
 
     qemu.enable = true;
@@ -59,12 +58,14 @@ in {
     rofi = {
       enable = true;
       package = pkgs.rofi.override { plugins = with pkgs;[ rofi-calc rofi-emoji ]; };
-      config = ../config/rofi/rofi.rasi;
+      config = ../config/rofi;
     };    
+
+    thefuck.enable = true;
 
     xmobar = {
       enable = true;
-      config = ../config/xmobar/xmobarrc;
+      config = ../config/xmobar;
     };
 
     xmonad = {
@@ -81,9 +82,9 @@ in {
   system = {
     appearance = {
       themes = [ pkgs.theme-vertex ];
-      icons = [ pkgs.gnome.adwaita-icon-theme pkgs.papirus-icon-theme ];
+      icons = [ pkgs.gnome.adwaita-icon-theme];
       fonts = [ (pkgs.nerdfonts.override { fonts = [ "Mononoki" ]; }) ];
-      config = ../config/gtk-3.0/settings.ini;
+      config = ../config/gtk-3.0;
     };
 
     distribution = {

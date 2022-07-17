@@ -14,6 +14,9 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    networking.hostName = hostname;
+    networking = {
+      hostName = hostname;
+      networkmanager.enable = true;
+    };
   };
 }

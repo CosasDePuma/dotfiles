@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.software;
-  defaults = with pkgs;[ curl git gnumake nano wget xclip ];
+  defaults = with pkgs;[ curl git gnumake nano unzip wget xclip zip ];
   extras   = with pkgs;[ firefox ];
 in {
   imports = builtins.map (x: ./${x})

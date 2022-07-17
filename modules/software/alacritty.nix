@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 let
   name = "alacritty";
-  cfg = config.software.${name};
+  cfg = config.software."${name}";
 in {
   options = {
-    software.${name} = {
+    software."${name}" = {
       enable = lib.mkEnableOption "custom ${name} (terminal emulator)";
 
       package = lib.mkPackageOption pkgs name {};
@@ -13,7 +13,7 @@ in {
         type = lib.types.nullOr lib.types.path;
         default = null;
         example = ../../config/${name};
-        description = "The path of the alacritty configuration file or folder.";
+        description = "The path of the ${name} configuration file or folder.";
       };
     };
   };

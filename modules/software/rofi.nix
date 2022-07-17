@@ -1,18 +1,19 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.software.rofi;
+  name = "rofi";
+  cfg = config.software."${name}";
 in {
   options = {
-    software.rofi = {
-      enable = lib.mkEnableOption "custom rofi (launcher)";
+    software."${name}" = {
+      enable = lib.mkEnableOption "custom ${name} (launcher)";
 
-      package = lib.mkPackageOption pkgs "rofi" {};
+      package = lib.mkPackageOption pkgs name {};
 
       config = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        example = ../../config/rofi/rofi.rasi;
-        description = "The path of the rofi configuration file.";
+        example = ../../config/${name};
+        description = "The path of the ${name} configuration file or folder.";
       };
     };
   };
@@ -20,8 +21,14 @@ in {
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = [ cfg.package ];
-      etc."rofi/rofi.rasi" = lib.mkIf (cfg.config != null) {
-        text = builtins.readFile cfg.config;
+      etc = lib.mkIf (cfg.config != null) {
+        "${name}" = if (builtins.pathExists (builtins.toString cfg.config + "/.")) then {
+          source = cfg.config;
+          target = name;
+        } else {
+          text = builtins.readConfig cfg.config;
+          target = "${name}/${name}.rasi";
+        };
       };
     };
   };

@@ -1,18 +1,19 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.software.feh;
+  name = "feh";
+  cfg = config.software."${name}";
 in {
   options = {
-    software.feh = {
-      enable = lib.mkEnableOption "custom feh (image viewer and background manager)";
+    software."${name}" = {
+      enable = lib.mkEnableOption "custom ${name} (image viewer and background manager)";
 
-      package = lib.mkPackageOption pkgs "feh" {};
+      package = lib.mkPackageOption pkgs name {};
 
-      wallpaper = lib.mkOption {
+      wallpapers = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        example = ../../config/wallpapers/ghiblike.png;
-        description = "The path of the default wallpaper.";
+        example = ../../config/wallpapers;
+        description = "The path of the default file or folder with the wallpaper(s).";
       };
     };
   };
@@ -20,9 +21,12 @@ in {
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = [ cfg.package ];
-      etc."wallpaper" = lib.mkIf (cfg.wallpaper != null) {
-        source = cfg.wallpaper;
-        target = "feh/wallpaper";
+      etc = lib.mkIf (cfg.wallpapers != null) {
+        "${name}" = {
+          source = cfg.wallpapers;
+          target = if (builtins.pathExists (builtins.toString cfg.wallpapers + "/."))
+            then name else "${name}/wallpaper";
+        };
       };
     };
   };

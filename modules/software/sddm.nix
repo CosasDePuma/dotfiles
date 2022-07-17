@@ -1,24 +1,25 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.software.sddm;
+  name = "sddm";
+  cfg = config.software."${name}";
 in {
   options = {
-    software.sddm = {
-      enable = lib.mkEnableOption "custom SDDM (login manager)";
+    software."${name}" = {
+      enable = lib.mkEnableOption "custom ${name} (login manager)";
 
-      autologin = lib.mkEnableOption "SDDM autologin";
+      autologin = lib.mkEnableOption "${name} autologin";
 
       theme = {
         name = lib.mkOption {
           type = lib.types.str;
           default = "";
-          description = "SDDM theme to be used.";
+          description = "${name} theme to be used.";
         };
 
         package = lib.mkOption {
           type = lib.types.nullOr lib.types.package;
           default = null;
-          description = "SDDM theme to be installed.";
+          description = "${name} theme to be installed.";
         };
       };
     };

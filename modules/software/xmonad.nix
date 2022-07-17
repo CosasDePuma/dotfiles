@@ -1,16 +1,17 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.software.xmonad;
+  name = "xmonad";
+  cfg = config.software."${name}";
 in {
   options = {
-    software.xmonad = {
-      enable = lib.mkEnableOption "custom XMonad (window manager)";
+    software."${name}" = {
+      enable = lib.mkEnableOption "custom ${name} (window manager)";
 
       config = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        example = ../../config/xmonad/xmonad.hs;
-        description = "The path of the XMonad configuration file. This file is embedded in the binary.";
+        example = ../../config/${name};
+        description = "The path of the ${name} configuration file. This file is embedded in the binary.";
       };
     };
   };

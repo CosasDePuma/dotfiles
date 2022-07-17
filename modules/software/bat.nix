@@ -1,23 +1,27 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.software.bat;
+  name = "bat";
+  cfg = config.software."${name}";
 in {
   options = {
-    software.bat = {
-      enable = lib.mkEnableOption "custom bat (better cat)";
+    software."${name}" = {
+      enable = lib.mkEnableOption "custom ${name} (better cat)";
 
-      package = lib.mkPackageOption pkgs "bat" {};
+      package = lib.mkPackageOption pkgs name {};
+
+      aliases = lib.mkOption {
+        type = lib.types.attrs;
+        default = {};
+        example = { "cat" = "bat --paging=never"; };
+        description = "Shell aliases for ${name}";
+      };
     };
   };
 
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = [ cfg.package ];
-      shellAliases = {
-        "cat"  = "bat --paging=never";
-        "catl" = "bat";
-        "catn" = "cat --plain --paging=never";
-      };
+      shellAliases = cfg.aliases;
     };
   };
 }

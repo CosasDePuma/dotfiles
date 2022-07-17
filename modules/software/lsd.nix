@@ -1,24 +1,27 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.software.lsd;
+  name = "lsd";
+  cfg = config.software."${name}";
 in {
   options = {
-    software.lsd = {
-      enable = lib.mkEnableOption "custom lsd (better ls)";
+    software."${name}" = {
+      enable = lib.mkEnableOption "custom ${name} (better ls)";
 
-      package = lib.mkPackageOption pkgs "lsd" {};
+      package = lib.mkPackageOption pkgs name {};
+
+      aliases = lib.mkOption {
+        type = lib.types.attrs;
+        default = {};
+        example = { "cat" = "bat --paging=never"; };
+        description = "Shell aliases for ${name}";
+      };
     };
   };
 
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = [ cfg.package ];
-      shellAliases = {
-        "ls"  = "lsd";
-        "la"  = "lsd -a";
-        "ll"  = "lsd -l";
-        "lla" = "lsd -la";
-      };
+      shellAliases = cfg.aliases;
     };
   };
 }
