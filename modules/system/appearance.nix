@@ -36,6 +36,7 @@ in {
 
   config = {
     fonts.fonts = cfg.fonts;
+   xdg.icons.enable = (cfg.icons != []);
     environment = {
       systemPackages = cfg.themes ++ cfg.icons;
       etc."xdg/gtk-3.0/settings.ini" = lib.mkIf (cfg.config != null) {

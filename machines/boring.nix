@@ -18,15 +18,20 @@ in {
   };  
 
   software = {
-    extras = with pkgs;[ bunnyfetch dunst firefox ];
+    extras = with pkgs;[ bunnyfetch firefox ];
 
     alacritty = {
       enable = true;
-      config = ../config/alacritty/alacritty.yml;
+      config = ../config/alacritty;
     };
 
     bat.enable = true;
     coolretroterm.enable = true;
+
+    dunst = {
+      enable = true;
+      config = ../config/dunst/dunstrc;
+    };
 
     feh = {
       enable = true;
@@ -48,6 +53,8 @@ in {
       enable = true;
       config = ../config/picom/picom.conf;
     };
+
+    qemu.enable = true;
 
     rofi = {
       enable = true;

@@ -129,6 +129,7 @@ myLogHook xmproc = dynamicLogWithPP $ xmobarPP
 -- 🏁 startup
 
 myStartupHook = do
+    spawnOnce "dunst"                                        -- notification
     spawnOnce "picom"                                        -- compositor
     spawnOnce "feh --no-fehbg --bg-fill /etc/feh/wallpaper"  -- wallpaper
 

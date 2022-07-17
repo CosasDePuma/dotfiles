@@ -25,7 +25,7 @@
 - [x] [bat](https://github.com/sharkdp/bat)
 - [ ] [cool-retro-term](https://github.com/Swordfish90/cool-retro-term) (TODO config)
 - [ ] [emacs](https://github.com/emacs-mirror/emacs) / [doomemacs](https://github.com/doomemacs/doomemacs) (has a shell.nix)
-- [ ] [dunst](https://github.com/dunst-project/dunst)
+- [ ] [dunst](https://github.com/dunst-project/dunst) (TODO icons and automatization)
 - [x] [feh](https://github.com/derf/feh)
 - [ ] [firefox](https://github.com/mozilla)
 - [ ] [git](https://github.com/git/git)
