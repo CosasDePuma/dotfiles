@@ -20,7 +20,7 @@ for command in "${commands[@]}"; do
 done
 
 # format the partitions
-partitions=$(lsblk | grep part | grep sda | cut -d' ' -f1 | sed 's/^.\{2\}//g')
+partitions=$(lsblk | grep part | grep "${disk}" | cut -d' ' -f1 | sed 's/^.\{2\}//g')
 echo "[*] Formatting partitions..."
 while IFS= read -r partition; do
     case "${partition}" in
@@ -28,7 +28,7 @@ while IFS= read -r partition; do
         *2) "${SUDO}" mkfs.ext4 -L SYSTEM "/dev/${partition}" &>/dev/null ;;
     esac
 done < <(printf '%s\n' "${partitions}")
-sleep 1
+sleep 4
 
 # enable swap
 echo '[*] Enabling SWAP...'
