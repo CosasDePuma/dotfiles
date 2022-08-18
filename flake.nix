@@ -27,8 +27,12 @@
       nixosConfigurations = lib.mkMachines {
         boring = {
           inherit overlays;
-          user = "puma";
           hardware = "matebook";
+        };
+
+        mobile = {
+          inherit overlays;
+          hardware = "vmware";
         };
       };
     };
