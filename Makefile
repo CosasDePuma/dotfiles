@@ -12,7 +12,6 @@ switch: prebuild
 boot: prebuild
 	nixos-rebuild boot --flake .#$(shell hostname)
 
-
 # 🔨 prerequisites to rebuild the system
 .PHONY: rebuild
 prebuild: .git flake.nix flake.lock

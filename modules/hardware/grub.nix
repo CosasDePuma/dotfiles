@@ -29,8 +29,8 @@ in {
     ({
       boot.loader.grub = {
         enable = true;
-        device = "nodev";
-        fsIdentifier = "uuid";
+        device = "SYSTEM";
+        fsIdentifier = "label";
         efiSupport = cfg.supportEFI;
         efiInstallAsRemovable = cfg.supportEFI;
       };
