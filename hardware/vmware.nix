@@ -10,7 +10,7 @@
       fsType = "ext4";
     };
 
-  swapDevices = [ { device = "/dev/disk/by-label/SWAP"; }; ];
+  swapDevices = [ { device = "/dev/disk/by-label/SWAP"; } ];
 
   networking.useDHCP = lib.mkDefault true;
   virtualisation.vmware.guest.enable = true;

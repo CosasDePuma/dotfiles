@@ -29,7 +29,7 @@ in {
     ({
       boot.loader.grub = {
         enable = true;
-        device = "SYSTEM";
+        device = if cfg.supportEFI then "nodev" else "/dev/sda";
         fsIdentifier = "label";
         efiSupport = cfg.supportEFI;
         efiInstallAsRemovable = cfg.supportEFI;

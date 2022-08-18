@@ -35,7 +35,7 @@ echo '[*] Enabling SWAP...'
 "${SUDO}" swapon /dev/disk/by-label/SWAP
 
 # mount the partitions
-echo "[*] Mounting SYSTEM and BOOT devices..."
+echo "[*] Mounting SYSTEM devices..."
 "${SUDO}" mount /dev/disk/by-label/SYSTEM /mnt/
 
 # download the flake file
