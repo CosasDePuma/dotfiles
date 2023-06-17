@@ -23,8 +23,6 @@ sync() {
       --exclude .github \
       --exclude LICENSE \
       "$@" || exit 1
-    if
-
 }
 
 # =======================
