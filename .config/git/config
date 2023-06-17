@@ -1,5 +1,7 @@
 [alias]
-    graph = log --graph --color --abbrev-commit --date=relative --pretty=format:'%C(red)%h%C(green)%d%C(reset)%x20%cd%C(bold blue)%x20%cn%C(reset)%C(yellow)%x20(%ce)%x20%C(cyan)%C(reset)%x20%s'
+    aliases = config --global --get-regexp 'alias\\.'
+    graph = log --graph --all --color --abbrev-commit --oneline --decorate
+    fullgraph = log --graph --all --color --abbrev-commit --date=relative --pretty=format:'%C(red)%h%C(green)%d%C(reset)%x20%cd%C(bold blue)%x20%cn%C(reset)%C(yellow)%x20(%ce)%x20%C(cyan)%C(reset)%x20%s'
     last = log -1 HEAD
 [color]
     ui = true
