@@ -1,0 +1,43 @@
+#!/bin/sh
+# install.sh - @cosasdepuma dotfiles installer
+
+# =======================
+#   Setup
+# =======================
+set -e
+
+# change to the dotfiles directory and update dotfiles itself first
+CDPATH='' cd -- "$(dirname -- "${0}")/.." || exit 1
+if ! git pull --quiet origin main 2>/dev/null; then
+  git clone --quiet --depth 1 https://github.com/cosasdepuma/.dotfiles ~/.cache/dotfiles
+  cd ~/.cache/dotfiles
+fi
+
+# define a function to sync dotfiles
+sync() {
+    rsync -gortu --no-p \
+      --exclude .git \
+      --exclude LICENSE \
+      "$@" || exit 1
+}
+
+# =======================
+#   Installation
+# =======================
+# widely used dotfiles
+sync .curlrc .ssh .wgetrc ~/
+sync .config/git ~/.config/
+sync .bin/dotfiles ~/.bin/
+
+# =======================
+#   Permissions
+# =======================
+# ensure that the dotfiles are readable
+chmod -R u+r ~/.[!.]*
+# ensure that the dotfiles binaries are executable
+chmod -R u+x ~/.bin/
+
+# =======================
+#   Clean up
+# =======================
+unset sync
