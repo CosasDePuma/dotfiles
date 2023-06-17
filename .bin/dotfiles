@@ -1,22 +1,26 @@
 #!/bin/sh
 # install.sh - @cosasdepuma dotfiles installer
+# Usage:
+#   Install: curl -fsSL https://dotfiles.kike.wtf/ | sh
+#   Update:  dotfiles
 
 # =======================
 #   Setup
 # =======================
 set -e
 
-# change to the dotfiles directory and update dotfiles itself first
-CDPATH='' cd -- "$(dirname -- "${0}")/.." || exit 1
-if ! git pull --quiet origin main 2>/dev/null; then
-  git clone --quiet --depth 1 https://github.com/cosasdepuma/.dotfiles ~/.cache/dotfiles
-  cd ~/.cache/dotfiles
+# change to the dotfiles directory and download/update dotfiles itself first
+if ! test -d ~/.cache/dotfiles; then
+    git clone --quiet --depth 1 https://github.com/cosasdepuma/.dotfiles ~/.cache/dotfiles
 fi
+cd ~/.cache/dotfiles || exit 1
+git pull --quiet --ff-only
 
 # define a function to sync dotfiles
 sync() {
     rsync -gortu --no-p \
       --exclude .git \
+      --exclude .github \
       --exclude LICENSE \
       "$@" || exit 1
 }
