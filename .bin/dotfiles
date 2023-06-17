@@ -1,24 +1,54 @@
 #!/bin/sh
 # install.sh - @cosasdepuma dotfiles installer
 # Usage:
-#   Install: curl -fsSL https://dotfiles.kike.wtf/ | sh
-#   Update:  dotfiles
-
-# =======================
-#   Setup
-# =======================
+#   Install: curl -fsLo /tmp/dotfiles https://dotfiles.kike.wtf/ && sh /tmp/dotfiles -a
+#   Update:  dotfiles [-a] [-b] [-p] [-v|-vv] [--no-cache] [--no-installer]
 set -e
 
-# change to the dotfiles directory and download/update dotfiles itself first
-if ! test -d ~/.cache/dotfiles; then
-    git clone --quiet --depth 1 https://github.com/cosasdepuma/.dotfiles ~/.cache/dotfiles
-fi
-cd ~/.cache/dotfiles || exit 1
-git pull --quiet --ff-only
+# =======================
+#   Arguments
+# =======================
+# flags
+binaries=false
+cache=true
+installer=true
+personal=false
+verbose=0
 
-# define a function to sync dotfiles
+# parser
+while :; do
+  case "${1}" in
+    -a|--all)
+      binaries=true
+      cache=true
+      installer=true
+      ;;
+    -b|--binaries)      binaries=true ;;
+    --no-installer)     installer=false ;;
+    --no-cache)         cache=false ;;
+    -p|--personal)      personal=true ;;
+    -v|--verbose)       verbose=$((verbose + 1)) ;;
+    -vv|--very-verbose) verbose=$((verbose + 2)) ;;
+    --) shift; break ;; # end all arguments
+    -?*) echo "Error: Unknown option (ignored): ${1}" >&2 ;;
+    *) break ;;
+  esac
+  shift
+done
+
+# =======================
+#   Functions
+# =======================
+# function to print messages
+msg() {
+  test "${verbose}" -gt 0 && echo "${1}"
+}
+
+# function to sync dotfiles
 sync() {
-    rsync -gortu --no-p \
+    v=''
+    test "${verbose}" -gt 1 && v='-v'
+    rsync "-gortu${v}" --no-p \
       --exclude .git \
       --exclude .github \
       --exclude LICENSE \
@@ -26,12 +56,40 @@ sync() {
 }
 
 # =======================
+#   Setup
+# =======================
+# change to the dotfiles directory and download/update dotfiles itself first
+if ! test -d ~/.cache/dotfiles; then
+    git clone --quiet --depth 1 https://github.com/cosasdepuma/.dotfiles ~/.cache/dotfiles
+fi
+cd ~/.cache/dotfiles || exit 1
+git pull --quiet --ff-only
+
+# =======================
 #   Installation
 # =======================
 # widely used dotfiles
-sync .curlrc .ssh .wgetrc ~/
-sync .config/git ~/.config/
-sync .bin/dotfiles ~/.bin/
+msg '[+] Syncing common dotfiles...'
+sync .curlrc .wgetrc ~/
+
+# binaries dotfiles
+if test "${binaries}" = true; then
+  msg '[+] Syncing binaries...'
+  sync --exclude .bin/dotfiles ./bin/ ~/.bin/
+fi
+
+# dotfiles installer
+if test "${installer}" = true; then
+  msg '[+] Syncing installer...'
+  sync .bin/dotfiles ~/.bin/
+fi
+
+# personal dotfiles (from @cosasdepuma)
+if test "${personal}" = true; then
+  msg '[+] Stealing personal dotfiles...'
+  sync .ssh/ ~/.ssh/
+  sync .config/git/ ~/.config/git/
+fi
 
 # =======================
 #   Permissions
@@ -39,9 +97,19 @@ sync .bin/dotfiles ~/.bin/
 # ensure that the dotfiles are readable
 chmod -R u+r ~/.[!.]*
 # ensure that the dotfiles binaries are executable
-chmod -R u+x ~/.bin/
+test -d ~/.bin && chmod -R u+x ~/.bin/
 
 # =======================
 #   Clean up
 # =======================
-unset sync
+# unset functions and variables
+unset -f sync
+unset -f msg
+unset -v binaries
+unset -v cache
+unset -v installer
+unset -v personal
+unset -v verbose
+
+# remove the cache
+test "${cache}" = true || rm -rf ~/.cache/dotfiles
