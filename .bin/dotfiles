@@ -47,8 +47,8 @@ msg() {
 # function to sync dotfiles
 sync() {
     v=''
-    test "${verbose}" -gt 1 && v='-v'
-    rsync "-gortu${v}" --no-p \
+    test "${verbose}" -gt 1 && v='vP'
+    rsync "-gortux${v}" --no-p \
       --exclude .git \
       --exclude .github \
       --exclude LICENSE \
