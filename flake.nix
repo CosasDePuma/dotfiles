@@ -24,7 +24,10 @@
             })
             (lib.mkIf cfg.git {
               programs.git.enable = true;
-              home.file = dotfile ".config/git/config" // dotfile ".config/git/ignore";
+              home.file = lib.mkMerge [
+                (dotfile ".config/git/config")
+                (dotfile ".config/git/ignore")
+              ];
             })
             (lib.mkIf cfg.ssh {
               programs.ssh.enable = true;
