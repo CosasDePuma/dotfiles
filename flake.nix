@@ -8,7 +8,7 @@
         let
           cfg = config."${name}";
           dotfile = path:
-            with lib.strings; { "${path}".text = removePrefix "\n" (removeSuffix "\n" (builtins.readFile ./.config/${path})); };
+            with lib.strings; { "${path}".text = removePrefix "\n" (removeSuffix "\n" (builtins.readFile ./${path})); };
        in {
           options."${name}" = {
             curl = lib.mkEnableOption "cURL dotfiles";
@@ -17,20 +17,24 @@
             wget = lib.mkEnableOption "wget dotfiles";
           };
 
-          config =
-            lib.mkIf cfg.curl {
+          config = lib.mkMerge [
+            (lib.mkIf cfg.curl {
               home.packages = with pkgs; [ curl ];
-              xdg.configFile = dotfile "../.curlrc";
-            } // lib.mkIf cfg.git {
+              home.file = dotfile ".curlrc";
+            })
+            (lib.mkIf cfg.git {
               programs.git.enable = true;
-              xdg.configFile = dotfile "git/config" // dotfile "git/ignore";
-            } // lib.mkIf cfg.ssh {
+              home.file = dotfile ".config/git/config" // dotfile ".config/git/ignore";
+            })
+            (lib.mkIf cfg.ssh {
               programs.ssh.enable = true;
-              xdg.configFile = dotfile "ssh/config";
-            } // lib.mkIf cfg.wget {
+              home.file = dotfile ".ssh/config";
+            })
+            (lib.mkIf cfg.wget {
               home.packages = with pkgs; [ wget ];
-              xdg.configFile = dotfile "../.wgetrc";
-            };
+              home.file = dotfile ".wgetrc";
+            })
+          ];
         };
     };
 }
