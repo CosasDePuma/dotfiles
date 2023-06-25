@@ -29,10 +29,7 @@
             (lib.mkIf cfg.git {
               programs.git.enable = lib.mkDefault false;
               home.packages = with pkgs; [ git ];
-              xdg.configFile = lib.mkMerge [
-                (dotconfig "git/config")
-                (dotconfig "git/ignore")
-              ];
+              xdg.configFile = (dotconfig "git/config") // (dotconfig "git/ignore");
             })
             (lib.mkIf cfg.ssh {
               programs.ssh.enable = lib.mkDefault false;
