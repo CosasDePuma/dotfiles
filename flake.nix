@@ -23,14 +23,13 @@
               home.file = dotfile ".curlrc";
             })
             (lib.mkIf cfg.git {
-              programs.git.enable = true;
+              home.packages = with pkgs; [ git ];
               home.file = lib.mkMerge [
                 (dotfile ".config/git/config")
                 (dotfile ".config/git/ignore")
               ];
             })
             (lib.mkIf cfg.ssh {
-              programs.ssh.enable = true;
               home.file = dotfile ".ssh/config";
             })
             (lib.mkIf cfg.wget {
