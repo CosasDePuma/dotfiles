@@ -7,8 +7,12 @@
       homeManagerModules.default = { config, lib, pkgs, ... }:
         let
           cfg = config."${name}";
-          dotfile = path:
-            with lib.strings; { "${path}".text = removePrefix "\n" (removeSuffix "\n" (builtins.readFile ./${path})); };
+          dotfile = path: writeFile path path;
+          dotconfig = path: writeFile ".config/${path}" path;
+          
+          writeFile = src: dest: with lib.strings; {
+            "${dest}".text = removePrefix "\n" (removeSuffix "\n" (builtins.readFile ./${src}));
+          };
        in {
           options."${name}" = {
             curl = lib.mkEnableOption "cURL dotfiles";
@@ -25,9 +29,9 @@
             (lib.mkIf cfg.git {
               programs.git.enable = lib.mkDefault false;
               home.packages = with pkgs; [ git ];
-              home.file = lib.mkMerge [
-                (dotfile ".config/git/config")
-                (dotfile ".config/git/ignore")
+              xdg.configFile = lib.mkMerge [
+                (dotconfig "git/config")
+                (dotconfig "git/ignore")
               ];
             })
             (lib.mkIf cfg.ssh {
