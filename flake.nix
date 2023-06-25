@@ -17,6 +17,7 @@
           options."${name}" = {
             curl = lib.mkEnableOption "cURL dotfiles";
             git  = lib.mkEnableOption "git dotfiles";
+            hypr = lib.mkEnableOption "Hyprland dotfiles";
             ssh  = lib.mkEnableOption "SSH dotfiles";
             wget = lib.mkEnableOption "wget dotfiles";
           };
@@ -29,7 +30,15 @@
             (lib.mkIf cfg.git {
               programs.git.enable = lib.mkDefault false;
               home.packages = with pkgs; [ git ];
-              xdg.configFile = (dotconfig "git/config") // (dotconfig "git/ignore");
+              xdg.configFile =  (dotconfig "git/config") //
+                                (dotconfig "git/ignore");
+            })
+            (lib.mkIf cfg.hypr {
+              programs.git.enable = lib.mkDefault false;
+              xdg.configFile =  (dotconfig "hypr/hyprland.conf") //
+                                (dotconfig "hypr/bindings.conf") //
+                                (dotconfig "hypr/themes/catppuccin.conf");
+              
             })
             (lib.mkIf cfg.ssh {
               programs.ssh.enable = lib.mkDefault false;
