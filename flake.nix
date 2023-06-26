@@ -15,6 +15,7 @@
           };
        in {
           options."${name}" = {
+            all = lib.mkEnableOption "all the dotfiles";
             curl = lib.mkEnableOption "cURL dotfiles";
             git  = lib.mkEnableOption "git dotfiles";
             hypr = lib.mkEnableOption "Hyprland dotfiles";
@@ -23,28 +24,28 @@
           };
 
           config = lib.mkMerge [
-            (lib.mkIf cfg.curl {
+            (lib.mkIf (cfg.all || cfg.curl) {
               home.packages = with pkgs; [ curl ];
               home.file = dotfile ".curlrc";
             })
-            (lib.mkIf cfg.git {
+            (lib.mkIf (cfg.all || cfg.git) {
               programs.git.enable = lib.mkDefault false;
               home.packages = with pkgs; [ git ];
               xdg.configFile =  (dotconfig "git/config") //
                                 (dotconfig "git/ignore");
             })
-            (lib.mkIf cfg.hypr {
+            (lib.mkIf (cfg.all || cfg.hypr) {
               programs.git.enable = lib.mkDefault false;
               xdg.configFile =  (dotconfig "hypr/hyprland.conf") //
                                 (dotconfig "hypr/bindings.conf") //
                                 (dotconfig "hypr/themes/catppuccin.conf");
               
             })
-            (lib.mkIf cfg.ssh {
+            (lib.mkIf (cfg.all || cfg.ssh) {
               programs.ssh.enable = lib.mkDefault false;
               home.file = dotfile ".ssh/config";
             })
-            (lib.mkIf cfg.wget {
+            (lib.mkIf (cfg.all || cfg.wget) {
               home.packages = with pkgs; [ wget ];
               home.file = dotfile ".wgetrc";
             })
