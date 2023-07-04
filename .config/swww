@@ -1,0 +1,12 @@
+#!/bin/sh
+
+export SWWW_INTERVAL=300
+
+swww kill | swww init
+while :; do
+  random_img=$(find ~/.config/wallpapers | shuf -n 1)
+  if test -f ${random_img}; then
+    swww img --transition-type grow --transition-duration 3 "${random_img}"
+    sleep "${SWWW_INTERVAL}"
+  fi
+done
