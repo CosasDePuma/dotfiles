@@ -19,6 +19,7 @@
           options.dotfiles = {
             all        = mkEnableOption "all the dotfiles";
             curl       = mkEnableOption "cURL dotfiles";
+            foot       = mkEnableOption "foot dotfiles";
             git        = mkEnableOption "git dotfiles";
             hyprland   = mkEnableOption "Hyprland dotfiles";
             ssh        = mkEnableOption "SSH dotfiles";
@@ -37,6 +38,12 @@
             (mkIf (cfg.all || cfg.curl) {
               home.packages = with pkgs; [ curl ];
               home.file = dotfile ".curlrc";
+            })
+            # Foot
+            (mkIf (cfg.all || cfg.git) {
+              programs.git.enable = mkDefault false;
+              home.packages = with pkgs; [ foot ];
+              xdg.configFile = dotconfig "foot/foot.ini";
             })
             # Git
             (mkIf (cfg.all || cfg.git) {
