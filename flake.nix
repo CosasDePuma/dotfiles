@@ -78,15 +78,15 @@
             # Swww
             (mkIf (cfg.all || cfg.swww) {
               home.packages = with pkgs; [ swww ];
-              home.file = binfile ".bin/swww";
+              home.file = binfile ".local/bin/swww";
             })
 
             # --------------------
             #   Themes
             # --------------------
             (mkIf (cfg.all || cfg.themes.enable) {
-              home.file = binfile ".bin/theme";
-              home.shellAliases."theme" = "~/.bin/theme ";
+              home.file = binfile ".local/bin/theme";
+              home.shellAliases."theme" = "~/.local/bin/theme ";
             })
 
             # catppuccin
