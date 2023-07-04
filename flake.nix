@@ -1,14 +1,13 @@
 {
   description = "Pumita's dotfiles";
 
-  outputs = { self, nixpkgs }:
-    let name = "dotfiles";
-    in {
+  outputs = { self, nixpkgs }: {
       homeManagerModules.default = { config, lib, pkgs, ... }:
         let
-          cfg = config."${name}";
-          dotfile = path: x: writeFile path path x;
-          dotconfig = path: x: writeFile ".config/${path}" path x;
+          cfg = config.dotfiles;
+          binfile   = path: writeFile path path true;
+          dotfile   = path: writeFile path path false;
+          dotconfig = path: writeFile ".config/${path}" path false;
           
           writeFile = src: dest: x: with lib.strings; {
             "${dest}" = {
@@ -17,51 +16,56 @@
             };
           };
        in with lib; {
-          options."${name}" = {
-            all = mkEnableOption "all the dotfiles";
-            curl = mkEnableOption "cURL dotfiles";
-            git  = mkEnableOption "git dotfiles";
-            hypr = mkEnableOption "Hyprland dotfiles";
-            ssh  = mkEnableOption "SSH dotfiles";
-            swww  = mkEnableOption "swww dotfiles";
+          options.dotfiles = {
+            all        = mkEnableOption "all the dotfiles";
+            curl       = mkEnableOption "cURL dotfiles";
+            git        = mkEnableOption "git dotfiles";
+            hyprland   = mkEnableOption "Hyprland dotfiles";
+            ssh        = mkEnableOption "SSH dotfiles";
+            swww       = mkEnableOption "swww dotfiles";
             wallpapers = mkEnableOption "wallpapers";
-            wget = mkEnableOption "wget dotfiles";
+            wget       = mkEnableOption "wget dotfiles";
           };
 
           config = mkMerge [
+            # cURL
             (mkIf (cfg.all || cfg.curl) {
               home.packages = with pkgs; [ curl ];
-              home.file = dotfile ".curlrc" false;
+              home.file = dotfile ".curlrc";
             })
+            # Git
             (mkIf (cfg.all || cfg.git) {
               programs.git.enable = mkDefault false;
               home.packages = with pkgs; [ git ];
-              xdg.configFile =  (dotconfig "git/config" false) //
-                                (dotconfig "git/ignore" false);
+              xdg.configFile =  (dotconfig "git/config") //
+                                (dotconfig "git/ignore");
             })
-            (mkIf (cfg.all || cfg.hypr) {
-              programs.git.enable = mkDefault false;
-              xdg.configFile =  (dotconfig "hypr/hyprland.conf" false) //
-                                (dotconfig "hypr/bindings.conf" false) //
-                                (dotconfig "hypr/themes/catppuccin.conf" false);
-              
+            # Hyprland
+            (mkIf (cfg.all || cfg.hyprland) {
+              xdg.configFile =  (dotconfig "hypr/hyprland.conf") //
+                                (dotconfig "hypr/bindings.conf") //
+                                (dotconfig "hypr/themes/catppuccin.conf");
             })
+            # SSH
             (mkIf (cfg.all || cfg.ssh) {
-              home.file = dotfile ".ssh/config" false;
+              home.file = dotfile ".ssh/config";
             })
+            # Swww
             (mkIf (cfg.all || cfg.swww) {
               home.packages = with pkgs; [ swww ];
-              xdg.configFile = dotconfig "swww" true;
+              home.file = binfile ".bin/swww";
             })
+            # Wallpapers
             (mkIf (cfg.all || cfg.wallpapers) {
               xdg.configFile."wallpapers" = {
                 recursive = true;
                 source = .config/wallpapers;
               };
             })
+            # Wget
             (mkIf (cfg.all || cfg.wget) {
               home.packages = with pkgs; [ wget ];
-              home.file = dotfile ".wgetrc" false;
+              home.file = dotfile ".wgetrc";
             })
           ];
         };
