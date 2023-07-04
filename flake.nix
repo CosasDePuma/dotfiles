@@ -7,11 +7,14 @@
       homeManagerModules.default = { config, lib, pkgs, ... }:
         let
           cfg = config."${name}";
-          dotfile = path: writeFile path path;
-          dotconfig = path: writeFile ".config/${path}" path;
+          dotfile = path: x: writeFile path path x;
+          dotconfig = path: x: writeFile ".config/${path}" path x;
           
-          writeFile = src: dest: with lib.strings; {
-            "${dest}".text = removePrefix "\n" (removeSuffix "\n" (builtins.readFile ./${src}));
+          writeFile = src: dest: x: with lib.strings; {
+            "${dest}" = {
+              text = removePrefix "\n" (removeSuffix "\n" (builtins.readFile ./${src}));
+              executable = x;
+            };
           };
        in {
           options."${name}" = {
@@ -27,34 +30,32 @@
           config = lib.mkMerge [
             (lib.mkIf (cfg.all || cfg.curl) {
               home.packages = with pkgs; [ curl ];
-              home.file = dotfile ".curlrc";
+              home.file = dotfile ".curlrc" false;
             })
             (lib.mkIf (cfg.all || cfg.git) {
               programs.git.enable = lib.mkDefault false;
               home.packages = with pkgs; [ git ];
-              xdg.configFile =  (dotconfig "git/config") //
-                                (dotconfig "git/ignore");
+              xdg.configFile =  (dotconfig "git/config" false) //
+                                (dotconfig "git/ignore" false);
             })
             (lib.mkIf (cfg.all || cfg.hypr) {
               programs.git.enable = lib.mkDefault false;
-              xdg.configFile =  (dotconfig "hypr/hyprland.conf") //
-                                (dotconfig "hypr/bindings.conf") //
-                                (dotconfig "hypr/themes/catppuccin.conf");
+              xdg.configFile =  (dotconfig "hypr/hyprland.conf" false) //
+                                (dotconfig "hypr/bindings.conf" false) //
+                                (dotconfig "hypr/themes/catppuccin.conf" false);
               
             })
             (lib.mkIf (cfg.all || cfg.ssh) {
-              programs.ssh.enable = lib.mkDefault false;
-              home.file = dotfile ".ssh/config";
+              home.file = dotfile ".ssh/config" false;
             })
             (lib.mkIf (cfg.all || cfg.swww) {
               home.packages = with pkgs; [ swww ];
-              xdg.configFile = dotconfig "swww";
-              xdg.configFile."swww".executable = true;
+              xdg.configFile = dotconfig "swww" true;
               xdg.configFile."wallpapers" = { recursive = true; source = ./config/wallpapers; };
             })
             (lib.mkIf (cfg.all || cfg.wget) {
               home.packages = with pkgs; [ wget ];
-              home.file = dotfile ".wgetrc";
+              home.file = dotfile ".wgetrc" false;
             })
           ];
         };
