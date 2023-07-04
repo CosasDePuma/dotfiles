@@ -56,7 +56,7 @@
             (mkIf (cfg.all || cfg.wallpapers) {
               xdg.configFile."wallpapers" = {
                 recursive = true;
-                source = ./config/wallpapers;
+                source = .config/wallpapers;
               };
             })
             (mkIf (cfg.all || cfg.wget) {
