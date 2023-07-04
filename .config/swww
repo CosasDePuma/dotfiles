@@ -2,7 +2,10 @@
 
 export SWWW_INTERVAL=300
 
-swww kill | swww init
+test -f "${$XDG_RUNTIME_DIR}/swww.socket" && rm -f "${$XDG_RUNTIME_DIR}/swww.socket"
+test -d "${$HOME}/.cache/swww" && rm -rf "${$HOME}/.cache/swww"
+
+swww init
 while :; do
   random_img=$(find ~/.config/wallpapers | shuf -n 1)
   if test -f ${random_img}; then
