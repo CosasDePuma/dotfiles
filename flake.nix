@@ -25,6 +25,11 @@
             swww       = mkEnableOption "swww dotfiles";
             wallpapers = mkEnableOption "wallpapers";
             wget       = mkEnableOption "wget dotfiles";
+
+            themes = {
+              enable     = mkEnableOption "themes";
+              catppuccin = mkEnableOption "catppuccin theme";
+            };
           };
 
           config = mkMerge [
@@ -43,8 +48,7 @@
             # Hyprland
             (mkIf (cfg.all || cfg.hyprland) {
               xdg.configFile =  (dotconfig "hypr/hyprland.conf") //
-                                (dotconfig "hypr/bindings.conf") //
-                                (dotconfig "hypr/themes/catppuccin.conf");
+                                (dotconfig "hypr/bindings.conf");
             })
             # SSH
             (mkIf (cfg.all || cfg.ssh) {
@@ -66,6 +70,21 @@
             (mkIf (cfg.all || cfg.wget) {
               home.packages = with pkgs; [ wget ];
               home.file = dotfile ".wgetrc";
+            })
+
+            # --------------------
+            #   Themes
+            # --------------------
+            (mkIf (cfg.all || cfg.themes.enable) {
+              home.file = binfile ".bin/theme";
+            })
+
+            # catppuccin
+            (mkIf (cfg.all || cfg.themes.catppuccin) {
+              xdg.configFile."themes/catppuccin" = {
+                recursive = true;
+                source = .config/themes/catppuccin;
+              };
             })
           ];
         };

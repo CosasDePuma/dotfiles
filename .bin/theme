@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Check theme
+THEME="~/.config/themes/${1}"
+if ! test -d "${THEME}"; then
+    echo "[ERR] The ${1} theme is not installed."
+    exit 1
+fi
+
+# Foot
+if command -v foot >/dev/null 2>&1; then
+    ln -sf ${THEME}/foot.ini ~/.config/foot/theme.ini
+    echo "[INF] Foot theme set to ${1}"
+fi
+
+# Hyprland
+if command -v Hyprland >/dev/null 2>&1; then
+    ln -sf ${THEME}/hyprland.conf ~/.config/hypr/theme.conf
+    echo "[INF] Hyprland theme set to ${1}"
+fi
