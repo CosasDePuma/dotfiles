@@ -2,8 +2,8 @@
 
 export SWWW_INTERVAL=300
 
-test -f "${$XDG_RUNTIME_DIR}/swww.socket" && rm -f "${$XDG_RUNTIME_DIR}/swww.socket"
-test -d "${$HOME}/.cache/swww" && rm -rf "${$HOME}/.cache/swww"
+test -f "${XDG_RUNTIME_DIR}/swww.socket" && rm -f "${XDG_RUNTIME_DIR}/swww.socket"
+test -d "${HOME}/.cache/swww" && rm -rf "${HOME}/.cache/swww"
 
 swww init
 while :; do
