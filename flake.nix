@@ -34,16 +34,14 @@
           };
 
           config = mkMerge [
+            # --------------------
+            #   System utils
+            # --------------------
+
             # cURL
             (mkIf (cfg.all || cfg.curl) {
               home.packages = with pkgs; [ curl ];
               home.file = dotfile ".curlrc";
-            })
-            # Foot
-            (mkIf (cfg.all || cfg.git) {
-              programs.git.enable = mkDefault false;
-              home.packages = with pkgs; [ foot ];
-              xdg.configFile = dotconfig "foot/foot.ini";
             })
             # Git
             (mkIf (cfg.all || cfg.git) {
@@ -52,27 +50,10 @@
               xdg.configFile =  (dotconfig "git/config") //
                                 (dotconfig "git/ignore");
             })
-            # Hyprland
-            (mkIf (cfg.all || cfg.hyprland) {
-              xdg.configFile =  (dotconfig "hypr/hyprland.conf") //
-                                (dotconfig "hypr/bindings.conf");
-            })
             # SSH
             (mkIf (cfg.all || cfg.ssh) {
               home.file = dotfile ".ssh/config";
-            })
-            # Swww
-            (mkIf (cfg.all || cfg.swww) {
-              home.packages = with pkgs; [ swww ];
-              home.file = binfile ".bin/swww";
-            })
-            # Wallpapers
-            (mkIf (cfg.all || cfg.wallpapers) {
-              xdg.configFile."wallpapers" = {
-                recursive = true;
-                source = .config/wallpapers;
-              };
-            })
+            })            
             # Wget
             (mkIf (cfg.all || cfg.wget) {
               home.packages = with pkgs; [ wget ];
@@ -80,10 +61,32 @@
             })
 
             # --------------------
+            #   WM/DE utils
+            # --------------------
+
+            # Foot
+            (mkIf (cfg.all || cfg.git) {
+              programs.git.enable = mkDefault false;
+              home.packages = with pkgs; [ foot ];
+              xdg.configFile = dotconfig "foot/foot.ini";
+            })
+            # Hyprland
+            (mkIf (cfg.all || cfg.hyprland) {
+              xdg.configFile =  (dotconfig "hypr/hyprland.conf") //
+                                (dotconfig "hypr/bindings.conf");
+            })
+            # Swww
+            (mkIf (cfg.all || cfg.swww) {
+              home.packages = with pkgs; [ swww ];
+              home.file = binfile ".bin/swww";
+            })
+
+            # --------------------
             #   Themes
             # --------------------
             (mkIf (cfg.all || cfg.themes.enable) {
               home.file = binfile ".bin/theme";
+              home.shellAliases."theme" = "~/.bin/theme ";
             })
 
             # catppuccin
@@ -91,6 +94,16 @@
               xdg.configFile."themes/catppuccin" = {
                 recursive = true;
                 source = .config/themes/catppuccin;
+              };
+            })
+
+            # --------------------
+            #   Wallpapers
+            # --------------------
+            (mkIf (cfg.all || cfg.wallpapers) {
+              xdg.configFile."wallpapers" = {
+                recursive = true;
+                source = .config/wallpapers;
               };
             })
           ];
