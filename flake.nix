@@ -20,6 +20,7 @@
             git  = lib.mkEnableOption "git dotfiles";
             hypr = lib.mkEnableOption "Hyprland dotfiles";
             ssh  = lib.mkEnableOption "SSH dotfiles";
+            swww  = lib.mkEnableOption "swww dotfiles";
             wget = lib.mkEnableOption "wget dotfiles";
           };
 
@@ -44,6 +45,12 @@
             (lib.mkIf (cfg.all || cfg.ssh) {
               programs.ssh.enable = lib.mkDefault false;
               home.file = dotfile ".ssh/config";
+            })
+            (lib.mkIf (cfg.all || cfg.swww) {
+              home.packages = with pkgs; [ swww ];
+              xdg.configFile = dotconfig "swww";
+              xdg.configFile."swww".executable = true;
+              xdg.configFile."wallpapers" = { recursive = true; source = ./config/wallpapers; };
             })
             (lib.mkIf (cfg.all || cfg.wget) {
               home.packages = with pkgs; [ wget ];
