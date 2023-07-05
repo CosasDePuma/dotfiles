@@ -51,11 +51,10 @@
               xdg.configFile = (dotconfig "git/config") //
                                (dotconfig "git/ignore");
             })
-            # SSH
+            # Neofetch
             (mkIf (cfg.all || cfg.neofetch) {
-              home.packages = with pkgs; [ neofetch ];
-              xdg.configFile = (dotconfig "neofetch/config.conf") //
-                               { "neofetch/logo.png" = { source = .config/neofetch/logo.png; }; };
+              home.packages = with pkgs; [ neofetch];
+              xdg.configFile = dotconfig "neofetch/config.conf";
             })   
             # SSH
             (mkIf (cfg.all || cfg.ssh) {
