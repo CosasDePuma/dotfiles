@@ -53,7 +53,7 @@
             })
             # Neofetch
             (mkIf (cfg.all || cfg.neofetch) {
-              home.packages = with pkgs; [ neofetch];
+              home.packages = with pkgs; [ neofetch ];
               xdg.configFile = dotconfig "neofetch/config.conf";
             })   
             # SSH
