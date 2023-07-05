@@ -22,6 +22,7 @@
             foot       = mkEnableOption "foot dotfiles";
             git        = mkEnableOption "git dotfiles";
             hyprland   = mkEnableOption "Hyprland dotfiles";
+            neofetch   = mkEnableOption "neofetch dotfiles";
             ssh        = mkEnableOption "SSH dotfiles";
             swww       = mkEnableOption "swww dotfiles";
             wallpapers = mkEnableOption "wallpapers";
@@ -47,9 +48,15 @@
             (mkIf (cfg.all || cfg.git) {
               programs.git.enable = mkDefault false;
               home.packages = with pkgs; [ git ];
-              xdg.configFile =  (dotconfig "git/config") //
-                                (dotconfig "git/ignore");
+              xdg.configFile = (dotconfig "git/config") //
+                               (dotconfig "git/ignore");
             })
+            # SSH
+            (mkIf (cfg.all || cfg.neofetch) {
+              home.packages = with pkgs; [ neofetch ];
+              xdg.configFile = (dotconfig "neofetch/config.conf") //
+                               { "neofetch/logo.png" = { source = .config/neofetch/logo.png; }; };
+            })   
             # SSH
             (mkIf (cfg.all || cfg.ssh) {
               home.file = dotfile ".ssh/config";
@@ -72,8 +79,8 @@
             })
             # Hyprland
             (mkIf (cfg.all || cfg.hyprland) {
-              xdg.configFile =  (dotconfig "hypr/hyprland.conf") //
-                                (dotconfig "hypr/bindings.conf");
+              xdg.configFile = (dotconfig "hypr/hyprland.conf") //
+                               (dotconfig "hypr/bindings.conf");
             })
             # Swww
             (mkIf (cfg.all || cfg.swww) {
