@@ -8,8 +8,7 @@ main = xmonad $ def {
     --  Variables
     -- -----------------
     terminal = "kitty",
-    modMask = mod4Mask,
-    altMask = mod1Mask
+    modMask = mod4Mask
   } `additionalKeysP` [
     -- -----------------
     --  Keybindings
