@@ -21,5 +21,7 @@ main = xmonad $ def {
     ("M-e",         spawn "thunar"),
     ("M-<Return>",  spawn "kitty"),
     ("M-S-<Space>", spawn "rofi -show drun"),
-    ("M-S-<Tab>",   spawn "rofi -show window")
+    ("M-S-<Tab>",   spawn "rofi -show window"),
+    -- Screen
+    ("M-<Print>",   spawn "flameshot gui")
   ]
