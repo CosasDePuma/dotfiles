@@ -10,6 +10,7 @@
 
         config = mkIf cfg.enable {
           home.activation = {
+            # Local scripts
             "bin" = lib.hm.dag.entryAfter ["writeBoundary"] ''
               $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync -gortux --no-p ${./.local/bin} ~/.local/bin
             '';
@@ -20,5 +21,5 @@
           };
         };
       };
-  }
+  };
 }
