@@ -24,7 +24,7 @@
             ssh = lib.hm.dag.entryAfter ["writeBoundary"] ''
               if ${pkgs.coreutils}/bin/test -x "${path}/ssh"; then
                 $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir $VERBOSE_ARG -p ~/.ssh/
-                $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.ssh ~/.ssh/.
+                $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.ssh/. ~/.ssh
                 $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod $VERBOSE_ARG -R ug+rw,o-rwx ~/.ssh/
               fi
             '';
@@ -39,7 +39,7 @@
             xmonad = lib.hm.dag.entryAfter ["writeBoundary"] ''
               if ${pkgs.coreutils}/bin/test -x "${path}/xmonad"; then
                 $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir $VERBOSE_ARG -p ~/.config/xmonad/
-                $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.config/xmonad ~/.config/xmonad/.
+                $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.config/xmonad/. ~/.config/xmonad
                 $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod $VERBOSE_ARG -R ug+rw,o-rwx ~/.config/xmonad/
               fi
             '';
