@@ -15,29 +15,50 @@
            in {
             # cURL
             curl = lib.hm.dag.entryAfter ["writeBoundary"] ''
-              ${pkgs.coreutils}/bin/test -x "${path}/curl" && ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.}/.curlrc ~/.curlrc
-            '';
-            # Local scripts
-            local = lib.hm.dag.entryAfter ["writeBoundary"] ''
-              ${pkgs.coreutils}/bin/mkdir -p ~/.local/bin
-              ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.local/bin}/theme ~/.local/bin/theme
-              command -v "feh"  >/dev/null && ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.local/bin}/feh  ~/.local/bin/feh
-              command -v "swww" >/dev/null && ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.local/bin}/swww ~/.local/bin/swww
-              ${pkgs.coreutils}/bin/chmod -R +x ~/.local/bin/
+              if ${pkgs.coreutils}/bin/test -x "${path}/curl"; then
+                $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.curlrc ~/.curlrc
+                $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod $VERBOSE_ARG -R ug+r,o-rwx ~/.curlrc
+              fi
             '';
             # SSH
             ssh = lib.hm.dag.entryAfter ["writeBoundary"] ''
-              mkdir -p ~/.ssh
-              command -v "ssh" > /dev/null && ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.ssh}/. ~/.ssh/
+              if ${pkgs.coreutils}/bin/test -x "${path}/ssh"; then
+                $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir $VERBOSE_ARG -p ~/.ssh/
+                $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.ssh ~/.ssh
+                $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod $VERBOSE_ARG -R ug+r,o-rwx ~/.ssh
+              fi
             '';
             # Wget
             wget = lib.hm.dag.entryAfter ["writeBoundary"] ''
-              command -v "wget" > /dev/null && ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.}/.wgetrc ~/.wgetrc
+              if ${pkgs.coreutils}/bin/test -x "${path}/wget"; then
+                $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.wgetrc ~/.wgetrc
+                $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod $VERBOSE_ARG -R ug+r,o-rwx ~/.wgetrc
+              fi
             '';
             # XMonad
             xmonad = lib.hm.dag.entryAfter ["writeBoundary"] ''
-              mkdir -p ~/.config/xmonad
-              command -v "xmonad" > /dev/null && ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.config/xmonad}/. ~/.config/xmonad/
+              if ${pkgs.coreutils}/bin/test -x "${path}/xmonad"; then
+                $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir $VERBOSE_ARG -p ~/.config/xmonad/
+                $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.config/xmonad ~/.config/xmonad
+                $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod $VERBOSE_ARG -R ug+r,o-rwx ~/.config/xmonad
+              fi
+            '';
+
+            # Local scripts
+            local = lib.hm.dag.entryAfter ["writeBoundary"] ''
+              $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir $VERBOSE_ARG -p ~/.local/bin/
+              $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.local/bin}/theme ~/.local/bin/theme
+
+              # Feh
+              if ${pkgs.coreutils}/bin/test -x "${path}/feh"; then
+                $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.local/bin}/feh ~/.local/bin/feh
+              fi
+
+              # Swww
+              if ${pkgs.coreutils}/bin/test -x "${path}/swww"; then
+                $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.local/bin}/swww ~/.local/bin/swww
+              fi
+              $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod $VERBOSE_ARG -R ug+x,o-x ~/.local/bin/
             '';
           };
         };
