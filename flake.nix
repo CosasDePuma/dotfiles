@@ -19,6 +19,7 @@
           options.dotfiles = {
             all        = mkEnableOption "all the dotfiles";
             curl       = mkEnableOption "cURL dotfiles";
+            feh        = mkEnableOption "feh dotfiles";
             foot       = mkEnableOption "foot dotfiles";
             git        = mkEnableOption "git dotfiles";
             hyprland   = mkEnableOption "Hyprland dotfiles";
@@ -70,6 +71,11 @@
             #   WM/DE utils
             # --------------------
 
+            # Feh
+            (mkIf (cfg.all || cfg.feh) {
+              home.packages = with pkgs; [ feh ];
+              home.file = binfile ".local/bin/feh";
+            })
             # Foot
             (mkIf (cfg.all || cfg.git) {
               programs.git.enable = mkDefault false;
