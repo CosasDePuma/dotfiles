@@ -5,7 +5,7 @@
     homeManagerModules.default = { config, lib, pkgs, ... }:
       let
         cfg = config.dotfiles;
-        sw-profile = "~/.nix-profile/bin";
+        sw-profile = "$HOME/.nix-profile/bin";
         sw-system = "/run/current-system/sw/bin";
         
         cpyFile = pkg: path: {

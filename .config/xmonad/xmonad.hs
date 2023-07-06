@@ -7,14 +7,12 @@ import XMonad.Hooks.EwmhDesktops (ewmh,ewmhFullscreen)
 --  Entry Point
 -- -----------------
 
-main :: IO ()
-main = xmonad . ewmhFullscreen . ewmh $ myConfig
+main = xmonad $ ewmhFullscreen $ ewmh $ myConfig
 
 -- -----------------
 --  Variables
 -- -----------------
 
-myConfig :: XConfig a
 myConfig = def {
     terminal = "kitty",
     modMask = mod4Mask,
