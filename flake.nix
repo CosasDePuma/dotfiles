@@ -12,7 +12,7 @@
           home.activation = {
             # Local scripts
             bin = lib.hm.dag.entryAfter ["writeBoundary"] ''
-              $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.local/bin} ~/.local/bin
+              $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.local/bin}/. ~/.local/bin
             '';
             # SSH
             #"ssh" = lib.hm.dag.entryAfter ["writeBoundary"] ''
