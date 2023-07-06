@@ -8,19 +8,23 @@
         sw-profile = "~/.nix-profile/bin";
         sw-system = "/run/current-system/sw/bin";
         
-        cpyFile = pkg: path: lib.hm.dag.entryAfter ["writeBoundary"] ''
-          if ${pkgs.coreutils}/bin/test -x "${sw-profile}/${pkg}" || ${pkgs.coreutils}/bin/test -x "${sw-system}/${pkg}"; then
-            $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/${path} ~/${path}
-            $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod $VERBOSE_ARG ug+rw,o-rwx ~/${path}
-          fi
-        '';
-        cpyFolder = pkg: path: lib.hm.dag.entryAfter ["writeBoundary"] ''
-          if ${pkgs.coreutils}/bin/test -x "${sw-profile}/${pkg}" || ${pkgs.coreutils}/bin/test -x "${sw-system}/${pkg}"; then
-            $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir $VERBOSE_ARG -p ~/${path}
-            $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/${path}/. ~/${path}
-            $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod $VERBOSE_ARG -R ug+rw,o-rwx ~/${path}
-          fi
-        '';
+        cpyFile = pkg: path: {
+          "${pkg}" = lib.hm.dag.entryAfter ["writeBoundary"] ''
+            if ${pkgs.coreutils}/bin/test -x "${sw-profile}/${pkg}" || ${pkgs.coreutils}/bin/test -x "${sw-system}/${pkg}"; then
+              $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/${path} ~/${path}
+              $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod $VERBOSE_ARG ug+rw,o-rwx ~/${path}
+            fi
+          '';
+        };
+        cpyFolder = pkg: path: {
+          "${pkg}" = lib.hm.dag.entryAfter ["writeBoundary"] ''
+            if ${pkgs.coreutils}/bin/test -x "${sw-profile}/${pkg}" || ${pkgs.coreutils}/bin/test -x "${sw-system}/${pkg}"; then
+              $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir $VERBOSE_ARG -p ~/${path}
+              $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/${path}/. ~/${path}
+              $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod $VERBOSE_ARG -R ug+rw,o-rwx ~/${path}
+            fi
+          '';
+        };
 
       in with lib; {
         options.dotfiles.enable = mkEnableOption "dotfiles";
@@ -34,7 +38,6 @@
 
             ({
               local-scripts = lib.hm.dag.entryAfter ["writeBoundary"] ''
-                echo "Installing local scripts from ${./.}..."
                 $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir $VERBOSE_ARG -p ~/.local/bin/
                 $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.local/bin/theme ~/.local/bin/theme
 
