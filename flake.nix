@@ -16,6 +16,7 @@
             '';
             # Local scripts
             local = lib.hm.dag.entryAfter ["writeBoundary"] ''
+              $DRY_RUN_CMD mkdir -p ~/.local/bin
               $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.local/bin}/theme ~/.local/bin/theme
               command -v "feh"  >/dev/null && $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.local/bin}/feh  ~/.local/bin/feh
               command -v "swww" >/dev/null && $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.local/bin}/swww ~/.local/bin/swww
