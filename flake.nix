@@ -6,7 +6,7 @@
         let
           cfg = config.dotfiles;
 
-          cpy = command: path: lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+          cpy = program: path: lib.hm.dag.entryAfter [ "writeBoundary" ] ''
             if command -v "${program}" > /dev/null || test -z "${program}"; then
               $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync -gortux --no-p "${path}" ~/"${path}"
             fi
