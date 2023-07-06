@@ -6,13 +6,16 @@
         let
           cfg = config.dotfiles;
 
-          cpy = program: path: lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-            if command -v "${program}" > /dev/null || test -z "${program}"; then
-              $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync -gortux --no-p "${path}" ~/"${path}"
-            fi
-
-            test "${program}" == "sh" && $DRY_RUN_CMD chmod -R +x ~/"${path}"
-          '';
+          cpy = program: path: {
+            "${program}" = lib.hm.dag.entryAfter ["writeBoundary"] ''
+              # copy dotfiles to a directory
+              if command -v "${program}" > /dev/null || test -z "${program}"; then
+                $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync -gortux --no-p "${path}" ~/"${path}"
+              fi
+              # make scripts executable
+              test "${program}" == "sh" && $DRY_RUN_CMD chmod -R +x ~/"${path}"
+            '';
+          };
        in with lib; {
           options.dotfiles.enable = mkEnableOption "dotfiles";
 
