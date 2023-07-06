@@ -9,20 +9,21 @@
         options.dotfiles.enable = mkEnableOption "dotfiles";
 
         config = mkIf cfg.enable {
-          home.activation = {
+          home.activation =
+           let
+              path = "/run/current-system/sw/bin";
+           in {
             # cURL
             curl = lib.hm.dag.entryAfter ["writeBoundary"] ''
-              if command -v "curl" >/dev/null; then
-                ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.}/.curlrc ~/.curlrc
-              fi
+              ${pkgs.coreutils}/bin/test -x "${path}/curl" && ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.}/.curlrc ~/.curlrc
             '';
             # Local scripts
             local = lib.hm.dag.entryAfter ["writeBoundary"] ''
-              mkdir -p ~/.local/bin
+              ${pkgs.coreutils}/bin/mkdir -p ~/.local/bin
               ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.local/bin}/theme ~/.local/bin/theme
               command -v "feh"  >/dev/null && ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.local/bin}/feh  ~/.local/bin/feh
               command -v "swww" >/dev/null && ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.local/bin}/swww ~/.local/bin/swww
-              chmod -R +x ~/.local/bin/
+              ${pkgs.coreutils}/bin/chmod -R +x ~/.local/bin/
             '';
             # SSH
             ssh = lib.hm.dag.entryAfter ["writeBoundary"] ''
