@@ -12,7 +12,9 @@
           home.activation = {
             # cURL
             curl = lib.hm.dag.entryAfter ["writeBoundary"] ''
-              command -v "curl" > /dev/null && ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.}/.curlrc ~/.curlrc
+              if command -v "curl" >/dev/null; then
+                ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.}/.curlrc ~/.curlrc
+              fi
             '';
             # Local scripts
             local = lib.hm.dag.entryAfter ["writeBoundary"] ''
