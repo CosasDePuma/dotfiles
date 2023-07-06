@@ -11,13 +11,13 @@
         config = mkIf cfg.enable {
           home.activation = {
             # Local scripts
-            "bin" = lib.hm.dag.entryAfter ["writeBoundary"] ''
+            bin = lib.hm.dag.entryAfter ["writeBoundary"] ''
               $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.local/bin} ~/.local/bin
             '';
             # SSH
-            "ssh" = lib.hm.dag.entryAfter ["writeBoundary"] ''
-              command -v "ssh" > /dev/null && $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.ssh} ~/.ssh
-            '';
+            #"ssh" = lib.hm.dag.entryAfter ["writeBoundary"] ''
+            #  command -v "ssh" > /dev/null && $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync -gortuxv --no-p ${./.ssh} ~/.ssh
+            #'';
           };
         };
       };
