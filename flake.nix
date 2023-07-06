@@ -21,9 +21,9 @@
 
           config = mkIf cfg.enable {
             home.activation = mkMerge [
-              (cpy "sh"     ./.local/bin)
-              (cpy "ssh"    ./.ssh)
-              (cpy "xmonad" ./.config/xmonad)
+              (cpy "sh"     .local/bin)
+              (cpy "ssh"    .ssh)
+              (cpy "xmonad" .config/xmonad)
             ];
           };
         };
