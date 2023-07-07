@@ -18,3 +18,11 @@ if command -v Hyprland >/dev/null 2>&1; then
     ln -sf "${THEME}/hyprland.conf" ~/.config/hypr/theme.conf
     echo "[INF] Hyprland theme set to ${1}"
 fi
+
+# Foot
+if command -v xmonad >/dev/null 2>&1; then
+    mkdir -p ~/.xmonad/lib/
+    ln -sf "${THEME}/xmonad.hs" ~/.xmonad/lib/Theme.hs
+    xmonad --recompile && xmonad --restart
+    echo "[INF] XMonad theme set to ${1}"
+fi

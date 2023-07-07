@@ -37,14 +37,14 @@
 
         config = mkIf cfg.enable {
           home.activation = mkMerge [
-            (dotFile   "curl"             ".curlrc"                  )
-            (dotFolder "Hyprland"         ".config/hypr"             )
-            (dotFolder "neofetch"         ".config/neofetch"         )
-            (dotFolder "ssh"              ".ssh"                     )
-            (cpyFolder "theme-catppuccin" ".config/themes/catppuccin")
-            (dotFile   "wget"             ".wgetrc"                  )
-            (dotFolder "xmonad"           ".config/xmonad"           )
-            (cpyFolder "wallpapers"       ".config/wallpapers"       )
+            (dotFile   "curl"             ".curlrc"                   )
+            (dotFolder "Hyprland"         ".config/hypr"              )
+            (dotFolder "neofetch"         ".config/neofetch"          )
+            (dotFolder "ssh"              ".ssh"                      )
+            (cpyFolder "theme-catppuccin" ".config/themes/catppuccin" )
+            (dotFile   "wget"             ".wgetrc"                   )
+            (dotFolder "xmonad"           ".xmonad"                   )
+            (cpyFolder "wallpapers"       ".config/wallpapers"        )
 
             ({
               local-scripts = lib.hm.dag.entryAfter ["writeBoundary"] ''
