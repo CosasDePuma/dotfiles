@@ -28,7 +28,13 @@ if command -v Hyprland >/dev/null 2>&1; then
     echo "[INF] Hyprland theme set to ${1}"
 fi
 
-# Foot
+# Kitty
+if command -v kitty >/dev/null 2>&1; then
+    ln -sf "${THEME}/kitty.ini" ~/.config/kitty/theme.conf
+    echo "[INF] Kitty theme set to ${1}"
+fi
+
+# XMonad
 if command -v xmonad >/dev/null 2>&1; then
     mkdir -p ~/.xmonad/lib/
     ln -sf "${THEME}/xmonad.hs" ~/.xmonad/lib/Theme.hs

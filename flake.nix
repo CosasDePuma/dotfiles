@@ -39,7 +39,7 @@
           home.activation = mkMerge [
             (dotFile   "curl"             ".curlrc"                   )
             (dotFolder "Hyprland"         ".config/hypr"              )
-            (dotFile   "kitty"            ".config/kitty"             )
+            (dotFolder "kitty"            ".config/kitty"             )
             (dotFolder "neofetch"         ".config/neofetch"          )
             (dotFolder "ssh"              ".ssh"                      )
             (cpyFolder "theme-catppuccin" ".config/themes/catppuccin" )
@@ -65,7 +65,7 @@
 
               postInstallation = hm.dag.entryAfter ["local-scripts"] ''
                 $DRY_RUN_CMD ${pkgs.bash-interactive}/bin/bash ~/.local/bin/theme catppuccin
-              ''
+              '';
             })
           ];
         };
