@@ -17,25 +17,25 @@ if ! test -d "${THEME}"; then
 fi
 
 # Foot
-if command -v foot >/dev/null 2>&1; then
+if type foot >/dev/null 2>&1; then
     ln -sf "${THEME}/foot.ini" ~/.config/foot/theme.ini
     echo "[INF] Foot theme set to ${1}"
 fi
 
 # Hyprland
-if command -v Hyprland >/dev/null 2>&1; then
+if type Hyprland >/dev/null 2>&1; then
     ln -sf "${THEME}/hyprland.conf" ~/.config/hypr/theme.conf
     echo "[INF] Hyprland theme set to ${1}"
 fi
 
 # Kitty
-if command -v kitty >/dev/null 2>&1; then
+if type kitty >/dev/null 2>&1; then
     ln -sf "${THEME}/kitty.ini" ~/.config/kitty/theme.conf
     echo "[INF] Kitty theme set to ${1}"
 fi
 
 # XMonad
-if command -v xmonad >/dev/null 2>&1; then
+if type xmonad >/dev/null 2>&1; then
     mkdir -p ~/.xmonad/lib/
     ln -sf "${THEME}/xmonad.hs" ~/.xmonad/lib/Theme.hs
     xmonad --recompile >/dev/null 2>&1

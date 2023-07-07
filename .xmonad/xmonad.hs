@@ -35,7 +35,7 @@ myWrappers =
 myConfig :: XConfig Layouts
 myConfig = def {
     modMask            = mod4Mask,
-    borderWidth        = 2,
+    borderWidth        = 3,
     normalBorderColor  = Theme.normal,
     focusedBorderColor = Theme.focused,
     focusFollowsMouse  = False,

@@ -4,4 +4,4 @@ normal :: String
 normal = "#bac2de"
 
 focused :: String
-focused = "#cba6f7"
+focused = "#f5c227"
