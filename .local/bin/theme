@@ -1,5 +1,14 @@
 #!/bin/sh
 
+# Check arguments
+if test -z "${1}"; then
+    echo "Usage: ${0} <theme>"
+    echo
+    echo "Available themes:"
+    ls -1 ~/.config/themes
+    exit 1
+fi
+
 # Check theme
 THEME="${HOME}/.config/themes/${1}"
 if ! test -d "${THEME}"; then
@@ -23,6 +32,7 @@ fi
 if command -v xmonad >/dev/null 2>&1; then
     mkdir -p ~/.xmonad/lib/
     ln -sf "${THEME}/xmonad.hs" ~/.xmonad/lib/Theme.hs
-    xmonad --recompile && xmonad --restart
+    xmonad --recompile >/dev/null 2>&1
+    xmonad --restart   >/dev/null 2>&1
     echo "[INF] XMonad theme set to ${1}"
 fi
