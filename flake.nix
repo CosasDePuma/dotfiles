@@ -64,7 +64,7 @@
               '';
 
               postInstallation = hm.dag.entryAfter ["local-scripts"] ''
-                $DRY_RUN_CMD ${pkgs.bash-interactive}/bin/bash ~/.local/bin/theme catppuccin
+                $DRY_RUN_CMD ${pkgs.bashInteractive}/bin/bash ~/.local/bin/theme catppuccin
               '';
             })
           ];
