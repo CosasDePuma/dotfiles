@@ -43,12 +43,12 @@
             (dotFolder "neofetch"         ".config/neofetch"          )
             (dotFolder "ssh"              ".ssh"                      )
             (cpyFolder "theme-catppuccin" ".config/themes/catppuccin" )
+            (cpyFolder "wallpapers"       ".config/wallpapers"        )
             (dotFile   "wget"             ".wgetrc"                   )
             (dotFolder "xmonad"           ".xmonad"                   )
-            (cpyFolder "wallpapers"       ".config/wallpapers"        )
 
             ({
-              local-scripts = hm.dag.entryAfter ["onFilesChange"] ''
+              local-scripts = hm.dag.entryAfter ["xmonad"] ''
                 $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir $VERBOSE_ARG -p ~/.local/bin/
                 $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.local/bin/theme ~/.local/bin/theme
 
