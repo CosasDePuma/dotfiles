@@ -30,7 +30,7 @@ fi
 
 # Kitty
 if type kitty >/dev/null 2>&1; then
-    ln -sf "${THEME}/kitty.ini" ~/.config/kitty/theme.conf
+    ln -sf "${THEME}/kitty.conf" ~/.config/kitty/theme.conf
     echo "[INF] Kitty theme set to ${1}"
 fi
 
