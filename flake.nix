@@ -8,7 +8,7 @@
         sw-system = "/run/current-system/sw/bin";
         
         dotFile = pkg: path: {
-          "${pkg}" = lib.hm.dag.entryAfter ["reloadSystemd"] ''
+          "${pkg}" = lib.hm.dag.entryAfter ["onFilesChange"] ''
             if ${pkgs.coreutils}/bin/test -x ${sw-system}/"${pkg}"; then
               $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/${path} ~/${path}
               $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod $VERBOSE_ARG ug+rw,o-rwx ~/${path}
@@ -16,7 +16,7 @@
           '';
         };
         dotFolder = pkg: path: {
-          "${pkg}" = lib.hm.dag.entryAfter ["reloadSystemd"] ''
+          "${pkg}" = lib.hm.dag.entryAfter ["onFilesChange"] ''
             if ${pkgs.coreutils}/bin/test -x ${sw-system}/"${pkg}"; then
               $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir $VERBOSE_ARG -p ~/${path}
               $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/${path}/. ~/${path}
@@ -25,7 +25,7 @@
           '';
         };
         cpyFolder = name: path: {
-          "${name}" = lib.hm.dag.entryAfter ["reloadSystemd"] ''
+          "${name}" = lib.hm.dag.entryAfter ["onFilesChange"] ''
             $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir $VERBOSE_ARG -p ~/${path}
             $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/${path}/. ~/${path}
             $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod $VERBOSE_ARG -R ug+rw,o-rwx ~/${path}
@@ -48,7 +48,7 @@
             (cpyFolder "wallpapers"       ".config/wallpapers"        )
 
             ({
-              local-scripts = hm.dag.entryAfter ["reloadSystemd"] ''
+              local-scripts = hm.dag.entryAfter ["onFilesChange"] ''
                 $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir $VERBOSE_ARG -p ~/.local/bin/
                 $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.local/bin/theme ~/.local/bin/theme
 
@@ -64,7 +64,7 @@
               '';
 
               postInstallation = hm.dag.entryAfter ["local-scripts"] ''
-                $DRY_RUN_CMD ${pkgs.bashInteractive}/bin/bash ~/.local/bin/theme catppuccin
+                $DRY_RUN_CMD ${pkgs.bashInteractive}/bin/bash -c "~/.local/bin/theme catppuccin"
               '';
             })
           ];
