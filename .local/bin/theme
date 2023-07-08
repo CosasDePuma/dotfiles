@@ -16,6 +16,13 @@ if ! test -d "${THEME}"; then
     exit 1
 fi
 
+# fish
+if type fish >/dev/null 2>&1; then
+    ln -sf "${THEME}/fish.ini" ~/.config/fish/fish.theme
+    fish -c "yes | fish_config theme save 'fish'"
+    echo "[INF] Fish theme set to ${1}"
+fi
+
 # Foot
 if type foot >/dev/null 2>&1; then
     ln -sf "${THEME}/foot.ini" ~/.config/foot/theme.ini
