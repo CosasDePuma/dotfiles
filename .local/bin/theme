@@ -18,6 +18,7 @@ fi
 
 # fish
 if type fish >/dev/null 2>&1; then
+    mkdir -p ~/.config/fish/themes/
     ln -sf "${THEME}/fish.ini" ~/.config/fish/themes/fish.theme
     fish -c "yes | fish_config theme save 'fish'"
     echo "[INF] Fish theme set to ${1}"
@@ -25,18 +26,21 @@ fi
 
 # Foot
 if type foot >/dev/null 2>&1; then
+    mkdir -p ~/.config/foot/
     ln -sf "${THEME}/foot.ini" ~/.config/foot/theme.ini
     echo "[INF] Foot theme set to ${1}"
 fi
 
 # Hyprland
 if type Hyprland >/dev/null 2>&1; then
+    mkdir -p ~/.config/hypr/
     ln -sf "${THEME}/hyprland.conf" ~/.config/hypr/theme.conf
     echo "[INF] Hyprland theme set to ${1}"
 fi
 
 # Kitty
 if type kitty >/dev/null 2>&1; then
+    mkdir -p ~/.config/kitty/
     ln -sf "${THEME}/kitty.conf" ~/.config/kitty/theme.conf
     echo "[INF] Kitty theme set to ${1}"
 fi
