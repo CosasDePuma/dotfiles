@@ -18,7 +18,7 @@ fi
 
 # fish
 if type fish >/dev/null 2>&1; then
-    ln -sf "${THEME}/fish.ini" ~/.config/fish/fish.theme
+    ln -sf "${THEME}/fish.ini" ~/.config/fish/themes/fish.theme
     fish -c "yes | fish_config theme save 'fish'"
     echo "[INF] Fish theme set to ${1}"
 fi

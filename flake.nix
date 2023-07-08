@@ -53,11 +53,11 @@
                 $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir $VERBOSE_ARG -p ~/.local/bin/
                 $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.local/bin/theme ~/.local/bin/theme
 
-                if ${pkgs.coreutils}/bin/test -x ${sw-system}/"feh"; then
+                if ${pkgs.coreutils}/bin/test -x ${sw-system}/feh; then
                   $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.local/bin/feh ~/.local/bin/feh
                 fi
 
-                if ${pkgs.coreutils}/bin/test -x ${sw-system}/"swww"; then
+                if ${pkgs.coreutils}/bin/test -x ${sw-system}/swww; then
                   $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.local/bin/swww ~/.local/bin/swww
                 fi
 
