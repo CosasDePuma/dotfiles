@@ -5,6 +5,8 @@
 if status is-interactive
     # prompt
     starship init fish | source
+    # theme
+    fish_config theme choose 'default' 2>/dev/null
     # show a random litte pokemon
     set -l pokemon (mktemp /tmp/pokemon.XXXXXX)
     while krabby random --no-title >$pokemon; and test (count <$pokemon) -gt 14; end; cat $pokemon; rm $pokemon
@@ -25,4 +27,4 @@ end
 #     Configuration
 # -----------------------
 
-set -U fish_greeting      # disable fish greeting
+set -g fish_greeting      # disable fish greeting
