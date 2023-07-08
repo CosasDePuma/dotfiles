@@ -41,6 +41,7 @@
             (dotFolder "Hyprland"         ".config/hypr"              )
             (dotFolder "kitty"            ".config/kitty"             )
             (dotFolder "neofetch"         ".config/neofetch"          )
+            (dotFolder "picom"            ".config/picom"             )
             (dotFolder "ssh"              ".ssh"                      )
             (cpyFolder "theme-catppuccin" ".config/themes/catppuccin" )
             (cpyFolder "wallpapers"       ".config/wallpapers"        )

@@ -53,7 +53,9 @@ myConfig = def {
 
 myStartup :: X ()
 myStartup = do
-    spawnOnce "~/.local/bin/feh"
+    spawnOnce "picom -b"          -- compositor
+    spawnOnce "flameshot"         -- screenshot
+    spawnOnce "~/.local/bin/feh"  -- wallpaper
 
 -- -----------------
 --  Workspaces
@@ -73,6 +75,7 @@ myKeys = \conf -> mkKeymap conf $ [
     ("M-S-r",         spawn "xmonad --recompile && xmonad --restart"),                                       -- reload xmonad
     -- Windows: Control
     ("M-q",           kill),                                                                                 -- close the focused window
+    ("M-t",           withFocused toggleFloat),                                                              -- toggle the focused window between tiled and float
     ("M-`",           withFocused toggleFloat),                                                              -- toggle the focused window between tiled and float
     -- Windows: Focus
     ("M-m",           windows W.focusMaster),                                                                -- focus master window
