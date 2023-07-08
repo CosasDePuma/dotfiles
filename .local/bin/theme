@@ -16,7 +16,7 @@ if ! test -d "${THEME}"; then
     exit 1
 fi
 
-# fish
+# fiSh
 if type fish >/dev/null 2>&1; then
     mkdir -p ~/.config/fish/themes/
     ln -sf "${THEME}/fish.theme" ~/.config/fish/themes/default.theme
@@ -43,6 +43,18 @@ if type kitty >/dev/null 2>&1; then
     mkdir -p ~/.config/kitty/
     ln -sf "${THEME}/kitty.conf" ~/.config/kitty/theme.conf
     echo "[INF] Kitty theme set to ${1}"
+fi
+
+# Starship
+if type starship >/dev/null 2>&1; then
+    mkdir -p ~/.config/
+    if test -f ~/.config/starship.toml; then
+        line=$(grep -n "palettes\.default" ~/.config/starship.toml | cut -d: -f1)
+        if test -n "${line}"; then
+            sed -i "${line}d" ~/.config/starship.toml && cat "${THEME}/starship.toml" >> ~/.config/starship.toml
+            echo "[INF] Starship theme set to ${1}"
+        fi
+    fi
 fi
 
 # XMonad

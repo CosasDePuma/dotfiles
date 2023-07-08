@@ -1,0 +1,21 @@
+add_newline = true
+palette = "default"
+format = "$all$fill$time$line_break$character"
+
+[line_break]
+disabled = false
+
+[fill]
+symbol = " "
+
+[character]
+success_symbol = "[➜](bold green)"
+
+[directory]
+truncate_to_repo = false
+
+[time]
+disabled = false
+format = "[$time](bold bright-black)"
+
+[palettes.default]
