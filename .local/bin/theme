@@ -20,7 +20,7 @@ fi
 if type bat >/dev/null 2>&1; then
     mkdir -p ~/.config/bat/themes/
     ln -sf "${THEME}/bat.tmTheme" ~/.config/bat/themes/theme.tmTheme
-    bat cache --build
+    bat cache --build >/dev/null 2>&1
     echo "[INF] bat theme set to ${1}"
 fi
 

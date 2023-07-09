@@ -36,35 +36,41 @@
         options.dotfiles.enable = mkEnableOption "dotfiles";
 
         config = mkIf cfg.enable {
-          home.activation = mkMerge [
-            (dotFile   "curl"             ".curlrc"                   )
-            (dotFolder "Hyprland"         ".config/hypr"              )
-            (dotFolder "kitty"            ".config/kitty"             )
-            (dotFolder "neofetch"         ".config/neofetch"          )
-            (dotFolder "picom"            ".config/picom"             )
-            (dotFolder "ssh"              ".ssh"                      )
-            (cpyFolder "theme-catppuccin" ".config/themes/catppuccin" )
-            (cpyFolder "wallpapers"       ".config/wallpapers"        )
-            (dotFile   "wget"             ".wgetrc"                   )
-            (dotFolder "xmonad"           ".xmonad"                   )
+          home = {
+            activation = mkMerge [
+              (dotFile   "curl"             ".curlrc"                   )
+              (dotFolder "Hyprland"         ".config/hypr"              )
+              (dotFolder "kitty"            ".config/kitty"             )
+              (dotFolder "neofetch"         ".config/neofetch"          )
+              (dotFolder "picom"            ".config/picom"             )
+              (dotFolder "ssh"              ".ssh"                      )
+              (cpyFolder "theme-catppuccin" ".config/themes/catppuccin" )
+              (cpyFolder "wallpapers"       ".config/wallpapers"        )
+              (dotFile   "wget"             ".wgetrc"                   )
+              (dotFolder "xmonad"           ".xmonad"                   )
 
-            ({
-              local-scripts = hm.dag.entryAfter ["writeBoundary"] ''
-                $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir $VERBOSE_ARG -p ~/.local/bin/
-                $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.local/bin/theme ~/.local/bin/theme
+              ({
+                local-scripts = hm.dag.entryAfter ["writeBoundary"] ''
+                  $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir $VERBOSE_ARG -p ~/.local/bin/
+                  $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.local/bin/theme ~/.local/bin/theme
 
-                if ${pkgs.coreutils}/bin/test -x ${sw-system}/feh; then
-                  $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.local/bin/feh ~/.local/bin/feh
-                fi
+                  if ${pkgs.coreutils}/bin/test -x ${sw-system}/feh; then
+                    $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.local/bin/feh ~/.local/bin/feh
+                  fi
 
-                if ${pkgs.coreutils}/bin/test -x ${sw-system}/swww; then
-                  $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.local/bin/swww ~/.local/bin/swww
-                fi
+                  if ${pkgs.coreutils}/bin/test -x ${sw-system}/swww; then
+                    $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync $VERBOSE_ARG -gortux --no-p ${./.}/.local/bin/swww ~/.local/bin/swww
+                  fi
 
-                $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod $VERBOSE_ARG -R ug+rwx,o-x ~/.local/bin/
-              '';
-            })
-          ];
+                  $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod $VERBOSE_ARG -R ug+rwx,o-x ~/.local/bin/
+                '';
+              })
+            ];
+
+            sessionVariables = {
+              PATH = "$PATH:$HOME/.local/bin";
+            };
+          };
         };
       };
   };
