@@ -16,6 +16,14 @@ if ! test -d "${THEME}"; then
     exit 1
 fi
 
+# bat
+if type bat >/dev/null 2>&1; then
+    mkdir -p ~/.config/bat/themes/
+    ln -sf "${THEME}/bat.thTheme" ~/.config/bat/themes/theme.thTheme
+    bat cache --build
+    echo "[INF] bat theme set to ${1}"
+fi
+
 # fiSh
 if type fish >/dev/null 2>&1; then
     mkdir -p ~/.config/fish/themes/
