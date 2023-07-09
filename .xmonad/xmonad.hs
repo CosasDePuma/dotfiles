@@ -72,7 +72,7 @@ myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
 myKeys = \conf -> mkKeymap conf $ [
     -- XMonad
     ("M-S-<Esc>",     io exitSuccess),                                                                       -- quit xmonad
-    ("M-S-r",         spawn "xmonad --recompile && xmonad --restart"),                                       -- reload xmonad
+    ("M-S-r",         spawn "sh -c 'xmonad --recompile && xmonad --restart'"),                               -- reload xmonad
     -- Windows: Control
     ("M-q",           kill),                                                                                 -- close the focused window
     ("M-t",           withFocused toggleFloat),                                                              -- toggle the focused window between tiled and float
