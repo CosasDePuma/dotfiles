@@ -24,6 +24,13 @@ if type bat >/dev/null 2>&1; then
     echo "[INF] bat theme set to ${1}"
 fi
 
+# btop
+if type btop >/dev/null 2>&1; then
+    mkdir -p ~/.config/btop/themes/
+    ln -sf "${THEME}/btop.theme" ~/.config/btop/themes/theme.theme
+    echo "[INF] btop theme set to ${1}"
+fi
+
 # fiSh
 if type fish >/dev/null 2>&1; then
     mkdir -p ~/.config/fish/themes/
