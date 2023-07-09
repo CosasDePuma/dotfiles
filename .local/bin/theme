@@ -19,7 +19,7 @@ fi
 # bat
 if type bat >/dev/null 2>&1; then
     mkdir -p ~/.config/bat/themes/
-    ln -sf "${THEME}/bat.thTheme" ~/.config/bat/themes/theme.thTheme
+    ln -sf "${THEME}/bat.tmTheme" ~/.config/bat/themes/theme.tmTheme
     bat cache --build
     echo "[INF] bat theme set to ${1}"
 fi
@@ -59,7 +59,7 @@ if type starship >/dev/null 2>&1; then
     if test -f ~/.config/starship.toml; then
         line=$(grep -n "palettes\.default" ~/.config/starship.toml | cut -d: -f1)
         if test -n "${line}"; then
-            sed -i "${line}d" ~/.config/starship.toml && cat "${THEME}/starship.toml" >> ~/.config/starship.toml
+            sed -i "${line},\$d" ~/.config/starship.toml && cat "${THEME}/starship.toml" >> ~/.config/starship.toml
             echo "[INF] Starship theme set to ${1}"
         fi
     fi
