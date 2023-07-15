@@ -4,12 +4,16 @@
 
 if status is-interactive
     # prompt
-    starship init fish | source
+    if type -q starship
+        starship init fish | source
+    end
     # theme
     fish_config theme choose 'default' 2>/dev/null
     # show a random litte pokemon
-    set -l pokemon (mktemp /tmp/pokemon.XXXXXX)
-    while krabby random --no-title >$pokemon; and test (count <$pokemon) -gt 14; end; cat $pokemon; rm $pokemon
+    if type -q krabby
+        set -l pokemon (mktemp /tmp/pokemon.XXXXXX)
+        while krabby random --no-title >$pokemon; and test (count <$pokemon) -gt 14; end; cat $pokemon; rm $pokemon
+    end
 end
 
 # -----------------------
