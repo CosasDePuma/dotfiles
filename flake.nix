@@ -10,6 +10,7 @@
         dotFile = pkg: path: {
           "${pkg}" = lib.hm.dag.entryAfter ["writeBoundary"] ''
             if ${pkgs.coreutils}/bin/test -x ${sw-system}/"${pkg}"; then
+              $DRY_RUN_CMD ${pkgs.coreutils}/bin/rm $VERBOSE_ARG -f ~/${path}
               $DRY_RUN_CMD ${pkgs.coreutils}/bin/cp $VERBOSE_ARG -f ${./.}/${path} ~/${path}
               $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod $VERBOSE_ARG ug+rw,o-rwx ~/${path}
             fi
@@ -18,6 +19,7 @@
         dotFolder = pkg: path: {
           "${pkg}" = lib.hm.dag.entryAfter ["writeBoundary"] ''
             if ${pkgs.coreutils}/bin/test -x ${sw-system}/"${pkg}"; then
+              $DRY_RUN_CMD ${pkgs.coreutils}/bin/rm $VERBOSE_ARG -rf ~/${path}
               $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir $VERBOSE_ARG -p ~/${path}
               $DRY_RUN_CMD ${pkgs.coreutils}/bin/cp $VERBOSE_ARG -rf ${./.}/${path} ~/${path}
               $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod $VERBOSE_ARG -R ug+rw,o-rwx ~/${path}
@@ -26,6 +28,7 @@
         };
         cpyFolder = name: path: {
           "${name}" = lib.hm.dag.entryAfter ["writeBoundary"] ''
+            $DRY_RUN_CMD ${pkgs.coreutils}/bin/rm $VERBOSE_ARG -rf ~/${path}
             $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir $VERBOSE_ARG -p ~/${path}
             $DRY_RUN_CMD ${pkgs.coreutils}/bin/cp $VERBOSE_ARG -rf ${./.}/${path} ~/${path}
             $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod $VERBOSE_ARG -R ug+rw,o-rwx ~/${path}
@@ -52,13 +55,16 @@
               ({
                 local-scripts = hm.dag.entryAfter ["writeBoundary"] ''
                   $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir $VERBOSE_ARG -p ~/.local/bin/
+                  $DRY_RUN_CMD ${pkgs.coreutils}/bin/rm $VERBOSE_ARG -f ~/.local/bin/theme
                   $DRY_RUN_CMD ${pkgs.coreutils}/bin/cp $VERBOSE_ARG -f ${./.}/.local/bin/theme ~/.local/bin/theme
 
                   if ${pkgs.coreutils}/bin/test -x ${sw-system}/feh; then
+                    $DRY_RUN_CMD ${pkgs.coreutils}/bin/rm $VERBOSE_ARG -f ~/.local/bin/feh
                     $DRY_RUN_CMD ${pkgs.coreutils}/bin/cp $VERBOSE_ARG -f ${./.}/.local/bin/feh ~/.local/bin/feh
                   fi
 
                   if ${pkgs.coreutils}/bin/test -x ${sw-system}/swww; then
+                    $DRY_RUN_CMD ${pkgs.coreutils}/bin/rm $VERBOSE_ARG -f ~/.local/bin/swww
                     $DRY_RUN_CMD ${pkgs.coreutils}/bin/cp $VERBOSE_ARG -f ${./.}/.local/bin/swww ~/.local/bin/swww
                   fi
 
