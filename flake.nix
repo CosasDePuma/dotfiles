@@ -21,7 +21,7 @@
             if ${pkgs.coreutils}/bin/test -x ${sw-system}/"${pkg}"; then
               $DRY_RUN_CMD ${pkgs.coreutils}/bin/rm $VERBOSE_ARG -rf ~/${path}
               $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir $VERBOSE_ARG -p ~/${path}
-              $DRY_RUN_CMD ${pkgs.coreutils}/bin/cp $VERBOSE_ARG -rf ${./.}/${path} ~/${path}
+              $DRY_RUN_CMD ${pkgs.coreutils}/bin/cp $VERBOSE_ARG -rf ${./.}/${path}/. ~/${path}
               $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod $VERBOSE_ARG -R ug+rw,o-rwx ~/${path}
             fi
           '';
