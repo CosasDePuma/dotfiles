@@ -4,6 +4,7 @@ import System.Exit (exitSuccess)
 import XMonad
 import XMonad.Config (def)
 import XMonad.Hooks.EwmhDesktops (ewmh,ewmhFullscreen)
+import XMonad.Hooks.ManageDocks (docks)
 import XMonad.Layout.LayoutModifier (ModifiedLayout)
 import XMonad.Layout.NoBorders (SmartBorder,smartBorders)
 import XMonad.Layout.Spacing (Border(Border),Spacing,spacingRaw)
@@ -26,6 +27,7 @@ main = xmonad . myWrappers $ myConfig
 
 myWrappers :: XConfig a0 -> XConfig a0
 myWrappers =
+  docks .               -- bars support
   ewmhFullscreen . ewmh -- fullscreen support
 
 -- -----------------
