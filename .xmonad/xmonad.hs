@@ -4,7 +4,7 @@ import System.Exit (exitSuccess)
 import XMonad
 import XMonad.Config (def)
 import XMonad.Hooks.EwmhDesktops (ewmh,ewmhFullscreen)
-import XMonad.Hooks.ManageDocks (docks)
+import XMonad.Hooks.ManageDocks (avoidStruts,docks)
 import XMonad.Layout.LayoutModifier (ModifiedLayout)
 import XMonad.Layout.NoBorders (SmartBorder,smartBorders)
 import XMonad.Layout.Spacing (Border(Border),Spacing,spacingRaw)
@@ -126,7 +126,7 @@ type Tiled   = ModifiedLayout Spacing Tall
 myGaps i = spacingRaw True (Border 0 i 0 i) True (Border i 0 i 0) True 
 
 myLayouts :: Layouts Window
-myLayouts = smartBorders $ layouts
+myLayouts = smartBorders $ avoidStruts $ layouts
   where
     layouts = tiled ||| Mirror tiled
     tiled   = myGaps 5 $ Tall nmaster delta ratio
