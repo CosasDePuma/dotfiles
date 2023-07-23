@@ -41,13 +41,15 @@
         config = mkIf cfg.enable {
           home = {
             activation = mkMerge [
+              (dotFolder "btop"             ".config/btop"              )
               (dotFile   "curl"             ".curlrc"                   )
               (dotFolder "Hyprland"         ".config/hypr"              )
               (dotFolder "kitty"            ".config/kitty"             )
               (dotFolder "neofetch"         ".config/neofetch"          )
               (dotFolder "picom"            ".config/picom"             )
               (dotFolder "ssh"              ".ssh"                      )
-              (cpyFolder "theme-catppuccin" ".config/themes/catppuccin" )
+              (dotFile   "starship"         ".config/starship"          )
+              (cpyFolder "themes"           ".config/themes"            )
               (cpyFolder "wallpapers"       ".config/wallpapers"        )
               (dotFile   "wget"             ".wgetrc"                   )
               (dotFolder "xmonad"           ".xmonad"                   )
