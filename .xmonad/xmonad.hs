@@ -1,25 +1,29 @@
 import Data.Map (Map,member)
 import Data.Ratio ((%))
 import System.Exit (exitSuccess)
+import System.IO (Handle,hPutStrLn)
 import XMonad
 import XMonad.Config (def)
+import XMonad.Hooks.DynamicLog (PP(..),dynamicLogWithPP,shorten,xmobarColor,xmobarPP,wrap)
 import XMonad.Hooks.EwmhDesktops (ewmh,ewmhFullscreen)
-import XMonad.Hooks.ManageDocks (avoidStruts,docks)
+import XMonad.Hooks.ManageDocks (AvoidStruts,avoidStruts,docks)
 import XMonad.Layout.LayoutModifier (ModifiedLayout)
 import XMonad.Layout.NoBorders (SmartBorder,smartBorders)
 import XMonad.Layout.Spacing (Border(Border),Spacing,spacingRaw)
-import XMonad.Util.SpawnOnce (spawnOnce)
+import XMonad.Util.SpawnOnce (spawnOnce) 
 import XMonad.Util.EZConfig (mkKeymap)
+import XMonad.Util.Run (spawnPipe)
 import qualified XMonad.StackSet as W
--- Custom
-import Theme
+import Theme -- Custom
 
 -- -----------------
 --  Entry Point
 -- -----------------
 
-main :: IO ()
-main = xmonad . myWrappers $ myConfig
+-- main :: IO ()
+main = do
+  xmobarrc0 <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"
+  xmonad $ myWrappers $ myConfig xmobarrc0
 
 -- -----------------
 --  Wrappers
@@ -27,27 +31,30 @@ main = xmonad . myWrappers $ myConfig
 
 myWrappers :: XConfig a0 -> XConfig a0
 myWrappers =
-  docks .               -- bars support
-  ewmhFullscreen . ewmh -- fullscreen support
+  ewmhFullscreen . ewmh . -- fullscreen support
+  docks                   -- taskbar and docks support
 
 -- -----------------
---  Variables
+--  Configuration
 -- -----------------
 
-myConfig :: XConfig Layouts
-myConfig = def {
-    modMask            = mod4Mask,
-    borderWidth        = 3,
-    normalBorderColor  = Theme.normal,
-    focusedBorderColor = Theme.focused,
-    focusFollowsMouse  = False,
-    clickJustFocuses   = False,
-    
-    keys               = myKeys,
-    layoutHook         = myLayouts,
-    startupHook        = myStartup,
-    workspaces         = myWorkspaces
-  }
+myConfig :: Handle -> XConfig Layouts
+myConfig = \b0 -> def {
+  -- | General behavior
+  modMask            = mod4Mask,
+  focusFollowsMouse  = False,
+  clickJustFocuses   = False,
+  -- | Appearance
+  borderWidth        = 3,
+  normalBorderColor  = Theme.normal,
+  focusedBorderColor = Theme.focused,
+  -- | Hooks
+  keys               = myKeys,
+  layoutHook         = myLayouts,
+  logHook            = myXmobar b0,
+  startupHook        = myStartup,
+  workspaces         = myWorkspaces
+}
        
 -- -----------------
 --  Startup
@@ -55,9 +62,9 @@ myConfig = def {
 
 myStartup :: X ()
 myStartup = do
-    spawnOnce "picom -b"          -- compositor
-    spawnOnce "flameshot"         -- screenshot
-    spawnOnce "~/.local/bin/feh"  -- wallpaper
+  spawnOnce "picom -b"         -- compositor
+  spawnOnce "flameshot"        -- screenshot
+  spawnOnce "~/.local/bin/feh" -- wallpaper
 
 -- -----------------
 --  Workspaces
@@ -72,14 +79,14 @@ myWorkspaces = map show [1..9]
 
 myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
 myKeys = \conf -> mkKeymap conf $ [
-    -- XMonad
+    -- | XMonad
     ("M-S-<Esc>",     io exitSuccess),                                                                       -- quit xmonad
     ("M-S-r",         spawn "sh -c 'xmonad --recompile && xmonad --restart'"),                               -- reload xmonad
-    -- Windows: Control
+    -- | Windows: Control
     ("M-q",           kill),                                                                                 -- close the focused window
     ("M-t",           withFocused toggleFloat),                                                              -- toggle the focused window between tiled and float
     ("M-`",           withFocused toggleFloat),                                                              -- toggle the focused window between tiled and float
-    -- Windows: Focus
+    -- | Windows: Focus
     ("M-m",           windows W.focusMaster),                                                                -- focus master window
     ("M1-<Tab>",      windows W.focusDown),                                                                  -- focus next window
     ("M1-S-<Tab>",    windows W.focusUp),                                                                    -- focus previous window
@@ -87,50 +94,66 @@ myKeys = \conf -> mkKeymap conf $ [
     ("M-<Down>",      windows W.focusDown),                                                                  -- focus next window
     ("M-<Left>",      windows W.focusUp),                                                                    -- focus previous window
     ("M-<Up>",        windows W.focusUp),                                                                    -- focus previous window
-    -- Windows: Order
+    -- | Windows: Order
     ("M-S-m",         windows W.swapMaster),                                                                 -- swap the focus and the master
     ("M-S-<Left>",    windows W.swapUp),                                                                     -- swap the focus with the previous window
     ("M-S-<Up>",      windows W.swapUp),                                                                     -- swap the focus with the previous window
     ("M-S-<Right>",   windows W.swapDown),                                                                   -- swap the focus with the next window
     ("M-S-<Down>",    windows W.swapDown),                                                                   -- swap the focus with the next window
-    -- Layouts
+    -- | Layouts
     ("M-<Backspace>", sendMessage NextLayout),                                                               -- rotate through layout algorithms
     ("M-.",           sendMessage Expand),                                                                   -- expand the master area
     ("M-,",           sendMessage Shrink),                                                                   -- shrink the master area
-    -- Programs
+    -- | Programs
     ("M-b",           spawn "firefox"),                                                                      -- browser
     ("M-S-b",         spawn "firefox --private-window"),                                                     -- browser (private)
     ("M-e",           spawn "thunar"),                                                                       -- file manager
     ("M-<Return>",    spawn "kitty"),                                                                        -- terminal
     ("M-S-<Space>",   spawn "rofi -show drun"),                                                              -- launcher
     ("M-C-<Tab>",     spawn "rofi -show window"),                                                            -- launcher (windows)
-    -- Screen
+    -- | Screen
     ("<Print>",       spawn "flameshot gui")                                                                 -- screenshot
   ]
-  -- Workspaces
+  -- | Workspaces
   ++ [ ("M-"   ++ [n], windows $ W.greedyView w)             | (n,w) <- zip ['1'..'9'] (workspaces conf) ]   -- switch workspaces with numbers
-  ++ [ ("M-S-" ++ [n], windows $ W.greedyView w . W.shift w) | (n,w) <- zip ['1'..'9'] (workspaces conf) ]   -- switch focused window to workspace
+  ++ [ ("M-C-" ++ [n], windows $ W.shift w)                  | (n,w) <- zip ['1'..'9'] (workspaces conf) ]   -- send focused window to workspace
+  ++ [ ("M-S-" ++ [n], windows $ W.greedyView w . W.shift w) | (n,w) <- zip ['1'..'9'] (workspaces conf) ]   -- send focused window to workspace and switch workspace
     where
       toggleFloat window = windows $ \s ->
         if member window (W.floating s)
           then W.sink window s
-          else (W.float window (W.RationalRect (1%4) (1%4) (1%2) (1%2)) s)
+          else W.float window (W.RationalRect (1%4) (1%4) (1%2) (1%2)) s
 
 -- -----------------
 --  Layouts
 -- -----------------
 
-type Layouts = ModifiedLayout SmartBorder (Choose Tiled (Mirror Tiled))
 type Tiled   = ModifiedLayout Spacing Tall
+type Layouts =
+  ModifiedLayout SmartBorder
+    (ModifiedLayout AvoidStruts
+      (Choose Tiled (Mirror Tiled)))
 
+myGaps :: Integer -> Tall a0 -> Tiled a0
 myGaps i = spacingRaw True (Border 0 i 0 i) True (Border i 0 i 0) True 
 
 myLayouts :: Layouts Window
-myLayouts = smartBorders $ avoidStruts $ layouts
+myLayouts = smartBorders . avoidStruts $ layouts
   where
     layouts = tiled ||| Mirror tiled
     tiled   = myGaps 5 $ Tall nmaster delta ratio
-
     nmaster = 1     -- default number of windows in the master pane
     ratio   = 1/2   -- default proportion of screen occupied by master
     delta   = 3/100 -- percent of screen to increment by when resizing
+
+-- -----------------
+--  XMobar
+-- -----------------
+
+myXmobar = \b0 -> dynamicLogWithPP $ xmobarPP {
+  ppOutput = \x -> hPutStrLn b0 x,
+  ppCurrent = xmobarColor "yellow" "" . wrap "[" "]",
+  ppTitle   = xmobarColor "green" "" . shorten 40,
+  ppVisible = wrap "(" ")",
+  ppUrgent  = xmobarColor "red" "yellow"
+}

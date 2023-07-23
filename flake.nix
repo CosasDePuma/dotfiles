@@ -51,6 +51,7 @@
               (cpyFolder "wallpapers"       ".config/wallpapers"        )
               (dotFile   "wget"             ".wgetrc"                   )
               (dotFolder "xmonad"           ".xmonad"                   )
+              (dotFolder "xmonad"           ".config/xmobar"            )
 
               ({
                 local-scripts = hm.dag.entryAfter ["writeBoundary"] ''
