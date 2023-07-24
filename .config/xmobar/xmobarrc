@@ -2,7 +2,7 @@
 
 Config {
   -- | General behaviour
-  position        = TopSize C 100 25, 
+  position        = TopSize C 100 25,
   allDesktops     = True,
   hideOnStart     = False,
   lowerOnStart    = True,
@@ -14,17 +14,17 @@ Config {
                     , "xft:Font Awesome 5 Brands:pixelsize=14" ]
   -- | Appearance
   bgColor         = "#1e1e2e",
-  fgColor         = "#cdd6f4",
+  fgColor         = "#bac2de",
 
   -- | Templates
   sepChar         = "%",
   alignSep        = "}{",
-  template        = " %UnsafeStdinReader% } %date% { %cpu% | %disku% ",
+  template        = " %XMonadLog% } %date% { %cpu% | %disku% ",
 
   -- | Commands
   commands        = [
     -- workspaces & layouts
-    Run UnsafeStdinReader,
+    Run XMonadLog,
     -- time
     Run Date "%H:%M" "date" 50,
     -- cpu usage
@@ -33,3 +33,4 @@ Config {
     Run DiskU [("/", "<fn=1>\xf0a0</fn> <usedp>%")] [] 60
   ]
 }
+

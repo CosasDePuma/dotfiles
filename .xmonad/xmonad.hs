@@ -4,12 +4,15 @@ import System.Exit (exitSuccess)
 import System.IO (Handle,hPutStrLn)
 import XMonad
 import XMonad.Config (def)
-import XMonad.Hooks.DynamicLog (PP(..),dynamicLogWithPP,shorten,xmobarColor,xmobarPP,wrap)
+import XMonad.Hooks.DynamicLog (shorten,xmobarColor,wrap)
 import XMonad.Hooks.EwmhDesktops (ewmh,ewmhFullscreen)
 import XMonad.Hooks.ManageDocks (AvoidStruts,avoidStruts,docks)
+import XMonad.Hooks.StatusBar (statusBarProp,withSB)
+import XMonad.Hooks.StatusBar.PP (PP,PP(..))
 import XMonad.Layout.LayoutModifier (ModifiedLayout)
 import XMonad.Layout.NoBorders (SmartBorder,smartBorders)
 import XMonad.Layout.Spacing (Border(Border),Spacing,spacingRaw)
+import XMonad.Util.ClickableWorkspaces (clickablePP)
 import XMonad.Util.SpawnOnce (spawnOnce) 
 import XMonad.Util.EZConfig (mkKeymap)
 import XMonad.Util.Run (spawnPipe)
@@ -22,15 +25,15 @@ import Theme -- Custom
 
 -- main :: IO ()
 main = do
-  xmobarrc0 <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"
-  xmonad $ myWrappers $ myConfig xmobarrc0
+  xmonad . myWrappers $ myConfig
 
 -- -----------------
 --  Wrappers
 -- -----------------
 
-myWrappers :: XConfig a0 -> XConfig a0
+--myWrappers :: XConfig a0 -> XConfig a0
 myWrappers =
+  withSB myStatusBar .    -- status bar
   ewmhFullscreen . ewmh . -- fullscreen support
   docks                   -- taskbar and docks support
 
@@ -38,8 +41,8 @@ myWrappers =
 --  Configuration
 -- -----------------
 
-myConfig :: Handle -> XConfig Layouts
-myConfig = \b0 -> def {
+myConfig :: XConfig Layouts
+myConfig = def {
   -- | General behavior
   modMask            = mod4Mask,
   focusFollowsMouse  = False,
@@ -51,7 +54,6 @@ myConfig = \b0 -> def {
   -- | Hooks
   keys               = myKeys,
   layoutHook         = myLayouts,
-  logHook            = myXmobar b0,
   startupHook        = myStartup,
   workspaces         = myWorkspaces
 }
@@ -70,8 +72,14 @@ myStartup = do
 --  Workspaces
 -- -----------------
 
-myWorkspaces :: [WorkspaceId]
-myWorkspaces = map show [1..9]
+xmobarEscape :: String -> String
+xmobarEscape = concatMap doubleLts
+  where
+    doubleLts x = [x]
+myWorkspaces :: [String]
+myWorkspaces = clickableSymbols [1..9]
+  where
+    clickableSymbols l = ["<action=xdotool set_desktop " ++ show (i) ++ "> <fn=1>\61713</fn> </action>" | i <- l] 
 
 -- -----------------
 --  Keybindings
@@ -115,10 +123,11 @@ myKeys = \conf -> mkKeymap conf $ [
     ("<Print>",       spawn "flameshot gui")                                                                 -- screenshot
   ]
   -- | Workspaces
-  ++ [ ("M-"   ++ [n], windows $ W.greedyView w)             | (n,w) <- zip ['1'..'9'] (workspaces conf) ]   -- switch workspaces with numbers
-  ++ [ ("M-C-" ++ [n], windows $ W.shift w)                  | (n,w) <- zip ['1'..'9'] (workspaces conf) ]   -- send focused window to workspace
-  ++ [ ("M-S-" ++ [n], windows $ W.greedyView w . W.shift w) | (n,w) <- zip ['1'..'9'] (workspaces conf) ]   -- send focused window to workspace and switch workspace
+  ++ [ ("M-"   ++ [n], windows $ W.greedyView w)             | (n,w) <- zip ['1'..wl] (workspaces conf) ]   -- switch workspaces with numbers
+  ++ [ ("M-C-" ++ [n], windows $ W.shift w)                  | (n,w) <- zip ['1'..wl] (workspaces conf) ]   -- send focused window to workspace
+  ++ [ ("M-S-" ++ [n], windows $ W.greedyView w . W.shift w) | (n,w) <- zip ['1'..wl] (workspaces conf) ]   -- send focused window to workspace and switch workspace
     where
+      wl = head . show $ length myWorkspaces
       toggleFloat window = windows $ \s ->
         if member window (W.floating s)
           then W.sink window s
@@ -147,13 +156,21 @@ myLayouts = smartBorders . avoidStruts $ layouts
     delta   = 3/100 -- percent of screen to increment by when resizing
 
 -- -----------------
---  XMobar
+--  Status Bar
 -- -----------------
 
-myXmobar = \b0 -> dynamicLogWithPP $ xmobarPP {
-  ppOutput = \x -> hPutStrLn b0 x,
-  ppCurrent = xmobarColor "yellow" "" . wrap "[" "]",
-  ppTitle   = xmobarColor "green" "" . shorten 40,
-  ppVisible = wrap "(" ")",
-  ppUrgent  = xmobarColor "red" "yellow"
+myStatusBar = statusBarProp statusBar (pure myXmobarPP)
+  where
+    statusBar = "xmobar ~/.config/xmobar/xmobarrc"
+
+myXmobarPP :: PP
+myXmobarPP = def {
+  ppSep             = "<fn=1> </fn>",
+  ppCurrent         = xmobarColor Theme.focused "" . \s -> " <fn=1>\61713</fn> ",
+  ppVisible         = xmobarColor Theme.normal "",
+  ppHidden          = xmobarColor Theme.subtext "",
+  ppHiddenNoWindows = xmobarColor Theme.normal "",
+  ppUrgent          = xmobarColor Theme.urgent "" . wrap "*" "",
+  ppOrder           = \(ws:_) -> [ws],
+  ppExtras          = []
 }

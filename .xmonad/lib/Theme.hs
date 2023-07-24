@@ -1,5 +1,7 @@
 module Theme where
 
-normal, focused :: String
+normal, focused, subtext, urgent :: String
 normal  = "#dddddd"
-focused = "#ff0000"
+focused = "#00ff00"
+subtext = "#cdd6f4"
+urgent  = "#f38ba8"
