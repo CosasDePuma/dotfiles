@@ -19,7 +19,7 @@ Config {
   -- | Templates
   sepChar         = "%",
   alignSep        = "}{",
-  template        = " %UnsafeXMonadLog% } %date% { %cpu% | %memory% | %disku% | %kbd% | %battery% ",
+  template        = " <fc=#cdd6f4><action=rofi -show drun>   ⃞ </action></fc> | %UnsafeXMonadLog% } %date% { %cpu% | %memory% | %disku% | %kbd% | %battery% ",
 
   -- | Commands
   commands        = [

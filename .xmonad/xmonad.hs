@@ -64,10 +64,10 @@ myConfig = def {
 
 myStartup :: X ()
 myStartup = do
-  -- | XMonad
+  -- xmonad
   setWMName "LG3D"             -- Java GUI fix
   setDefaultCursor xC_left_ptr -- normal cursor
-  -- | Programs
+  -- programs
   spawnOnce "picom -b"         -- compositor
   spawnOnce "flameshot"        -- screenshot
   spawnOnce "~/.local/bin/feh" -- wallpaper
@@ -77,7 +77,7 @@ myStartup = do
 -- -----------------
 
 myWorkspaces :: [String]
-myWorkspaces = clickableSymbols $ map show [0..8]
+myWorkspaces = clickableSymbols $ map show [0..6]
   where
     symbol = "<fn=1>\61713</fn>"
     clickableSymbols l = ["<action=xdotool set_desktop "++i++">"++symbol++"</action>" | i <- l] 
