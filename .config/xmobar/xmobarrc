@@ -19,18 +19,23 @@ Config {
   -- | Templates
   sepChar         = "%",
   alignSep        = "}{",
-  template        = " %XMonadLog% } %date% { %cpu% | %disku% ",
+  template        = " %UnsafeXMonadLog% } %date% { %cpu% | %memory% | %disku% | %kbd% | %battery% ",
 
   -- | Commands
   commands        = [
-    -- workspaces & layouts
-    Run XMonadLog,
+    -- battery
+    Run Battery [ "-t","<acstatus>", "--", "-o","<fn=1>\xf243</fn>  <left>%", "-O","<fn=1>\xf242</fn>  <left>%", "-i","<fn=1>\xf240</fn>  " ] 50, 
+    -- cpu usage
+    Run Cpu [ "-t","<fn=1>\xf2db</fn>  <total>%", "-H","50", "--high","#f38ba8" ] 20,
+    -- layout
+    Run Kbd [("es","<fn=1>\xf11c</fn> es"), ("us","<fn=1>\xf11c</fn> us")],
+    -- disk usage
+    Run DiskU [("/","<fn=1>\xf233</fn>  <usedp>%")] [] 60,
+    -- ram memory usage
+    Run Memory [ "-t","<fn=1>\xf538</fn> <usedratio>%", "-H","50", "--high","#f38ba8" ] 10, 
     -- time
     Run Date "%H:%M" "date" 50,
-    -- cpu usage
-    Run Cpu [ "-t", "<fn=1>\xf2db</fn>  <total>%", "-H", "50", "--high", "#f38ba8" ] 20,
-    -- Ram used number and percent
-    Run DiskU [("/", "<fn=1>\xf0a0</fn> <usedp>%")] [] 60
+    -- workspaces & layouts
+    Run UnsafeXMonadLog
   ]
 }
-

@@ -4,15 +4,15 @@ import System.Exit (exitSuccess)
 import System.IO (Handle,hPutStrLn)
 import XMonad
 import XMonad.Config (def)
-import XMonad.Hooks.DynamicLog (shorten,xmobarColor,wrap)
 import XMonad.Hooks.EwmhDesktops (ewmh,ewmhFullscreen)
 import XMonad.Hooks.ManageDocks (AvoidStruts,avoidStruts,docks)
-import XMonad.Hooks.StatusBar (statusBarProp,withSB)
-import XMonad.Hooks.StatusBar.PP (PP,PP(..))
+import XMonad.Hooks.SetWMName (setWMName)
+import XMonad.Hooks.StatusBar (StatusBarConfig,statusBarProp,withSB)
+import XMonad.Hooks.StatusBar.PP (PP,PP(..),shorten,xmobarColor,wrap)
 import XMonad.Layout.LayoutModifier (ModifiedLayout)
 import XMonad.Layout.NoBorders (SmartBorder,smartBorders)
 import XMonad.Layout.Spacing (Border(Border),Spacing,spacingRaw)
-import XMonad.Util.ClickableWorkspaces (clickablePP)
+import XMonad.Util.Cursor (setDefaultCursor)
 import XMonad.Util.SpawnOnce (spawnOnce) 
 import XMonad.Util.EZConfig (mkKeymap)
 import XMonad.Util.Run (spawnPipe)
@@ -23,7 +23,7 @@ import Theme -- Custom
 --  Entry Point
 -- -----------------
 
--- main :: IO ()
+main :: IO ()
 main = do
   xmonad . myWrappers $ myConfig
 
@@ -31,7 +31,7 @@ main = do
 --  Wrappers
 -- -----------------
 
---myWrappers :: XConfig a0 -> XConfig a0
+myWrappers :: XConfig Layouts -> XConfig Layouts
 myWrappers =
   withSB myStatusBar .    -- status bar
   ewmhFullscreen . ewmh . -- fullscreen support
@@ -64,6 +64,10 @@ myConfig = def {
 
 myStartup :: X ()
 myStartup = do
+  -- | XMonad
+  setWMName "LG3D"             -- Java GUI fix
+  setDefaultCursor xC_left_ptr -- normal cursor
+  -- | Programs
   spawnOnce "picom -b"         -- compositor
   spawnOnce "flameshot"        -- screenshot
   spawnOnce "~/.local/bin/feh" -- wallpaper
@@ -72,14 +76,11 @@ myStartup = do
 --  Workspaces
 -- -----------------
 
-xmobarEscape :: String -> String
-xmobarEscape = concatMap doubleLts
-  where
-    doubleLts x = [x]
 myWorkspaces :: [String]
-myWorkspaces = clickableSymbols [1..9]
+myWorkspaces = clickableSymbols $ map show [0..8]
   where
-    clickableSymbols l = ["<action=xdotool set_desktop " ++ show (i) ++ "> <fn=1>\61713</fn> </action>" | i <- l] 
+    symbol = "<fn=1>\61713</fn>"
+    clickableSymbols l = ["<action=xdotool set_desktop "++i++">"++symbol++"</action>" | i <- l] 
 
 -- -----------------
 --  Keybindings
@@ -159,6 +160,7 @@ myLayouts = smartBorders . avoidStruts $ layouts
 --  Status Bar
 -- -----------------
 
+myStatusBar :: StatusBarConfig
 myStatusBar = statusBarProp statusBar (pure myXmobarPP)
   where
     statusBar = "xmobar ~/.config/xmobar/xmobarrc"
@@ -166,7 +168,7 @@ myStatusBar = statusBarProp statusBar (pure myXmobarPP)
 myXmobarPP :: PP
 myXmobarPP = def {
   ppSep             = "<fn=1> </fn>",
-  ppCurrent         = xmobarColor Theme.focused "" . \s -> " <fn=1>\61713</fn> ",
+  ppCurrent         = xmobarColor Theme.focused "" . \s -> "<fn=1>\61713</fn>",
   ppVisible         = xmobarColor Theme.normal "",
   ppHidden          = xmobarColor Theme.subtext "",
   ppHiddenNoWindows = xmobarColor Theme.normal "",
