@@ -19,7 +19,7 @@ Config {
   -- | Templates
   sepChar         = "%",
   alignSep        = "}{",
-  template        = " <fc=#cdd6f4><action=rofi -show drun>   ⃞ </action></fc> | %UnsafeXMonadLog% } %date% { %cpu% | %memory% | %disku% | %kbd% | %battery% ",
+  template        = " <fc=#cdd6f4><action=rofi -show drun>󰀻</action></fc> | %UnsafeXMonadLog% } %date% { %cpu% | %memory% | %disku% | %kbd% | %default:Master% | %battery% ",
 
   -- | Commands
   commands        = [
@@ -32,9 +32,11 @@ Config {
     -- disk usage
     Run DiskU [("/","<fn=1>\xf233</fn>  <usedp>%")] [] 60,
     -- ram memory usage
-    Run Memory [ "-t","<fn=1>\xf538</fn> <usedratio>%", "-H","50", "--high","#f38ba8" ] 10, 
+    Run Memory [ "-t","<fn=1>\xf538</fn> <usedratio>%", "-H","50", "--high","#f38ba8" ] 10,
     -- time
     Run Date "%H:%M" "date" 50,
+    -- volume
+    Run Volume "default" "Master" [ "-t","<status>", "--", "-O","<fn=1>\xf028</fn>  <volume>%", "-o","<fn=1>\xf026</fn>-", "-c","#f38ba8", "-C","#bac2de" ] 5,
     -- workspaces & layouts
     Run UnsafeXMonadLog
   ]

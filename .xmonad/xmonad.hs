@@ -3,6 +3,7 @@ import Data.Ratio ((%))
 import System.Exit (exitSuccess)
 import System.IO (Handle,hPutStrLn)
 import XMonad
+import XMonad.Actions.Volume (lowerVolume,raiseVolume,toggleMute)
 import XMonad.Config (def)
 import XMonad.Hooks.EwmhDesktops (ewmh,ewmhFullscreen)
 import XMonad.Hooks.ManageDocks (AvoidStruts,avoidStruts,docks)
@@ -121,7 +122,11 @@ myKeys = \conf -> mkKeymap conf $ [
     ("M-<Space>",     spawn "rofi -show drun"),                                                              -- launcher
     ("M-S-<Space>",   spawn "rofi -show emoji"),                                                             -- launcher (emojis)
     -- | Screen
-    ("<Print>",       spawn "flameshot gui")                                                                 -- screenshot
+    ("<Print>",       spawn "flameshot gui"),                                                                -- screenshot
+    -- | Volume
+    ("<XF86AudioRaiseVolume>", raiseVolume 5 >> return ()),                                                  -- raise volume
+    ("<XF86AudioLowerVolume>", lowerVolume 5 >> return ()),                                                  -- lower volume
+    ("<XF86AudioMute>",        toggleMute    >> return ())                                                   -- toggle mute
   ]
   -- | Workspaces
   ++ [ ("M-"   ++ [n], windows $ W.greedyView w)             | (n,w) <- zip ['1'..wl] (workspaces conf) ]   -- switch workspaces with numbers
