@@ -47,6 +47,7 @@
               (dotFolder "kitty"            ".config/kitty"             )
               (dotFolder "neofetch"         ".config/neofetch"          )
               (dotFolder "picom"            ".config/picom"             )
+              (dotFolder "rofi"             ".config/rofi"              )
               (dotFolder "ssh"              ".ssh"                      )
               (dotFile   "starship"         ".config/starship"          )
               (cpyFolder "themes"           ".config/themes"            )

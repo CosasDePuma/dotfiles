@@ -60,6 +60,13 @@ if type kitty >/dev/null 2>&1; then
     echo "[INF] Kitty theme set to ${1}"
 fi
 
+# Rofi
+if type rofi >/dev/null 2>&1; then
+    mkdir -p ~/.local/share/rofi/themes/
+    ln -sf "${THEME}/rofi.rasi" ~/.local/share/rofi/themes/theme.rasi
+    echo "[INF] Rofi theme set to ${1}"
+fi
+
 # Starship
 if type starship >/dev/null 2>&1; then
     mkdir -p ~/.config/

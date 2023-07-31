@@ -118,8 +118,8 @@ myKeys = \conf -> mkKeymap conf $ [
     ("M-S-b",         spawn "firefox --private-window"),                                                     -- browser (private)
     ("M-e",           spawn "thunar"),                                                                       -- file manager
     ("M-<Return>",    spawn "kitty"),                                                                        -- terminal
-    ("M-S-<Space>",   spawn "rofi -show drun"),                                                              -- launcher
-    ("M-C-<Tab>",     spawn "rofi -show window"),                                                            -- launcher (windows)
+    ("M-<Space>",     spawn "rofi -show drun"),                                                              -- launcher
+    ("M-S-<Space>",   spawn "rofi -show emoji"),                                                             -- launcher (emojis)
     -- | Screen
     ("<Print>",       spawn "flameshot gui")                                                                 -- screenshot
   ]
